@@ -20,7 +20,7 @@ Version 		Date 			Author			Comments
 //number of rounds
 #define NOOFROUNDS 6
 
-static int blocks=5;
+static int blocks;
 static double index_bit_length;
 static unsigned int * round1table;
 static unsigned int * round2table;
@@ -35,7 +35,12 @@ int main(int argc, char *argv[])
 {
 	//second argument is the file name to be permuted
 	//atoi converted string to integer, we get the file size directly.
-    	int blocks = atoi(argv[1]);
+	if (argv[1])
+    	blocks = atoi(argv[1]);
+    else {
+    	printf("passing block number as parameter\n");
+    	exit(0);
+    }
     	//printf("file size: %dG\n",filesize);
 	
 	//calculate blocklength 30 - 5 = 25 ( 2^30 stands for 1 gb, 2^5 for 32 bytes)
@@ -43,6 +48,7 @@ int main(int argc, char *argv[])
 	
     	//blocks = filesize * (1<<temp);
     	printf("block num: %d\n",blocks);
+    	fflush(stdout);
 
 	//find the bit length  of the each element of array to get number of blocks
 	index_bit_length = log2(blocks);
