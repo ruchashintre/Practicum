@@ -72,7 +72,8 @@ int inc_encoding (FILE* fp,int* prptable,unsigned char* k_ecc_perm,unsigned char
 	char codeword[blocks][n];
 	int readLen = 512*1024*1024;
 	char * buf = malloc(sizeof(buf)*readLen);
-	int counter = 0;
+	int filecounter = 0;
+    int blockcounter = 0;
 	int endIndicator = readLen;
 	while (!feof(fp))
 	{
@@ -84,7 +85,7 @@ int inc_encoding (FILE* fp,int* prptable,unsigned char* k_ecc_perm,unsigned char
 		{
 			for (i=0;i<32;i++)
 			{
-				message[i] = buf[startind+i];
+				message[blockcounter++] = buf[startind+i];
 			}
 		}
 	}
