@@ -78,16 +78,20 @@ int inc_encoding (FILE* fp,int* prptable,unsigned char* k_ecc_perm,unsigned char
 	while (!feof(fp))
 	{
 		fread(buf, readLen, 1, fp);
-		int index = prptable[counter];
-		int startind = 32*index;
-		int endind = 32*index+31;
-		if (startind<=readLen && endind<=readLen)
-		{
-			for (i=0;i<32;i++)
-			{
-				message[blockcounter++] = buf[startind+i];
-			}
-		}
+        int j;
+        int (j=0;j<readLen;j++) {
+            int index = prptable[counter];
+            int startind = 32*index;
+            int endind = 32*index+31;
+            if (startind<=readLen && endind<=readLen)
+            {
+                for (i=0;i<32;i++)
+                {
+                    message[blockcounter++] = buf[startind+i];
+                }
+            }
+            filecounter++
+        }
 	}
 }
 
