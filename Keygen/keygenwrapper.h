@@ -23,23 +23,23 @@ int seeding(char * seed)
 }
 
 // generate key
-int keygen(char * keyname, unsigned char * buf, unsigned long len)
+int keygen(unsigned char * buf, unsigned long len)
 {
-    FILE *key;
+    /*FILE *key;
     key = fopen(strcat(keyname,".key"),"w");
     if (!key)
     {
         fprintf(stderr, "Unable to open file %s", filename);
         return -1;
-    }
+    }*/
     if ((err = fortuna_ready(&prng)) != CRYPT_OK) {
 		printf("Ready error: %s\n", error_to_string(err));
 	}
-    fortuna_read(buf,len,&prng)
-    fwrite(buf, len, 1, key);
+    fortuna_read(buf,len,&prng);
+    //fwrite(buf, len, 1, key);
     return 0;
 }
-
+/*
 // get key
 char * getkey(char * keyname)
 {
@@ -58,3 +58,4 @@ char * getkey(char * keyname)
     fread(buf, fileLen, 1, key);
     return buf;
 }
+*/
