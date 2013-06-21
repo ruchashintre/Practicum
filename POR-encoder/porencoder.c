@@ -7,6 +7,10 @@
 #define w 4096/32
 #define n 255
 #define k 223
+#define n1 64
+#define k1 32
+#define n2 64
+#define k2 32
 
 int q,t;
 
@@ -127,9 +131,38 @@ int inc_encoding (FILE* fp,int* prptable,unsigned char* k_ecc_perm,unsigned char
 	return 0;
 }
 
+void concat_encode(unsigned char * message,unsigned char* codeword) {
+	unsigned char tmp_code[v*32*n1/k1],stripe[k1],stripe_code[n1];
+	int index,i,j;
+	for (index=0;index<sizeof(message);index++) {
+		tmp_code[index] = message[index];
+	}
+	for (i=0;i<v;i++) {
+		for (j=0;j<sizeof(stripe);j++) {
+			stripe[j] = message[i*k1+j];
+		}
+		encode_data(stripe,k1,stripe_code);
+		for (j=0;j<n1-k1;j++) {
+			tmp_code[index] = stripe_code[k1+j];
+			index++;
+		}
+	}
+	index = 0;
+	for (i=0;i<v*n1/k1;i++) {
+		for (j=0;j<sizeof(stripe);j++) {
+			stripe[j] = tmp_code[i*k2+j];
+		}
+		encode_data(stripe,k2,stripe_code);
+		for (j=0;j<n2;j++) {
+			codeword[index] = stripe_code[j];
+			index++;
+		}
+	}
+}
+
 int precompute_response(FILE* fp, Chal * c,char * key) {
-	char message[v*32];
-	char codeword[w*32];
+	unsigned char message[v*32];
+	unsigned char codeword[w*32];
 	char uth[32];
 	char ct[32];
 	int i,j;
@@ -140,7 +173,7 @@ int precompute_response(FILE* fp, Chal * c,char * key) {
 			fread(buffer, 32, 1, fp);
 			strcat(message,buffer);
 		}
-		concat_encode(message,v,codeword);
+		concat_encode(message,codeword);
 		for (i=0;i<32;i++)
 			uth[i] = codeword[32*c[j].u+i];
 		enc_init(key);
@@ -199,7 +232,7 @@ int main(int argc, char* argv[])
 	
 	q = 2;
 	Chal c[q];
-	c[0].s = {5,163,1234,23,412,51,61,1234,
+	/*c[0].s = {5,163,1234,23,412,51,61,1234,
 	716,247,3568,3145,356835,1354,1457,356,
 	3576,2345,1234,478,456,4,587,46789,
 	27682,765,2345,8476,2456,3568,2346,6};
@@ -208,7 +241,7 @@ int main(int argc, char* argv[])
 	76,65,765,734,8476,657,4265,63,2345,5,
 	27682,765,2345,8476,2456,3568,2346,16,
 	3576,2345,1234,478,456,4,587,46789};
-	c[1].u = 20;
+	c[1].u = 20;*/
 	precompute_response(fp,c,k_enc);
 	
 	fwrite(mac,1,16,fp);
