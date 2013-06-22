@@ -13,9 +13,10 @@ int keygen_init()
 }
 
 // add seed
-int seeding(char * seed)
+int seeding(unsigned char * seed)
 {
-    if ((err = fortuna_add_entropy(seed, strlen(seed), &prng))!= CRYPT_OK) {
+	//printf("print seed %s %\n",seed,sizeof(seed));
+    if ((err = fortuna_add_entropy(seed, sizeof(seed), &prng))!= CRYPT_OK) {
 		printf("Add seed error: %s\n", error_to_string(err));
         return err;
 	}
@@ -35,6 +36,7 @@ int keygen(unsigned char * buf, unsigned long len)
     if ((err = fortuna_ready(&prng)) != CRYPT_OK) {
 		printf("Ready error: %s\n", error_to_string(err));
 	}
+	printf("fortuna read %lu %lu\n",sizeof(buf),len);
     fortuna_read(buf,len,&prng);
     //fwrite(buf, len, 1, key);
     return 0;

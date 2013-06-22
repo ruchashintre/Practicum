@@ -34,7 +34,7 @@ int* prp(int blocks, unsigned char* key)
 	int * blockindices;
 	int * prpblockindices;
 	//allocate memory for input and output table
-    //blockindices = (int *)malloc(blocks*sizeof(int));
+    blockindices = (int *)malloc(blocks*sizeof(int));
     prpblockindices = (int *)malloc(blocks*sizeof(int));
 
 	//initialize block array to the block indices
@@ -77,7 +77,7 @@ int* prp(int blocks, unsigned char* key)
 	generateRoundFunctions(seed5,round5table,blocks);
 	round6table = malloc(blocks*sizeof(unsigned int));
 	generateRoundFunctions(seed6,round6table,blocks);
-	printf("6 tables generated");
+	printf("6 tables generated\n");
     //endTime = getCPUTime();
     //fprintf( stderr, "CPU time used for PRNG = %lf\n", (endTime - startTime) );
     
@@ -99,9 +99,11 @@ int* prp(int blocks, unsigned char* key)
 	//for(i=0;i<blocks;i++){
 		//printf("%d -> %d\n", blockindices[i], prpblockindices[i]);		
 	//}
-	printf("a=%d,b=%d\n",a,b);
+
 	//endTime = getCPUTime();
     //fprintf( stderr, "CPU time used for PRP = %lf\n", (endTime - startTime) );
+    printf("PRP: finish \n");
+    fflush(stdout);
     return prpblockindices;
 }
 
@@ -123,7 +125,7 @@ void generateRoundFunctions(unsigned char * seed, unsigned int * bufint, int blo
 	if ((err = fortuna_start(&prng)) != CRYPT_OK) {
 		printf("start error: %s\n", error_to_string(err));
 	}
-	if ((err = fortuna_add_entropy(seed, strlen(seed), &prng))!= CRYPT_OK) {
+	if ((err = fortuna_add_entropy(seed, sizeof(seed), &prng))!= CRYPT_OK) {
 		printf("Add entropy error: %s\n", error_to_string(err));
 	}
 	if ((err = fortuna_ready(&prng)) != CRYPT_OK) {

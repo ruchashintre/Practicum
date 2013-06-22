@@ -1,4 +1,4 @@
-//#include "keygenwrapper.h"
+#include "keygenwrapper.h"
 #include "eccwrapper.h"
 #include "FeistelPRP.h"
 #include "encwrapper.h"
@@ -12,7 +12,7 @@
 #define n2 64
 #define k2 32
 
-int q,t;
+static int q,t;
 
 typedef struct {
 	int s[v];
@@ -53,40 +53,41 @@ void displayCharArray(unsigned char* out)
 int blockize(FILE* fp)
 {
 	unsigned long fileLen;
-	unsigned int blocks;
+	unsigned int file_blocks;
 	unsigned int i;
 	fseek(fp,0,SEEK_END);
 	fileLen = ftell(fp);
 	printf("\nfile size: %lu\n",fileLen);
 	if(fileLen % 32==0) {
-		blocks = fileLen/32;
-		printf("There are %d 32-byte blocks\n",blocks);
+		file_blocks = fileLen/32;
+		printf("There are %d 32-byte blocks\n",file_blocks);
 	}
 	else
 	{
-		blocks = fileLen/32+1;
+		file_blocks = fileLen/32+1;
 		int padding = 32 - fileLen % 32;
 		unsigned char paddingBytes[padding];
 		for (i=0;i<padding;i++)
 			paddingBytes[i] = 0;
 		fwrite(paddingBytes,padding,1,fp);
-		printf("After padding %d zeros, there are %d 32-byte blocks\n",padding,blocks);
+		printf("After padding %d zeros, there are %d 32-byte blocks\n",padding,file_blocks);
 	}
-	return blocks;
+	return file_blocks;
 }
 
 int inc_encoding (FILE* fp,int* prptable,unsigned char* k_ecc_perm,unsigned char* k_ecc_enc)
 {
-	int i,j,blocks,d=n-k;
+	printf("\nIncremental encoding starts...\n");
+	int i,j,enc_blocks,d=n-k;
 	fseek(fp,0,SEEK_END);
 	fileLen = ftell(fp);
 	if(fileLen % k==0) 
-		blocks = fileLen/k;
+		enc_blocks = fileLen/k;
 	else
-		blocks = fileLen/k+1;
+		enc_blocks = fileLen/k+1;
 	char message[k];
 	char codeword[n];
-	char code[blocks][d];
+	char code[enc_blocks][d];
 	int readLen = 512*1024*1024;
 	char * buf = malloc(sizeof(buf)*readLen);
 	int filecounter = 0;
@@ -96,7 +97,7 @@ int inc_encoding (FILE* fp,int* prptable,unsigned char* k_ecc_perm,unsigned char
 	{
 		size_t br = fread(buf, readLen, 1, fp);
 		filecounter = filecounter + br;
-		for(i=0;i<blocks;i++) {
+		for(i=0;i<enc_blocks;i++) {
 			for(j=0;j<k;j++) {
 				int index = i*k+j;
 				int block_index = index/32;
@@ -119,15 +120,17 @@ int inc_encoding (FILE* fp,int* prptable,unsigned char* k_ecc_perm,unsigned char
 		}
 		round = round + 1;
 	}
-	prptable = malloc(sizeof(int)*blocks);
-	prptable = prp(blocks, k_ecc_perm);
+	prptable = malloc(sizeof(int)*enc_blocks);
+	printf("\nSRF PRP for the outer layer ECC...\n");
+	prptable = prp(enc_blocks, k_ecc_perm);
 	enc_init(k_ecc_enc);
-	for (i=0;i<blocks;i++) {
+	printf("sizeof k ecc enc %lu\n",sizeof(k_ecc_enc));
+	for (i=0;i<enc_blocks;i++) {
 		unsigned char ct[d];
 		encrypt(ct,code[prptable[i]]);
 		fwrite(ct,1,d,fp);
 	}
-	t = t+blocks;
+	t = t+enc_blocks;
 	return 0;
 }
 
@@ -190,7 +193,7 @@ int main(int argc, char* argv[])
 	unsigned char mac[MAXBLOCKSIZE],
 	k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 	k_chal[16],k_ind[16],k_enc[16],k_mac[16];
-
+	printf("sizeof k ecc enc %lu\n",sizeof(k_ecc_enc));
 	keygen_init();
 	seeding(argv[2]);
 	keygen(k_file_perm,16);
@@ -200,6 +203,7 @@ int main(int argc, char* argv[])
 	printf("key for ecc permutation: ");
 	displayCharArray(k_ecc_perm);
 	keygen(k_ecc_enc,16);
+	printf("sizeof k ecc enc %lu\n",sizeof(k_ecc_enc));
 	printf("key for ecc encryption: ");
 	displayCharArray(k_ecc_enc);
 	keygen(k_chal,16);
@@ -224,12 +228,14 @@ int main(int argc, char* argv[])
 	displayCharArray(mac);	
 	
 	prptable = malloc(sizeof(int)*blocks);
+	printf("\nSRF PRP for the entire file...\n");
 	prptable = prp(blocks, k_file_perm);
-	
+	//for(i=0;i<blocks;i++)
+	//	printf("%d -> %d\n",i,prptable[i]);
 
 	initialize_ecc();
 	inc_encoding(fp,prptable,k_ecc_perm,k_ecc_enc);
-	
+		
 	q = 2;
 	Chal c[q];
 	/*c[0].s = {5,163,1234,23,412,51,61,1234,

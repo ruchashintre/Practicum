@@ -5,8 +5,12 @@ symmetric_key skey;
 // initialize the enc wrapper
 int enc_init(unsigned char* key)
 {
+	int keysize = 16;
     if ((err = aes_setup(key,sizeof(key),0,&skey)) != CRYPT_OK) {
 		printf("aes setup: %s\n", error_to_string(err));
+		    	aes_keysize(&keysize);
+		printf("aes suggested keysize: %d\n", keysize);
+		printf("size of current key: %lu\n", sizeof(key));
         return err;
 	}
     return 0;
@@ -15,8 +19,9 @@ int enc_init(unsigned char* key)
 
 int encrypt(unsigned char * ct, unsigned char * pt)
 {
-	
+
     if ((err = aes_ecb_encrypt(pt,ct,&skey)) != CRYPT_OK) {
+
 		printf("aes encrypt error: %s\n", error_to_string(err));
 		return err;
 	}
