@@ -11,6 +11,8 @@
 #define n 255
 #define k 233
 #define d 32
+#define w 4096
+#define v 1024
 
 //Challenge structure
 typedef struct {
@@ -27,10 +29,10 @@ typedef struct {
 
 void inner_decoding(decoding *d1, char * codeword, int * v_chal_indices);
 
-int extract(int t,int v, int w, unsigned char * masterkey, int * prptable, char * filename){
+int extract(int t,unsigned char * masterkey, int * prptable, char * filename){
 	
 	decoding * d1;
-	int i,j,u,size;
+	int i,j,u,size,index;
 	char * codeword,mac;
 	chal * c;
 	unsigned char * k_chal, k_j_c, k_ecc_perm, k_ecc_enc, k_mac;
@@ -57,12 +59,13 @@ int extract(int t,int v, int w, unsigned char * masterkey, int * prptable, char 
     	}
 
 	//allocate memory for d1
-	for(i=0;i<t;i++){
-		if ((d1[i] = *(decoding *) malloc (sizeof(decoding)*alpha)) == NULL) {
-			fprintf(stderr, "failed to allocate memory for d.\n");
-			return -1;
-		}
+	
+	d1 = (decoding *) malloc (sizeof(decoding)*alpha*t);
+	if(d1 == NULL) {
+		fprintf(stderr, "failed to allocate memory for d.\n");
+		return -1;
 	}
+	
 		
 	size = alpha*(t/v);
 
@@ -219,11 +222,11 @@ int outer_decoding (FILE* fp,int * erasureLocs,char ** r_data,int* prptable,unsi
 		int parity_index = (original_index*32);
 		
 		for(j=0;j<d;j++){
-			strcpy(codeword[index++],parity[parity_index+j]);
+			codeword[index++]=parity[parity_index][j];
 		}
 		
-		decode_data(codeword,k,message);
-		strcpy(decodedfile[i*k],message);
+		decode_data(codeword,n);
+		strcpy(decodedfile[i*k],codeword);
 	}
 	
 	//correct erasures
@@ -252,7 +255,7 @@ void inner_decoding(decoding *d1, char * codeword, int * v_chal_indices){
 	char block[32];
 	
 	//erasure should be empty array? 
-	int erasure[];
+	int erasure[1];
 
 	//corrected codeword would be in first parameter as well
 	correct_errors_erasures (codeword,sizeof(codeword),0,erasure);
@@ -260,13 +263,13 @@ void inner_decoding(decoding *d1, char * codeword, int * v_chal_indices){
 	//divide decoded message into v blocks from f1 to fv. 
 	for(i=0;i<v;i++){
 		//divide codeword into 32 byte blocks
-		int fi = v[i];
+		int fi = v_chal_indices[i];
 		for(j=0;j<32;j++){
-			block[j]=codeword[i][j];
+			block[j]=codeword[(i*32)+j];
 		}
 		
 		for(j=0;j<sizeof(d1[fi].file_blocks);j++){
-			if(strcmp(d1[fi].file_blocks[j],block){
+			if(strcmp(d1[fi].file_blocks[j],block)){
 				int freq = d1[fi].frequency[j];
 				d1[fi].frequency[j] = freq++;			
 			}		
