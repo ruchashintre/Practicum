@@ -2,6 +2,9 @@
 prng_state prng;
 int err;
 
+extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
+	k_chal[16],k_ind[16],k_enc[16],k_mac[16];
+
 // initialize the keygen wrapper
 int keygen_init()
 {
@@ -21,6 +24,34 @@ int seeding(unsigned char * seed)
         return err;
 	}
     return 0;
+}
+
+int master_keygen(unsigned char * seed)
+{
+	keygen_init();
+	seeding(seed);
+	keygen(k_file_perm,16);
+	printf("key for file permutation: ");
+	displayCharArray(k_file_perm);
+	keygen(k_ecc_perm,16);
+	printf("key for ecc permutation: ");
+	displayCharArray(k_ecc_perm);
+	keygen(k_ecc_enc,16);
+	printf("sizeof k ecc enc %lu\n",sizeof(k_ecc_enc));
+	printf("key for ecc encryption: ");
+	displayCharArray(k_ecc_enc);
+	keygen(k_chal,16);
+	printf("key for challenge generation: ");
+	displayCharArray(k_chal);
+	keygen(k_ind,16);
+	printf("key for random index generation: ");
+	displayCharArray(k_ind);
+	keygen(k_enc,16);
+	printf("key for response encryption: ");
+	displayCharArray(k_enc);
+	keygen(k_mac,16);
+	printf("key for MAC computation: ");
+	displayCharArray(k_mac);
 }
 
 // generate key
