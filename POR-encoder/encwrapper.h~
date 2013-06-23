@@ -47,7 +47,7 @@ int decrypt(unsigned char * ct, unsigned char * pt,int len)
 	for (i=0;i<len;i++) {
 		copyct[i] = ct[i];
 	}	
-    if ((err = aes_ecb_decrypt(copyct,copypt,&skey)) != CRYPT_OK) {
+    if ((err = aes_ecb_decrypt(ct,pt,&skey)) != CRYPT_OK) {
 		printf("aes decrypt error: %s\n", error_to_string(err));
 		return err;
 	}

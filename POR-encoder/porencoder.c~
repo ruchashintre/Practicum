@@ -288,7 +288,7 @@ int main(int argc, char* argv[])
 		keygen(rand, 8);
 		randomIndex = *(unsigned long *)rand;	
 		c[j].u = randomIndex % w;
-		printf("display rand for j=%d,u=%lu\n",j,c[j].u);
+		printf("display rand for j=%d,u=%u\n",j,c[j].u);
 	}
 	printf("Precomputation for challenges finishes\n",q);
 	precompute_response(fp,c,k_enc);

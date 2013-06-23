@@ -14,7 +14,9 @@ int* prp(int blocks, unsigned char* key)
 	int i;
 	count = malloc(blocks*sizeof(char));
 	memset(count,0,blocks * sizeof(char));
-
+	for (i=0;i<blocks;i++) {
+		printf("%d -> %02x\n",i,count[i]);
+	}
 	//second argument is the file name to be permuted
 	//atoi converted string to integer, we get the file size directly.
 	//blocks = atoi(argv[1]);

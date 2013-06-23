@@ -33,6 +33,7 @@ int master_keygen(unsigned char * seed)
 	keygen(k_file_perm,16);
 	keygen(k_ecc_perm,16);
 	keygen(k_ecc_enc,16);
+	printf("sizeof k ecc enc %lu\n",sizeof(k_ecc_enc));
 	keygen(k_chal,16);
 	keygen(k_ind,16);
 	keygen(k_enc,16);
