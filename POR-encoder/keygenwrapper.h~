@@ -2,6 +2,9 @@
 prng_state prng;
 int err;
 
+unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
+	k_chal[16],k_ind[16],k_enc[16],k_mac[16];
+
 // initialize the keygen wrapper
 int keygen_init()
 {
@@ -13,18 +16,34 @@ int keygen_init()
 }
 
 // add seed
-int seeding(char * seed)
+int seeding(unsigned char * seed)
 {
-    if ((err = fortuna_add_entropy(seed, strlen(seed), &prng))!= CRYPT_OK) {
+	//printf("print seed %s %\n",seed,sizeof(seed));
+    if ((err = fortuna_add_entropy(seed, sizeof(seed), &prng))!= CRYPT_OK) {
 		printf("Add seed error: %s\n", error_to_string(err));
         return err;
 	}
     return 0;
 }
 
+int master_keygen(unsigned char * seed)
+{
+	keygen_init();
+	seeding(seed);
+	keygen(k_file_perm,16);
+	keygen(k_ecc_perm,16);
+	keygen(k_ecc_enc,16);
+	printf("sizeof k ecc enc %lu\n",sizeof(k_ecc_enc));
+	keygen(k_chal,16);
+	keygen(k_ind,16);
+	keygen(k_enc,16);
+	keygen(k_mac,16);
+}
+
 // generate key
 int keygen(unsigned char * buf, unsigned long len)
 {
+	//memset(buf,0,len * sizeof(*buf));
     /*FILE *key;
     key = fopen(strcat(keyname,".key"),"w");
     if (!key)
@@ -35,7 +54,11 @@ int keygen(unsigned char * buf, unsigned long len)
     if ((err = fortuna_ready(&prng)) != CRYPT_OK) {
 		printf("Ready error: %s\n", error_to_string(err));
 	}
-    fortuna_read(buf,len,&prng);
+	//printf("fortuna read %lu %lu\n",sizeof(buf),len);
+    int i;
+    for(i=0;i<len;i++) {
+    	fortuna_read(buf++,1,&prng);
+    }
     //fwrite(buf, len, 1, key);
     return 0;
 }
