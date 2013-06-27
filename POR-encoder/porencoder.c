@@ -23,7 +23,6 @@ typedef struct {
 
 int hmac(char* filename,unsigned char* dst,unsigned char* key)
 {
-	printf("mac length: %lu\n",sizeof(dst));
 	int idx, err;
 	hmac_state hmac;
 	unsigned long dstlen;
@@ -294,8 +293,10 @@ int main(int argc, char* argv[])
 	precompute_response(fp,c,k_enc);
 	printf("Precomputation for responses finishes\n",q);
 	
+	printf("\nAppend MAC to the end of the file...\n",q);
 	fwrite(mac,1,16,fp);
 	fclose(fp);
+	printf("\nPOR encoding done\n",q);
 }
 
 
