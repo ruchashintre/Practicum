@@ -44,7 +44,7 @@ extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 
 int outer_decoding(FILE* temp_fp, FILE *output, decoded_blocks *db);
 void inner_decoding(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices);
-void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices);
+void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices,FILE * fp);
 
 void displayCharArray(unsigned char* out,int len)
 {
@@ -58,13 +58,15 @@ void displayCharArray(unsigned char* out,int len)
 void concat_encode(unsigned char * message,unsigned char* codeword) {
 	unsigned char tmp_code[v*32*n1/k1],stripe[k1],stripe_code[n1];
 	int index,i,j;
-	for (index=0;index<sizeof(message);index++) {
+	
+	for (index=0;index<v*32;index++) {
 		tmp_code[index] = message[index];
 	}
 	for (i=0;i<v;i++) {
 		for (j=0;j<sizeof(stripe);j++) {
 			stripe[j] = message[i*k1+j];
 		}
+		initialize_ecc();
 		encode_data(stripe,k1,stripe_code);
 		for (j=0;j<n1-k1;j++) {
 			tmp_code[index] = stripe_code[k1+j];
@@ -200,49 +202,27 @@ int main(int argc,char** argv)
 	printf("kjc for each challenge generated\n");
 	
 
-	for (i=0;i<q;i++){
+	for (i=0;i<1;i++){
 		
 		//unsigned char * codeword = (unsigned char *) malloc(sizeof(unsigned char)*32*w);
 		unsigned char codeword[32*w];
 		unsigned long indices[v];
-		//keygen_init();
-		//seeding(c[j].k_j_c);
-		//printf("generate random indices for challenge #%d\n",i);
-		//for(p=0;p<v;p++) {
-		//	unsigned long randomIndex;
-		//	char rand[8];
-		//	keygen(rand, 8);
-		//	randomIndex = *(unsigned long *)rand;	
-		//	indices[p] = randomIndex % t;
-		//	printf("random index #%d: %lu\n",p,indices[p]);
-		//}
-		//printf("random indices for challenge #%d generated\n",i);
-
-		//if(codeword== NULL){
-		//	fprintf(stderr, "failed to allocate memory for codeword.\n"); 
-		//	return -1;
-		//}
-
-		//if((v_chal_indices=(int *)malloc(sizeof(int)*v))==NULL){
-		//	fprintf(stderr, "failed to allocate memory for v indices.\n");
-		//	return -1;	
-		//}
 
 		index = 0;
 		//execute each challenge w times
 		for(u=0;u<w;u++){
 			unsigned char * subcode = execute_challenge(fp1,c[i].j, c[i].k_j_c, u, indices);
-			//printf("%d-th sub code\n",u);
-			//displayCharArray(subcode,32);
+			printf("%d-th sub code\n",u);
+			displayCharArray(subcode,32);
 			int tempI;
 			for(tempI=0;tempI<32;tempI++)
 				codeword[index++] = subcode[tempI];
 		}
-		//printf("codeword for challenge #%d\n",i);
-		//displayCharArray(codeword,4096);
+		printf("codeword for challenge #%d\n",i);
+		displayCharArray(codeword,4096);
 		// inner code decoding
 		printf("start decoding for challenge #%d\n",i);
-		inner_GMD(db,codeword,indices); 
+		inner_GMD(db,codeword,indices,fp1); 
 		printf("finish decoding for challenge %d\n",i);
 
 		//free the memory
@@ -300,7 +280,7 @@ int main(int argc,char** argv)
         		printf("%s",str);
 		}
 	}else{
-		printf("Your file can not be recovered.\n");
+		//printf("Your file can not be recovered.\n");
 		return -1;
 	}
 
@@ -520,8 +500,8 @@ void inner_decoding(decoded_blocks *db,unsigned char * c_in_codeword, unsigned l
 	}
 }
 
-void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices){ 	
-	unsigned char c_in_message[v*k2],temp[n2],c_out_codeword[n1],c_out_message[v*32];
+void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices, FILE * fp){ 	
+	unsigned char c_in_message[n1*k2],temp[n2],c_out_codeword[n1],c_out_message[v*32];
 	int c_index=0,m_index=0,i,j,m,index=0;
 	int erasure_index[n1];
 	
@@ -554,7 +534,7 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 			if (random_num<prob)
 				c_in_message[m_index++]=0;
 			else
-				c_in_message[m_index++]=temp[k2];	
+				c_in_message[m_index++]=temp[i];	
 		}
 		if (random_num<prob)
 			erasure_index[n1] = 1;
@@ -562,6 +542,8 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 			erasure_index[n1] = 0;
 	}
 	
+	printf("display c_in_message\n");
+	displayCharArray(c_in_message,sizeof(c_in_message));
 	printf("concatenated Cout decoding...\n");
 	c_index=0;
 	for(i=0;i<v;i++){
@@ -571,14 +553,16 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		//create codeword
 		//copy message part
 		for(j=0;j<k1;j++){
-			c_out_codeword[index++]=c_in_message[j];		
+			c_out_codeword[index++]=c_in_message[i*k1+j];		
 		}
 		int p;
 		//copy parity part codeword
-		p = (m_index/2) + (i*d1);
+		p = v*32 + (i*d1);
 		for(j=0;j<d1;j++){
 			c_out_codeword[index++]=c_in_message[j+p];		
 		}	
+		printf("display c_out_codeword for %d\n",i);
+		displayCharArray(c_out_codeword,sizeof(c_out_codeword));
 		
 		if(erasure_index[v]==1) {
 			int ki;
@@ -604,12 +588,12 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		}
 	}
 	
-	printf("updating Di...\n");
+	//printf("updating Di...\n");
 	for(i=0;i<v;i++){
-		printf("indices[%d]=%lu\n",i,indices[i]);
+		//printf("indices[%d]=%lu\n",i,indices[i]);
 		//divide codeword into 32 byte blocks
 		int fi = indices[i];
-		char block[32];
+		unsigned char block[32];
 		for(j=0;j<32;j++){
 			block[j]=c_out_message[(i*32)+j];
 		}
@@ -619,7 +603,6 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		int notfound=1;
 		for(j=0;j<alpha;j++){
 			int flag=1;
-			fflush(stdout);
 			if(db[fi].frequency[j]==0) break;
 			for(m=0;m<32;m++){
 				if(db[fi].file_blocks[j][m]!=block[m]){
@@ -641,5 +624,12 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 			}
 			db[fi].frequency[j] = 1;
 		}	
+		printf("display db %d:\n",fi);
+		displayCharArray(db[fi].file_blocks[j],32);
+		fseek(fp,fi*32,SEEK_SET);
+		unsigned char buffer[32];
+		fread(buffer, 32, 1, fp);
+		printf("real content in the file block %d:\n",fi);
+		displayCharArray(buffer,32);
 	}
 }

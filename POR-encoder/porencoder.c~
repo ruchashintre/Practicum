@@ -23,7 +23,6 @@ typedef struct {
 
 int hmac(char* filename,unsigned char* dst,unsigned char* key)
 {
-	printf("mac length: %lu\n",sizeof(dst));
 	int idx, err;
 	hmac_state hmac;
 	unsigned long dstlen;
@@ -288,14 +287,16 @@ int main(int argc, char* argv[])
 		keygen(rand, 8);
 		randomIndex = *(unsigned long *)rand;	
 		c[j].u = randomIndex % w;
-		printf("display rand for j=%d,u=%u\n",j,c[j].u);
+		printf("display rand for j=%d,u=%lu\n",j,c[j].u);
 	}
 	printf("Precomputation for challenges finishes\n",q);
 	precompute_response(fp,c,k_enc);
 	printf("Precomputation for responses finishes\n",q);
 	
+	printf("\nAppend MAC to the end of the file...\n",q);
 	fwrite(mac,1,16,fp);
 	fclose(fp);
+	printf("\nPOR encoding done\n",q);
 }
 
 

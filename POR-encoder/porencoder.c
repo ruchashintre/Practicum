@@ -140,13 +140,15 @@ int inc_encoding (FILE* fp,int* prptable)
 void concat_encode(unsigned char * message,unsigned char* codeword) {
 	unsigned char tmp_code[v*32*n1/k1],stripe[k1],stripe_code[n1];
 	int index,i,j;
-	for (index=0;index<sizeof(message);index++) {
+	
+	for (index=0;index<v*32;index++) {
 		tmp_code[index] = message[index];
 	}
 	for (i=0;i<v;i++) {
 		for (j=0;j<sizeof(stripe);j++) {
 			stripe[j] = message[i*k1+j];
 		}
+		initialize_ecc();
 		encode_data(stripe,k1,stripe_code);
 		for (j=0;j<n1-k1;j++) {
 			tmp_code[index] = stripe_code[k1+j];
