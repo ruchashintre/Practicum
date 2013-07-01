@@ -44,6 +44,7 @@ extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 
 int outer_decoding(FILE* temp_fp, FILE *output, decoded_blocks *db);
 void inner_decoding(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices);
+void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices);
 
 void displayCharArray(unsigned char* out,int len)
 {
@@ -144,7 +145,7 @@ int main(int argc,char** argv)
   	if ((fp1 = fopen(filename, "r")) == NULL){
 	         printf("couldn't open input file for reading.\n");
 	         return -1;
-    	}
+    }
 
 	//read mac from the end of the old file	
 	unsigned char originalmac[16];
@@ -159,13 +160,13 @@ int main(int argc,char** argv)
 	if ((fp2 = fopen(r_file, "w+")) == NULL){
 	         printf("couldn't open output file for writing.\n");
 	         return -1;
-    	}
+    }
 
 	//open temp file for writing
 	if ((temp_fp = fopen(temp, "w+")) == NULL){
 	         printf("couldn't open temperory file for writing.\n");
 	         return -1;
-    	}
+    }
 
 	//allocate memory for d1
 	db = malloc (sizeof(struct d_b)*t);  
@@ -198,7 +199,7 @@ int main(int argc,char** argv)
 	}
 	printf("kjc for each challenge generated\n");
 	
-	//execute each challenge w times
+
 	for (i=0;i<q;i++){
 		
 		//unsigned char * codeword = (unsigned char *) malloc(sizeof(unsigned char)*32*w);
@@ -228,6 +229,7 @@ int main(int argc,char** argv)
 		//}
 
 		index = 0;
+		//execute each challenge w times
 		for(u=0;u<w;u++){
 			unsigned char * subcode = execute_challenge(fp1,c[i].j, c[i].k_j_c, u, indices);
 			//printf("%d-th sub code\n",u);
@@ -240,7 +242,7 @@ int main(int argc,char** argv)
 		//displayCharArray(codeword,4096);
 		// inner code decoding
 		printf("start decoding for challenge #%d\n",i);
-		inner_decoding(db,codeword,indices); 
+		inner_GMD(db,codeword,indices); 
 		printf("finish decoding for challenge %d\n",i);
 
 		//free the memory
@@ -515,5 +517,129 @@ void inner_decoding(decoded_blocks *db,unsigned char * c_in_codeword, unsigned l
 			}
 			db[fi].frequency[j] = 1;
 		}	
-	}	
+	}
+}
+
+void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices){ 	
+	unsigned char c_in_message[v*k2],temp[n2],c_out_codeword[n1],c_out_message[v*32];
+	int c_index=0,m_index=0,i,j,m,index=0;
+	int erasure_index[n1];
+	
+	// cin decoding
+	printf("concatenated Cin decoding...\n");
+	for(j=0;j<n1;j++){
+		for(i=0;i<n2;i++){
+			temp[i]=c_in_codeword[c_index++];
+		}
+		unsigned char cpytemp[n2];
+		memcpy(cpytemp,temp,n2);
+		decode_data(temp, n2);
+		if (check_syndrome () != 0) {
+			int erasure[1];
+			correct_errors_erasures(temp,n2,0,erasure);
+		}
+		int delta_dist = 0;
+		for(i=0;i<n2;i++){
+			if(temp[i]!=cpytemp[i])
+				delta_dist++;
+		}
+		double prob;
+		if(delta_dist<d2/2)
+			prob = 2*(double)delta_dist/d2;
+		else
+			prob = 1.0;
+		srand(time(NULL));
+		double random_num = (double)rand() / (double)RAND_MAX;
+		for(i=0;i<k2;i++){
+			if (random_num<prob)
+				c_in_message[m_index++]=0;
+			else
+				c_in_message[m_index++]=temp[k2];	
+		}
+		if (random_num<prob)
+			erasure_index[n1] = 1;
+		else
+			erasure_index[n1] = 0;
+	}
+	
+	printf("concatenated Cout decoding...\n");
+	c_index=0;
+	for(i=0;i<v;i++){
+		int erasure[n1];
+		int num_erasure = 0;
+		index=0;
+		//create codeword
+		//copy message part
+		for(j=0;j<k1;j++){
+			c_out_codeword[index++]=c_in_message[j];		
+		}
+		int p;
+		//copy parity part codeword
+		p = (m_index/2) + (i*d1);
+		for(j=0;j<d1;j++){
+			c_out_codeword[index++]=c_in_message[j+p];		
+		}	
+		
+		if(erasure_index[v]==1) {
+			int ki;
+			for(ki=0;ki<k2;ki++) {
+				erasure[num_erasure] = ki;
+				num_erasure++;
+			}
+		}
+		if(erasure_index[v]==1) {
+			int di;
+			for(di=0;di<d2;di++) {
+				erasure[num_erasure] = k2+di;
+				num_erasure++;
+			}
+		}		
+		decode_data(c_out_codeword, n1);
+		if (check_syndrome () != 0) {
+			correct_errors_erasures(c_out_codeword,n1,num_erasure,erasure);
+		}
+		
+		for(j=0;j<k1;j++){
+			c_out_message[c_index++]=c_out_codeword[j];
+		}
+	}
+	
+	printf("updating Di...\n");
+	for(i=0;i<v;i++){
+		printf("indices[%d]=%lu\n",i,indices[i]);
+		//divide codeword into 32 byte blocks
+		int fi = indices[i];
+		char block[32];
+		for(j=0;j<32;j++){
+			block[j]=c_out_message[(i*32)+j];
+		}
+
+		//check if similar codeword was already decoded and present in Di
+		//if yes, just increase the frequency
+		int notfound=1;
+		for(j=0;j<alpha;j++){
+			int flag=1;
+			fflush(stdout);
+			if(db[fi].frequency[j]==0) break;
+			for(m=0;m<32;m++){
+				if(db[fi].file_blocks[j][m]!=block[m]){
+					flag=0;
+					break;
+				}		
+			}
+			if(flag){
+				//int freq = db[fi].frequency[j];
+				db[fi].frequency[j]++;	
+				notfound=0;		
+			}		
+		}
+
+		//if not found, add it in di		
+		if(notfound){
+			for(m=0;m<32;m++){
+				db[fi].file_blocks[j][m] = block[m];		
+			}
+			db[fi].frequency[j] = 1;
+		}	
+	}
 }
