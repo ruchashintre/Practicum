@@ -55,6 +55,28 @@ void displayCharArray(unsigned char* out,int len)
 	printf("\n");
 }
 
+int hmac(char* filename,unsigned char* dst,unsigned char* key)
+{
+	int idx, err;
+	hmac_state hmac;
+	unsigned long dstlen;
+	if (register_hash(&sha1_desc)==-1) {
+		printf("error registering SHA1\n");
+		return -1;
+	}
+	idx = find_hash("sha1");
+    
+	dstlen = sizeof(dst);
+    
+	if ((err = hmac_file(idx,filename,key,16,dst,&dstlen))!=CRYPT_OK) {
+		printf("Error hmac: %s\n",error_to_string(err));
+		return -1;
+	}
+    
+    printf("hmac complete\n");
+    return 0;
+}
+
 void concat_encode(unsigned char * message,unsigned char* codeword) {
 	unsigned char tmp_code[v*32*n1/k1],stripe[k1],stripe_code[n1];
 	int index,i,j;
@@ -201,8 +223,8 @@ int main(int argc,char** argv)
 	}
 	printf("kjc for each challenge generated\n");
 	
-
-	for (i=0;i<1;i++){
+    // for each challenge
+	for (i=0;i<q;i++){
 		
 		//unsigned char * codeword = (unsigned char *) malloc(sizeof(unsigned char)*32*w);
 		unsigned char codeword[32*w];
@@ -212,14 +234,14 @@ int main(int argc,char** argv)
 		//execute each challenge w times
 		for(u=0;u<w;u++){
 			unsigned char * subcode = execute_challenge(fp1,c[i].j, c[i].k_j_c, u, indices);
-			printf("%d-th sub code\n",u);
-			displayCharArray(subcode,32);
+			//printf("%d-th sub code\n",u);
+			//displayCharArray(subcode,32);
 			int tempI;
 			for(tempI=0;tempI<32;tempI++)
 				codeword[index++] = subcode[tempI];
 		}
-		printf("codeword for challenge #%d\n",i);
-		displayCharArray(codeword,4096);
+		//printf("codeword for challenge #%d\n",i);
+		//displayCharArray(codeword,4096);
 		// inner code decoding
 		printf("start decoding for challenge #%d\n",i);
 		inner_GMD(db,codeword,indices,fp1); 
@@ -233,7 +255,7 @@ int main(int argc,char** argv)
 			
 		//remove(filename);
 	}
-	fclose(fp1);
+	
 	for (i=0;i<t;i++){
 		int max_frequency=0;
 		int max_index=0;
@@ -244,7 +266,13 @@ int main(int argc,char** argv)
 				max_index = j;
 			}
 		}
-		
+        if(max_frequency==0) {
+            fseek(fp1,i*32,SEEK_SET);
+            unsigned char buffer[32];
+            fread(buffer, 32, 1, fp1);
+            fwrite(buffer,32,1,temp_fp);
+        }
+		else {
 		//check if the location can be corrected or has erasure 
 		if(ceil(max_frequency / sizeof(db[i].frequency)) > (delta+0.5)){
 			fwrite(db[i].file_blocks[max_index],32,1,temp_fp);
@@ -256,7 +284,9 @@ int main(int argc,char** argv)
 			//-1 indicating erasure
 			db[i].frequency[0]=-1;
 		}
+        }
 	}
+    fclose(fp1);
 	fclose(temp_fp);
 	
 	//perform outer decoding
@@ -264,7 +294,9 @@ int main(int argc,char** argv)
 	
 	//compute mac
 	unsigned char newmac[16]; 
-	//hmac(r_file,newmac,k_mac);
+	//hmac("temp",newmac,k_mac);
+    //printf("display MAC\n");
+    //displayCharArray(newmac,16);
 	
 	//if verified, print the file. Else output the error
 	int flag=1;	
@@ -542,8 +574,8 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 			erasure_index[n1] = 0;
 	}
 	
-	printf("display c_in_message\n");
-	displayCharArray(c_in_message,sizeof(c_in_message));
+	//printf("display c_in_message\n");
+	//displayCharArray(c_in_message,sizeof(c_in_message));
 	printf("concatenated Cout decoding...\n");
 	c_index=0;
 	for(i=0;i<v;i++){
@@ -561,8 +593,8 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		for(j=0;j<d1;j++){
 			c_out_codeword[index++]=c_in_message[j+p];		
 		}	
-		printf("display c_out_codeword for %d\n",i);
-		displayCharArray(c_out_codeword,sizeof(c_out_codeword));
+		//printf("display c_out_codeword for %d\n",i);
+		//displayCharArray(c_out_codeword,sizeof(c_out_codeword));
 		
 		if(erasure_index[v]==1) {
 			int ki;
@@ -623,7 +655,8 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 				db[fi].file_blocks[j][m] = block[m];		
 			}
 			db[fi].frequency[j] = 1;
-		}	
+		}
+        /*
 		printf("display db %d:\n",fi);
 		displayCharArray(db[fi].file_blocks[j],32);
 		fseek(fp,fi*32,SEEK_SET);
@@ -631,5 +664,6 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		fread(buffer, 32, 1, fp);
 		printf("real content in the file block %d:\n",fi);
 		displayCharArray(buffer,32);
+         */
 	}
 }
