@@ -2,6 +2,15 @@
 int err;
 symmetric_key skey;
 
+void dispCharArray(unsigned char* out,int len)
+{
+	int i;
+	for (i = 0;i < len; i++) {
+		printf("%02x", out[i]);
+	}
+	printf("\n");
+}
+
 // initialize the enc wrapper
 int enc_init(unsigned char* key)
 {
@@ -24,35 +33,47 @@ int enc_init(unsigned char* key)
 
 int encrypt(unsigned char* ct, unsigned char* pt,int len)
 {
-	int i;
-	unsigned char copyct[len],copypt[len];
-	for (i=0;i<len;i++) {
-		copypt[i] = pt[i];
-	}
-    if ((err = aes_ecb_encrypt(copypt,copyct,&skey)) != CRYPT_OK) {
 
-		printf("aes encrypt error: %s\n", error_to_string(err));
-		return err;
+	int i;
+	int indexc = 0;
+	int indexp = 0;
+	while (indexc<len){
+		unsigned char copyct[16],copypt[16];
+		for (i=0;i<16;i++) {
+			copypt[i] = pt[indexp++];
+		}
+	    if ((err = aes_ecb_encrypt(copypt,copyct,&skey)) != CRYPT_OK) {
+
+			printf("aes encrypt error: %s\n", error_to_string(err));
+			return err;
+		}
+		for (i=0;i<16;i++) {
+			ct[indexc++] = copyct[i];
+		}
 	}
-	for (i=0;i<len;i++) {
-		ct[i] = copyct[i];
-	}
-    return 0;
+   return 0;
 }
 
-int decrypt(unsigned char * ct, unsigned char * pt,int len)
+int decrypt(unsigned char* ct, unsigned char* pt,int len)
 {
+
 	int i;
-	unsigned char copyct[len],copypt[len];
-	for (i=0;i<len;i++) {
-		copyct[i] = ct[i];
-	}	
-    if ((err = aes_ecb_decrypt(copyct,copypt,&skey)) != CRYPT_OK) {
-		printf("aes decrypt error: %s\n", error_to_string(err));
-		return err;
-	}
-	for (i=0;i<len;i++) {
-		pt[i] = copypt[i];
+	int indexc = 0;
+	int indexp = 0;
+	while (indexc<len){
+		unsigned char copyct[16],copypt[16];
+		for (i=0;i<16;i++) {
+			copyct[i] = ct[indexc++];
+		}	
+
+	    if ((err = aes_ecb_decrypt(copyct,copypt,&skey)) != CRYPT_OK) {
+			printf("aes decrypt error: %s\n", error_to_string(err));
+			return err;
+		}
+
+		for (i=0;i<16;i++) {
+			pt[indexp++] = copypt[i];
+		}
 	}
     return 0;
 }

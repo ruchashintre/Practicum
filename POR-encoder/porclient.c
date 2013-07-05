@@ -14,13 +14,14 @@
 #include <time.h>
 #include <arpa/inet.h>
 #include "keygenwrapper.h"
+#include "encwrapper.h"
 
 #define PORT "3490" // the port client will be connecting to 
 #define v 1024/32
 #define w 4096/32
 #define LEN 16
 #define BLOCK_SIZE 32
-#define q 1000
+#define q 100
 #define MAXDATASIZE 100 // max number of bytes we can get at once 
 
 extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
@@ -138,8 +139,18 @@ int main(int argc, char *argv[])
 		if ((numbytes = recv(sockfd, recvbuf, 32, 0)) == -1) {
 			perror("recv");
 		}
-    	printf("client: receive response #%d\n",j);
+    	printf("client: receive response M%d\n",j);
 		displayCharArray(recvbuf,32);
+		if ((numbytes = recv(sockfd, recvbuf, 32, 0)) == -1) {
+			perror("recv");
+		}
+    	printf("client: receive response Q%d\n",j);
+		displayCharArray(recvbuf,32);
+		printf("client: Decrypting Q%d, dec(Q%d)=\n",j,j);
+		enc_init(k_enc);
+		unsigned char newMj[32];
+		decrypt(recvbuf, newMj,32);
+		displayCharArray(newMj,32);
 	}
 
     

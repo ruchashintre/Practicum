@@ -18,7 +18,7 @@ extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 
 typedef struct {
 	unsigned long s[v];
-	unsigned long u;
+	unsigned int u;
 } Chal;
 
 int hmac(char* filename,unsigned char* dst,unsigned char* key)
@@ -194,10 +194,13 @@ int precompute_response(FILE* fp, Chal * c,char * key) {
 		for (i=0;i<32;i++) {
 			uth[i] = codeword[32*c[j].u+i];
 		}
-		printf("u=%lu\n",c[j].u);
+		printf("u=%d\n",c[j].u);
 		encrypt(ct,uth,sizeof(uth));
 		printf("Precomputation for response No.%d\n",j);
+		displayCharArray(uth,32);
 		displayCharArray(ct,32);
+		decrypt(ct,uth,sizeof(ct));
+		displayCharArray(uth,32);
 		fwrite(ct,1,32,fp);
 		fflush(stdout);
 	}
@@ -284,12 +287,12 @@ int main(int argc, char* argv[])
 	keygen_init();
 	seeding(k_ind);	
 	for(j=0;j<q;j++) {
-		unsigned long randomIndex;
-		char rand[8];
-		keygen(rand, 8);
-		randomIndex = *(unsigned long *)rand;	
+		unsigned int randomIndex;
+		char rand[4];
+		keygen(rand, 4);
+		randomIndex = *(unsigned int *)rand;	
 		c[j].u = randomIndex % w;
-		printf("display rand for j=%d,u=%lu\n",j,c[j].u);
+		printf("display rand for j=%d,u=%d\n",j,c[j].u);
 	}
 	printf("Precomputation for challenges finishes\n",q);
 	precompute_response(fp,c,k_enc);

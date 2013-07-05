@@ -22,7 +22,7 @@
 #define w 4096/32
 #define LEN 16
 #define BLOCK_SIZE 32
-#define q 1000
+#define q 100
 #define BACKLOG 10     // how many pending connections queue will hold
 #define n1 64
 #define k1 32
@@ -235,8 +235,18 @@ int main(int argc, char ** argv)
 
 			if (send(new_fd, code, 32, 0) == -1)
         		perror("send");
-        	printf("server: send response for challenge %d\n",j);
+        	printf("server: send response M%d\n",j);
         	displayCharArray(code,32);
+        	fseek(fp,t*32+j*32,SEEK_SET);
+        	fread(code,32,1,fp);
+			if (send(new_fd, code, 32, 0) == -1)
+        		perror("send");
+        	printf("server: send response Q%d\n",j);
+        	displayCharArray(code,32);
+        	//unsigned char check[100];
+        	//fseek(fp,t*32,SEEK_SET);
+        	//fread(check,100,1,fp);
+        	//displayCharArray(check,100);
 			close(new_fd);
 			exit(0);
         	}
