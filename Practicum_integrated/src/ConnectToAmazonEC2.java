@@ -102,12 +102,11 @@ public class ConnectToAmazonEC2 {
 
             // DISPLAY IF RUNNING OR NOT
             String status = null;
-
+            String runningId = null;
             do {
                 List<Instance> newlyCreatedList = runResult.getReservation().getInstances();
-                System.out.println(newlyCreatedList.size());
                 Instance runningInstance = newlyCreatedList.get(0);
-                String runningId = runningInstance.getInstanceId();
+                runningId = runningInstance.getInstanceId();
                 pubDnsName = runningInstance.getPublicDnsName();
                 System.out.println(pubDnsName);
                 System.out.println(runningInstance.getPublicIpAddress());
@@ -123,12 +122,23 @@ public class ConnectToAmazonEC2 {
                     describeInstanceResult = ec2client.describeInstanceStatus(describeInstanceRequest);
                     state = describeInstanceResult.getInstanceStatuses();
                 }
+
                 status = state.get(0).getInstanceState().getName();
 
                 System.out.println("Status = " + status);
-                Thread.sleep(5 * 1000);
             } while (!status.equals("running"));
+            request = new DescribeInstancesRequest().withInstanceIds(runningId);
+            result = ec2client.describeInstances(request);
 
+            reservations = result.getReservations();
+
+            for (Reservation reservation : reservations) {
+                List<Instance> instances = reservation.getInstances();
+                for (Instance instance : instances) {
+                    pubDnsName = instance.getPublicDnsName();
+                    System.out.println("DNS " + pubDnsName);
+                }
+            }
             //pending, running, shutting-down, terminated, stopping, stopped
             System.out.println("Status of the instance = " + status);
             /*
@@ -166,6 +176,7 @@ public class ConnectToAmazonEC2 {
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
             }
+            prcs.destroy();
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return -1;
@@ -177,7 +188,7 @@ public class ConnectToAmazonEC2 {
 
         try {
             Runtime rt = Runtime.getRuntime();
-            String command ="scp -i " + pemFilePath + " ubuntu@" + pubDnsName + ":~/" + filNameToBeDownloaded + " " + saveToLocation; 
+            String command = "scp -i " + pemFilePath + " ubuntu@" + pubDnsName + ":~/" + filNameToBeDownloaded + " " + saveToLocation;
             System.out.println(command);
             prcs = rt.exec(command);
             InputStreamReader isr = new InputStreamReader(prcs.getInputStream());
@@ -186,6 +197,7 @@ public class ConnectToAmazonEC2 {
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
             }
+            prcs.destroy();
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return -1;
@@ -203,17 +215,20 @@ public class ConnectToAmazonEC2 {
             if (status == 0) {
                 try {
                     System.out.println("In the start of verify");
-
-
-                    String command = "./porserver "+fileName;
+                    String command = "pkill -9 -f porserver";
                     PrintWriter out = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(prcs.getOutputStream())), true);
                     out.println(command);
-                    
+                    command = "./porserver " + fileName;
+                    System.out.println(command);
+
+                    out.println(command);
+
                 } catch (Exception ioe) {
                     ioe.printStackTrace();
                 }
-
             }
+            prcs.destroy();
+
         } catch (Exception ioe) {
             ioe.printStackTrace();
             return -1;
@@ -242,7 +257,7 @@ public class ConnectToAmazonEC2 {
     public static ArrayList<String> getFileList(String pemFilePath, String fileName) {
 
         ArrayList<String> list = new ArrayList<String>();
-
+        prcs = null;
         int status = sshToCloud(pemFilePath, fileName);
         String line = null;
 
@@ -269,15 +284,12 @@ public class ConnectToAmazonEC2 {
                 line = br.readLine();
                 line = br.readLine();
 
-
-
-
                 String[] lines = line.split("\\s+");
                 System.out.println(line);
                 for (String a : lines) {
                     list.add(a);
                 }
-
+                prcs.destroy();
 
                 System.out.println("after while");
             } catch (IOException ioe) {

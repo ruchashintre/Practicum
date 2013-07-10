@@ -60,7 +60,7 @@ public class UploadSuccess extends javax.swing.JFrame {
                     jTextField9.setText(result);
                 }
             }
-            
+            pr.destroy();
            ConnectToAmazonEC2.fileUpload(filename,pemFilePath );
             
         } catch(Exception e) {
@@ -172,7 +172,7 @@ public class UploadSuccess extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Time Taken(ms)"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Time Taken(s)"));
 
         jLabel5.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jLabel5.setText("Total Pre-processing time");
@@ -257,7 +257,7 @@ public class UploadSuccess extends javax.swing.JFrame {
                             .addComponent(jTextField3)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 47, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -346,7 +346,7 @@ public class UploadSuccess extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

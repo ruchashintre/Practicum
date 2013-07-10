@@ -5,7 +5,6 @@ import java.util.ArrayList;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author PoojaD
@@ -14,18 +13,19 @@ public class CheckAvailability extends javax.swing.JFrame {
 
     private static String userName = null;
     private static String pemFilePath = null;
+
     /**
      * Creates new form CheckRetrievability
      */
-    public CheckAvailability(String userString,String pemFilePath) {
-        
-        this.userName=userString;
-        this.pemFilePath=pemFilePath;
+    public CheckAvailability(String userString, String pemFilePath) {
+
+        this.userName = userString;
+        this.pemFilePath = pemFilePath;
         initComponents();
         jLabel3.setVisible(false);
-        
+
         ArrayList<String> list = ConnectToAmazonEC2.getFileList(pemFilePath, userName);
-        for(int i=0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             jComboBox1.addItem(list.get(i));
         }
     }
@@ -152,37 +152,39 @@ public class CheckAvailability extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        MainMenu menu = new MainMenu(userName,pemFilePath);
+        MainMenu menu = new MainMenu(userName, pemFilePath);
         menu.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-       if(jTextField1.getText()== null || jTextField1.getText().length() == 0){
+
+        if (jTextField1.getText() == null || jTextField1.getText().length() == 0) {
             jLabel3.setText("Please select unique password for the file to be uploaded");
             jLabel3.setVisible(true);
-        }else{
+        } else {
             //validate here
-           //CHECK RUCHA's Code'
-           boolean flag = true;
-           if(flag){
-               String filename = jComboBox1.getSelectedItem().toString();
-               String masterkey = jTextField1.getText().toString();
-               
-                int status = KeyStore.validateKey(userName,filename,masterkey);
-                if(true){
-                RetrievabilitySuccess connectToCloud = new RetrievabilitySuccess(filename,masterkey,userName,pemFilePath);
-                }else{
+            //CHECK RUCHA's Code'
+            boolean flag = true;
+            if (flag) {
+                String filename = jComboBox1.getSelectedItem().toString();
+                String masterkey = jTextField1.getText().toString();
+
+                int status = KeyStore.validateKey(userName, filename, masterkey);
+                if (true) {
+                    RetrievabilitySuccess connectToCloud = new RetrievabilitySuccess(filename, masterkey, userName, pemFilePath);
+                    connectToCloud.setVisible(true);
+                    setVisible(false);
+                } else {
                     jLabel3.setText("Invalid master key. Please re-enter");
                     jLabel3.setVisible(true);
                 }
-           }else{
+            } else {
                 jLabel3.setText("Error while retrieving the file. Please check later");
                 jLabel3.setVisible(true);
-           }
-       }
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

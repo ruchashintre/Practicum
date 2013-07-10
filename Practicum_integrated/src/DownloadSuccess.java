@@ -58,6 +58,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
                     jTextField9.setText(result);
                 }
             }
+            pr.destroy();
         } catch(Exception e) {
             e.printStackTrace();
         }
