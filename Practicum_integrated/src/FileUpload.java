@@ -161,7 +161,7 @@ public class FileUpload extends javax.swing.JFrame {
             String masterkey = jTextField2.getText().toString();
             //store the master key locally
             System.out.println("Key to be stored");
-           // KeyStore.storeKey(userName,filename,masterkey);
+            KeyStore.storeKey(userName,filename,masterkey);
             
             
             System.out.println("File to be encoded");

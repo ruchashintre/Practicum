@@ -17,6 +17,7 @@ public class Practicum {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new CloudSelector().setVisible(true);
+        //new CloudSelector().setVisible(true);
+         KeyStore.storeKey("poojad", "/home/poojad/test.txt","iammasterkey") ;
     }
 }

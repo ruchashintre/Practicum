@@ -1,12 +1,11 @@
 
-import java.io.File;
-import java.io.IOException;
-import java.io.FileWriter;
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -18,7 +17,8 @@ import java.io.FileReader;
  */
 public class KeyStore {
 
-    public static String file_to_be_mounted = "/home/poojad/a.txt";
+    public static String file_to_be_mounted = "/home/poojad/adu.txt";
+    public static String op = "/home/poojad/x.txt";
     public static String mount_path = "/media/DISK1";
     public static int default_partition_size_MB = 1074000;
     public static String truecrypt_password = "poojad";
@@ -26,7 +26,6 @@ public class KeyStore {
     public static String key_store = "keyStore.txt";
 
     public static int storeKey(String userName, String fileName, String masterKey) {
-
 
         String line = null;
         File file = null;
@@ -37,60 +36,70 @@ public class KeyStore {
         try {
             //if file doesnt exists, then create it
             if (!file.exists()) {
+
+
                 file.createNewFile();
 
                 //create the volume
-                //check my volume .tc
-                String command = "truecrypt -t --size=" + default_partition_size_MB + " --password=" + truecrypt_password + " --random-source=" + random_file + " --volume-type=normal --encryption=AES --hash=SHA-512 --filesystem=FAT " + "-c " + file_to_be_mounted;
+                String command = "truecrypt --size=" + default_partition_size_MB + " --password=" + truecrypt_password + " -k \"\" --random-source=" + random_file + " --volume-type=normal --encryption=AES --hash=SHA-512 --filesystem=FAT " + "-c " + file_to_be_mounted + " > " + op;
+
                 Process p = Runtime.getRuntime().exec(command);
                 System.out.println(command);
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                p.waitFor();
+                p.destroy();
+
+                for (int i = 0; i < 15; i++) {
+                    line = stdInput.readLine();
+                    System.out.println(line);
+                }
+
                 while ((line = stdInput.readLine()) != null) {
                     System.out.println(line);
                 }
 
-                p = Runtime.getRuntime().exec("");
                 //mount a volume
                 mount(userName, fileName, masterKey);
 
-                keyFile = new File(key_store);
+                System.out.println("Volume mounted");
+                keyFile = new File(mount_path + "/"+key_store);
                 if (!file.exists()) {
                     file.createNewFile();
+                    System.out.println(key_store + " created");
                 }
 
-                FileWriter fileWritter = new FileWriter(key_store, true);
+                FileWriter fileWritter = new FileWriter(mount_path + "/"+key_store, true);
                 BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-                bufferWritter.write(userName + "|" + fileName + "|" + masterKey);
+                String str = userName + "|" + fileName + "|" + masterKey;
+                System.out.println("Appended to the file" + str);
+                bufferWritter.write(str);
                 bufferWritter.close();
 
                 System.out.println("In storeKey -3");
 
             } else {
-                
+
                 //mount a volume
+                //mount(userName, fileName, masterKey);
+                System.out.println("Volume is present.");
                 mount(userName, fileName, masterKey);
 
-                FileWriter fileWritter = new FileWriter(key_store, true);
+                System.out.println("Volume is mounted now");
+
+                FileWriter fileWritter = new FileWriter(mount_path + "/"+key_store, true);
                 BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
                 bufferWritter.write(userName + "|" + fileName + "|" + masterKey);
+                String str = userName + "|" + fileName + "|" + masterKey;
+                System.out.println("Appended to the file" + str);
                 bufferWritter.close();
             }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (IOException | InterruptedException ioe) {
+           System.out.println(ioe.getMessage());
             return -1;
         }
 
-
-        /*File Upload
-         1. if first time
-         - create a volume
-         2. else
-         - mount the volume
-         - open the file
-         - append entry to it at the end : useid, file name, password
-         - close the file
-         - dismount the volume
-         */
+        dismount(userName, fileName, masterKey);
+        System.out.println("Volume dismounted");
         return 0;
     }
 
@@ -98,6 +107,8 @@ public class KeyStore {
 
         File file;
         file = new File(file_to_be_mounted);
+        String sCurrentLine = null;
+        BufferedReader br = null;
 
         try {
 
@@ -107,13 +118,11 @@ public class KeyStore {
             }
 
             mount(userName, fileName, masterKey);
-            BufferedReader br = null;
+            System.out.println("partition mounted");
 
             try {
 
-                String sCurrentLine;
-
-                br = new BufferedReader(new FileReader("C:\\testing.txt"));
+                br = new BufferedReader(new FileReader(mount_path + "/"+key_store));
 
                 while ((sCurrentLine = br.readLine()) != null) {
                     System.out.println(sCurrentLine);
@@ -121,19 +130,18 @@ public class KeyStore {
 
                 if (sCurrentLine.contains(userName)) {
                     String array[] = sCurrentLine.split("|");
-                    if (array[1].equalsIgnoreCase(masterKey)) {
+                    if (array[2].equalsIgnoreCase(masterKey)) {
                         return 0;
                     } else {
                         return -1;
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+               System.out.println(e.getMessage());
             }
-            ////
 
         } catch (Exception e) {
-            e.printStackTrace();
+           System.out.println(e.getMessage());
         }
 
         return 0;
@@ -144,28 +152,38 @@ public class KeyStore {
         String line = null;
         try {
             System.out.println("I am in mount");
-            Process p = Runtime.getRuntime().exec("truecrypt " + file_to_be_mounted + " " + mount_path);
+            String command = "truecrypt " + file_to_be_mounted + " " + mount_path;
+            System.out.println(command);
+            Process p = Runtime.getRuntime().exec(command);
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = stdInput.readLine()) != null) {
                 System.out.println(line);
             }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+            p.waitFor();
+            p.destroy();
+        } catch (IOException | InterruptedException ioe) {
+            System.out.println(ioe.getMessage());
+            return false;
         }
-        return false;
+        return true;
     }
 
     public static boolean dismount(String userName, String fileName, String masterKey) {
         String line = null;
         try {
+            String command = "\"truecrypt -d \" + mount_path";
+            System.out.println("In dismount" + command);
             Process p = Runtime.getRuntime().exec("truecrypt -d " + mount_path);
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = stdInput.readLine()) != null) {
                 System.out.println(line);
             }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+            p.waitFor();
+            p.destroy();
+        } catch (IOException | InterruptedException ioe) {
+            System.out.println(ioe.getMessage());
+            return false;
         }
-        return false;
+        return true;
     }
 }

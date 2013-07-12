@@ -1,4 +1,3 @@
-
 import java.util.*;
 /*
  * To change this template, choose Tools | Templates
@@ -10,15 +9,13 @@ import java.util.*;
  * @author PoojaD
  */
 public class RetrievabilitySuccess extends javax.swing.JFrame {
-
-    private static String filename, masterkey, userName, pemFilePath;
-
+    private static String filename,masterkey,userName,pemFilePath;
     /**
      * Creates new form RetrievabilitySuccess
      */
-    public RetrievabilitySuccess(String filename, String masterkey, String userName, String pemFilePath) {
+    public RetrievabilitySuccess(String filename, String masterkey,String userName, String pemFilePath) {
         initComponents();
-        this.userName = userName;
+        this.userName =  userName;
         this.pemFilePath = pemFilePath;
         jTextField1.setEditable(false);
         jTextField2.setEditable(false);
@@ -26,19 +23,15 @@ public class RetrievabilitySuccess extends javax.swing.JFrame {
         jTextField5.setEditable(false);
         this.filename = filename;
         this.masterkey = masterkey;
-        String hostname = ConnectToAmazonEC2.pubDnsName;
+        String hostname=ConnectToAmazonEC2.pubDnsName;
         //TODO: get the hostname of cloud server
         ConnectToAmazonEC2.verify(pemFilePath, filename);
         //TODO: exec("./porserver "+filename) on the cloud end
         try {
-            String command = "/home/poojad/POR/porclient " + hostname + " " + masterkey;
-            System.out.println(command);
-            Process pr = Runtime.getRuntime().exec(command);
-            //System.out.println(pr.exitValue());
+            Process pr = Runtime.getRuntime().exec("/home/poojad/POR/porclient "+hostname+" "+masterkey);
             Scanner in = new Scanner(pr.getInputStream());
-            while (in.hasNextLine()) {
+            while(in.hasNextLine()) {
                 String result = in.nextLine();
-                System.out.println(result);
                 if (result.equals("#RESULT#")) {
                     result = in.nextLine();
                     jTextField2.setText(result);
@@ -48,10 +41,7 @@ public class RetrievabilitySuccess extends javax.swing.JFrame {
                     jTextField5.setText(result);
                 }
             }
-            pr.waitFor();
-            pr.destroy();
-
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -192,10 +182,10 @@ public class RetrievabilitySuccess extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        MainMenu menu = new MainMenu(userName, pemFilePath);
+        MainMenu menu = new MainMenu(userName,pemFilePath);
         menu.setVisible(true);
         setVisible(false);
-
+                
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
