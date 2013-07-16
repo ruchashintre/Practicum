@@ -4,16 +4,18 @@
 #include "FeistelPRP.h"
 #include "encwrapper.h"
 #include "keygenwrapper.h"
+#include "jg_timing.h"
 #include <math.h>
 
 #define alpha 10
 #define delta 0.25
 #define BLOCK_SIZE 32
 #define n 255
-#define k 233
+#define k 223
 #define d 32
 #define w 4096/32 
 #define v 1024/32 
+#define oldq 100
 #define MACSIZE 16
 #define n1 64
 #define k1 32
@@ -22,8 +24,19 @@
 #define k2 32
 #define d2 32
 
-static unsigned long q,t;
+//double startTime, endTime;
+//startTime = getCPUTime();
+//endTime = getCPUTime();
+
+static unsigned long q,t,m;
 static unsigned	char uth[32];
+double totalTime,totalStartTime, totalEndTime;
+double readTime,readStartTime, readEndTime;
+double prpTime,prpStartTime, prpEndTime;
+double eccTime,eccStartTime, eccEndTime;
+double macTime,macStartTime, macEndTime;
+double chalTime,chalStartTime, chalEndTime;
+double writeTime,writeStartTime, writeEndTime;
 
 //Challenge structure
 typedef struct { 
@@ -42,7 +55,7 @@ typedef struct d_b{
 extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 	k_chal[16],k_ind[16],k_enc[16],k_mac[16];
 
-int outer_decoding(FILE* temp_fp, FILE *output, decoded_blocks *db);
+int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decoded_blocks *db);
 void inner_decoding(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices);
 void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices,FILE * fp);
 
@@ -53,6 +66,28 @@ void displayCharArray(unsigned char* out,int len)
 		printf("%02x", out[i]);
 	}
 	printf("\n");
+}
+
+int hmac(char* filename,unsigned char* dst,unsigned char* key)
+{
+	int idx, err;
+	hmac_state hmac;
+	unsigned long dstlen;
+	if (register_hash(&sha1_desc)==-1) {
+		printf("error registering SHA1\n");
+		return -1;
+	}
+	idx = find_hash("sha1");
+    
+	dstlen = 16;
+    
+	if ((err = hmac_file(idx,filename,key,16,dst,&dstlen))!=CRYPT_OK) {
+		printf("Error hmac: %s\n",error_to_string(err));
+		return -1;
+	}
+    
+    printf("hmac complete\n");
+    return 0;
 }
 
 void concat_encode(unsigned char * message,unsigned char* codeword) {
@@ -117,13 +152,170 @@ unsigned char * execute_challenge(FILE* fp, int j, char * kjc, int u, unsigned l
 	return uth;
 }
 
+int checkFile(FILE* fp1,unsigned char * mac) {
+	unsigned char newMac[16];
+	unsigned char buf[BLOCK_SIZE];
+	int i,j;
+	FILE * orifp;
+	fseek(fp1,0,SEEK_SET);
+	if ((orifp = fopen("original", "w+b")) == NULL){
+		printf("couldn't open input file for reading.\n");
+		return -1;
+        }
+	for (i=0;i<m;i++) {
+		readStartTime = getCPUTime();
+		fread(buf, BLOCK_SIZE, 1, fp1);
+		readEndTime = getCPUTime();
+		readTime += readEndTime-readStartTime;
+		writeStartTime = getCPUTime();
+   	fwrite(buf,BLOCK_SIZE,1,orifp);
+      	writeEndTime = getCPUTime();
+		writeTime += writeEndTime-writeStartTime;
+	}
+	fclose(orifp);
+	macStartTime = getCPUTime();
+	printf("HMAC using key: ");
+	displayCharArray(k_mac,16);	
+	hmac("original",newMac,k_mac);
+	macEndTime = getCPUTime();
+	macTime = macEndTime - macStartTime;
+	printf("MAC of the file part: ");
+	displayCharArray(newMac,16);
+
+	for (i=0;i<16;i++) {
+		if (newMac[i]!=mac[i])
+			return -1;
+	}
+	return 0;
+}
+
+int initial_outer_decoding(FILE* fp1,unsigned char * mac) {
+	unsigned char newMac[16];
+	unsigned char buf[BLOCK_SIZE];
+	int i,j;
+	FILE * orifp, * parifp;
+
+	if ((orifp = fopen("original", "r+b")) == NULL){
+		printf("couldn't open input file for reading.\n");
+		return -1;
+        }
+	if ((parifp = fopen("parity", "w+b")) == NULL){
+		printf("couldn't open input file for reading.\n");
+		return -1;
+        }
+	fseek(fp1,m*BLOCK_SIZE,SEEK_SET);
+	for (i=0;i<t-m;i++) {
+		readStartTime = getCPUTime();
+		fread(buf, BLOCK_SIZE, 1, fp1);
+		readEndTime = getCPUTime();
+		readTime += readEndTime-readStartTime;
+		writeStartTime = getCPUTime();
+   	fwrite(buf,BLOCK_SIZE,1,parifp);
+      	writeEndTime = getCPUTime();
+		writeTime += writeEndTime-writeStartTime;
+	}
+	fclose(parifp);
+	if ((parifp = fopen("parity", "r+b")) == NULL){
+		printf("couldn't open input file for reading.\n");
+		return -1;
+        }
+   FILE* outer;
+   if ((outer = fopen("outerdec", "w+b")) == NULL){
+		printf("couldn't open input file for reading.\n");
+		return -1;
+        }     
+   FILE* tempfp = fopen("tempfile", "w+b");
+   initialize_ecc();
+   outer_decoding(orifp, parifp, outer, tempfp, NULL);
+	macStartTime = getCPUTime();
+	printf("HMAC using key: ");
+	displayCharArray(k_mac,16);	
+	hmac("outerdec",newMac,k_mac);
+	macEndTime = getCPUTime();
+	macTime = macEndTime - macStartTime;
+	printf("MAC of the file part: ");
+	displayCharArray(newMac,16);
+
+	for (i=0;i<16;i++) {
+		if (newMac[i]!=mac[i])
+			return -1;
+	}
+	return 0;
+}
+
 int main(int argc,char** argv)
 {
+
+	totalStartTime = getCPUTime();
+	//endTime = getCPUTime();
 	printf("start POR extract...\n");
 	char * filename = argv[1];
+    FILE *fp1,*fp2,*temp_fp;
+	//open encoded file for reading
+  	if ((fp1 = fopen(argv[1], "r")) == NULL){
+        printf("couldn't open input file for reading.\n");
+        return -1;
+        }
+    
 	int p;
-	t = atoi(argv[3]);
-	printf("extract for file \"%s\" with %lu blocks\n",filename,t);
+	//t = atoi(argv[3]);
+	unsigned long fileLen;
+	fseek(fp1,0,SEEK_END);
+	fileLen = ftell(fp1);
+	t = (fileLen-16-oldq*BLOCK_SIZE) / BLOCK_SIZE;
+	m = t*k/n;
+	printf("extract for file \"%s\" with size=%lu m=%lu and t=%lu\n",filename,fileLen,m,t);
+	//use master key and call keygen to generate all the keys here.	
+	master_keygen(argv[2]);
+	
+	//read mac from the end of the old file	
+	unsigned char originalmac[16];
+	int bufLength=16;
+	readStartTime = getCPUTime();
+	fseek(fp1, fileLen-bufLength, SEEK_SET);
+	fread(originalmac, sizeof(originalmac), 1, fp1);
+	readEndTime = getCPUTime();
+	readTime += readEndTime-readStartTime;
+	printf("\nMAC attached at the end of the file: ");
+	displayCharArray(originalmac,16);
+	
+	if (checkFile(fp1,originalmac)==0) {
+		printf("File is intact.\n");
+		fclose(fp1);
+		totalEndTime = getCPUTime();
+		totalTime = totalEndTime - totalStartTime;
+		printf("#RESULT#\n");
+		printf("%lf\n",totalTime);
+		printf("%lf\n",readTime);
+		printf("%lf\n",prpTime);
+		printf("%lf\n",eccTime);
+		printf("%lf\n",macTime);
+		printf("%lf\n",chalTime);
+		printf("%lf\n",writeTime);
+		exit(0);
+	}
+	else if (initial_outer_decoding(fp1,originalmac)==0){
+		//initial_outer_decoding(fp1, newfp);
+		//if (checkFile(newfp,originalmac)==0) {
+			printf("File is recovered after outer encoding.\n");
+			fclose(fp1);
+			totalEndTime = getCPUTime();
+			totalTime = totalEndTime - totalStartTime;
+			printf("#RESULT#\n");
+			printf("%lf\n",totalTime);
+			printf("%lf\n",readTime);
+			printf("%lf\n",prpTime);
+			printf("%lf\n",eccTime);
+			printf("%lf\n",macTime);
+			printf("%lf\n",chalTime);
+			printf("%lf\n",writeTime);
+			exit(0);
+		//}
+	}
+	//else {
+		//printf("File is corrupted.\n");
+		//exit(0);
+	//}
 	int tempv = v;
 	q = alpha * t / tempv;
 	decoded_blocks * db;
@@ -132,7 +324,6 @@ int main(int argc,char** argv)
 	chal c[q];
 	unsigned char k_j_c[16]; 
 	char str[999]; 
-	FILE *fp1,*fp2,*temp_fp; 
 	char * temp_block;
 	// after writing new file, delete old file
 
@@ -140,24 +331,7 @@ int main(int argc,char** argv)
 	char * temp ="temp";
 	unsigned int * v_chal_indices;
 
-	//use master key and call keygen to generate all the keys here.	
-	master_keygen(argv[2]); // integrate
-	
-	//open encoded file for reading	
-  	if ((fp1 = fopen(filename, "r")) == NULL){
-	         printf("couldn't open input file for reading.\n");
-	         return -1;
-    }
 
-	//read mac from the end of the old file	
-	unsigned char originalmac[16];
-	int bufLength=16;
-	fseek(fp1, 0, SEEK_END); // read file before
-	long fileLength=ftell(fp1);
-	fseek(fp1, fileLength-bufLength, SEEK_SET);
-	fread(originalmac, sizeof(originalmac), 1, fp1);
-	printf("\nMAC attached at the end of the file: ");
-	displayCharArray(originalmac,16);
 	//open output file for writing
 	if ((fp2 = fopen(r_file, "w+")) == NULL){
 	         printf("couldn't open output file for writing.\n");
@@ -168,7 +342,7 @@ int main(int argc,char** argv)
 	if ((temp_fp = fopen(temp, "w+")) == NULL){
 	         printf("couldn't open temperory file for writing.\n");
 	         return -1;
-    }
+    	}
 
 	//allocate memory for d1
 	db = malloc (sizeof(struct d_b)*t);  
@@ -201,8 +375,8 @@ int main(int argc,char** argv)
 	}
 	printf("kjc for each challenge generated\n");
 	
-
-	for (i=0;i<1;i++){
+    // for each challenge
+	for (i=0;i<q;i++){
 		
 		//unsigned char * codeword = (unsigned char *) malloc(sizeof(unsigned char)*32*w);
 		unsigned char codeword[32*w];
@@ -212,14 +386,14 @@ int main(int argc,char** argv)
 		//execute each challenge w times
 		for(u=0;u<w;u++){
 			unsigned char * subcode = execute_challenge(fp1,c[i].j, c[i].k_j_c, u, indices);
-			printf("%d-th sub code\n",u);
-			displayCharArray(subcode,32);
+			//printf("%d-th sub code\n",u);
+			//displayCharArray(subcode,32);
 			int tempI;
 			for(tempI=0;tempI<32;tempI++)
 				codeword[index++] = subcode[tempI];
 		}
-		printf("codeword for challenge #%d\n",i);
-		displayCharArray(codeword,4096);
+		//printf("codeword for challenge #%d\n",i);
+		//displayCharArray(codeword,4096);
 		// inner code decoding
 		printf("start decoding for challenge #%d\n",i);
 		inner_GMD(db,codeword,indices,fp1); 
@@ -233,7 +407,7 @@ int main(int argc,char** argv)
 			
 		//remove(filename);
 	}
-	fclose(fp1);
+	
 	for (i=0;i<t;i++){
 		int max_frequency=0;
 		int max_index=0;
@@ -244,7 +418,13 @@ int main(int argc,char** argv)
 				max_index = j;
 			}
 		}
-		
+		if(max_frequency==0) {
+			fseek(fp1,i*32,SEEK_SET);
+			unsigned char buffer[32];
+			fread(buffer, 32, 1, fp1);
+			fwrite(buffer,32,1,temp_fp);
+		 }
+		else {
 		//check if the location can be corrected or has erasure 
 		if(ceil(max_frequency / sizeof(db[i].frequency)) > (delta+0.5)){
 			fwrite(db[i].file_blocks[max_index],32,1,temp_fp);
@@ -256,7 +436,9 @@ int main(int argc,char** argv)
 			//-1 indicating erasure
 			db[i].frequency[0]=-1;
 		}
+        }
 	}
+    fclose(fp1);
 	fclose(temp_fp);
 	
 	//perform outer decoding
@@ -264,7 +446,9 @@ int main(int argc,char** argv)
 	
 	//compute mac
 	unsigned char newmac[16]; 
-	//hmac(r_file,newmac,k_mac);
+	//hmac("temp",newmac,k_mac);
+    //printf("display MAC\n");
+    //displayCharArray(newmac,16);
 	
 	//if verified, print the file. Else output the error
 	int flag=1;	
@@ -281,10 +465,19 @@ int main(int argc,char** argv)
 		}
 	}else{
 		printf("Your file can not be recovered.\n");
-		return -1;
+		//return -1;
 	}
 
 	fclose(fp2);
+    printf("#RESULT#\n");
+    printf("%lf\n",totalTime);
+    printf("%lf\n",readTime);
+    printf("%lf\n",prpTime);
+    printf("%lf\n",eccTime);
+    printf("%lf\n",macTime);
+    printf("%lf\n",chalTime);
+    printf("%lf\n",writeTime);
+
 	return 0;
 }
 
@@ -308,101 +501,161 @@ int main(int argc,char** argv)
 void reverseprp(int stripes, int * prp_table, int * reverse_prp_table)
 {
 	int i=0;
-	for(i=0;i<sizeof(prp_table);i++){
+	for(i=0;i<stripes;i++){
 		int num=prp_table[i];
+		//printf("prp %d: %d\n",i,num);
 		reverse_prp_table[num]=i;	
 	}
 }
 
-int outer_decoding(FILE* temp_fp, FILE *output, decoded_blocks *db)
+int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decoded_blocks *db)
 {
-	int i,j,stripes,fileLen,index,m;
-	int * prp_table, *reverse_prp_table;
+	int i,j,stripes,fileLen,index;
+	int* prp_table;
+	int* reverse_prp_table;
 	char message[k];
 	char codeword[n];
-	char parity[stripes][d]; 
-	char decodedfile[stripes][k];
+
+	//unsigned char decodedfile[stripes][k];
 	int erasure[1];
+	//FILE* tempfp = fopen("tempfile", "w+b");
+	if (tempfp  == NULL){
+ 		printf("couldn't open temperory file for writing.\n");
+ 		return -1;
+    	}
 
 	//find the number of stripes in the file 
-	fseek(temp_fp,0,SEEK_END);
-	fileLen = ftell(temp_fp);
-	if(fileLen % k==0) 
-		stripes = fileLen/k; 
-	else
-		stripes = fileLen/k+1;	
-
+	fseek(parifp,0,SEEK_END);
+	fileLen = ftell(parifp);
+	printf("display fileLen of parity %d\n",fileLen);
+	//if(fileLen % n==0) 
+		stripes = fileLen/d; 
+	//else
+		//stripes = fileLen/n+1;
+	printf("number of stripes for outer decoding %d\n",stripes);
+	fflush(stdout);
+	unsigned char ** parity;//[stripes][d]; 
+	parity = (unsigned char **) malloc(stripes*sizeof(unsigned char *));  
+	for (i = 0; i < stripes; i++) {
+   	parity[i] = (unsigned char *) malloc(d*sizeof(unsigned char));  
+   	}
 	//call prp
-	prp_table =(int *)malloc(sizeof(int)*stripes);
-	reverse_prp_table = (int *)malloc(sizeof(int)*stripes);
+	prp_table =malloc(sizeof(int)*stripes);
+	reverse_prp_table = malloc(sizeof(int)*stripes);
 	
 	//perform reverse prp
 	prp_table = prp(stripes, k_ecc_perm);
 	reverseprp(stripes,prp_table,reverse_prp_table);
-	free(prp_table);
-
+	/*for(i=0;i<stripes;i++){
+		printf("prp %d: %d\n",i,prp_table[i]);
+		printf("rev prp %d: %d\n",i,reverse_prp_table[i]);
+	}*/
+	//free(prp_table);
+	printf("check1\n");
 	enc_init(k_ecc_enc);
 	
 	//decrypt parity part
-	rewind(temp_fp);
-	
+	rewind(parifp);
+	rewind(orifp);
 	///number of parity blocks = stripes/2
 	//read parity parts directly
-	// not sure about block length : CHECK WITH JIE,Rucha
-	//can we do directly like this?
-	int parity_start = fileLen-(stripes/2)*d;
-	fseek(temp_fp,parity_start,SEEK_SET);
 
-	for (i=0;i<stripes/2;i++) {
+	//int parity_start = fileLen-(stripes/2)*d;
+	//fseek(temp_fp,parity_start,SEEK_SET);
+	unsigned char paritybytes[stripes][d];
+	for (i=0;i<stripes;i++) {
 		unsigned char ct[d];
-		unsigned char pt[d];	
+		//unsigned char pt[d];	
 		
-		fread(pt,sizeof(pt),1,temp_fp);
+		fread(ct,sizeof(ct),1,parifp);
 		
-		decrypt(ct,pt,sizeof(ct)); 
-		for(j=0;j<d;j++){
-			parity[i][j]=ct[j];
-		}
+		decrypt(ct,paritybytes[prp_table[i]],sizeof(ct)); 
+		//printf("prp rev for %d: ",i);
+		//displayCharArray(paritybytes[i],sizeof(ct));
+		//for(j=0;j<d;j++){
+		//	parity[i][j]=ct[j];
+		//}
 	}
-
+	for (i=0;i<stripes;i++) {
+		printf("prp rev for %d: ",i);
+		displayCharArray(paritybytes[i],sizeof(paritybytes[i]));
+	}
+	free(reverse_prp_table);
+	reverse_prp_table = malloc(sizeof(int)*m);
+	prp_table =malloc(sizeof(int)*m);
+	prp_table = prp(m, k_file_perm);
+	reverseprp(m,prp_table,reverse_prp_table);
 	//get the message and the parity, create codeword and decode it
-	rewind(temp_fp);
-	
-	for(i=0;i<stripes/2;i++) {
+	//rewind(temp_fp);
+	FILE * prp = fopen("prp","w+b");
+	for(i=0;i<m;i++) {
+		unsigned char prpbuf[BLOCK_SIZE];
+		fseek(orifp,prp_table[i]*32,SEEK_SET);
+		size_t br = fread(prpbuf,1,BLOCK_SIZE,orifp);
+		fwrite(prpbuf,1,BLOCK_SIZE,prp);
+	}
+	fclose(prp);
+	prp = fopen("prp","r+b");
+	for(i=0;i<stripes;i++) {
 		index=0;
-		unsigned char pt[k];
+		unsigned char code[n];
 
-		fread(pt,sizeof(pt),1,temp_fp);
-
-		for(j=0;j<k;j++) {
-			codeword[index++] = pt[j]; 
+		size_t br = fread(code,1,k,prp);
+		int pad = k-br;
+		int ii;
+		for (ii=0;ii<pad;ii++)
+			code[br+ii] = 0;
+			
+		for(j=0;j<d;j++) {
+			code[k+j] = paritybytes[i][j]; 
 		}
+		printf("whole code %d: ",i);
+		displayCharArray(code,n);
+		decode_data(code, n);
+		int syn = check_syndrome ();
+		printf("syndrome: %d\n",syn);
+		if (syn != 0) {
+			correct_errors_erasures(code,n,0,erasure);
+		}
+		printf("decoded code %d: ",i);
+		displayCharArray(code,n);
 		//calculate block index of the parity part
-		int parity_index = (reverse_prp_table[i]*32);
-		
-		for(j=0;j<d;j++){
-			codeword[index++]=parity[parity_index][j];
-		}
-		
-		correct_errors_erasures(codeword,n,0,erasure); 
-	
-		for(m=0;m<k;m++){
-			decodedfile[i*k][m]=codeword[m];
-		}
+		fwrite(code,1,br,tempfp);
 	}
-	
+	fclose(tempfp);
+	for (i = 0; i < stripes; i++){  
+   	free(parity[i]);  
+	}  
+	free(parity);
+	if ((tempfp = fopen("tempfile", "r+b")) == NULL){
+ 		printf("couldn't open temperory file for writing.\n");
+ 		return -1;
+    	}
 	// write data to the file by applying second level of permutation
-	for(i=0;i<stripes;i++){
-		int fileindex=reverse_prp_table[i];
-		int block_start_index= i*32;
-		int block_end_index=(i+1)*32;
-		unsigned char ct[32];
-		for(j=i*block_start_index;j<block_end_index;j++){
-			//ct[j]=decodedfile[j];
-		}
-		fwrite(ct,sizeof(ct),1,output);
+	//free(prp_table);
+	//free(reverse_prp_table);
+	//printf("display m = %lu\n",m);
+
+	rewind(tempfp);
+	rewind(output);
+	unsigned char buf[BLOCK_SIZE];
+	for(i=0;i<m;i++) {
+		readStartTime = getCPUTime();
+		fseek(tempfp,reverse_prp_table[i]*32,SEEK_SET);
+		fread(buf, BLOCK_SIZE, 1, tempfp);
+		readEndTime = getCPUTime();
+		readTime += readEndTime-readStartTime;
+		writeStartTime = getCPUTime();
+   	fwrite(buf,BLOCK_SIZE,1,output);
+      	writeEndTime = getCPUTime();
+		writeTime += writeEndTime-writeStartTime;		
 	}
+	printf("check4\n");
+	fclose(tempfp);
 	fclose(output);
+	fclose(orifp);
+	fclose(parifp);
+	printf("check5\n");
 	//delete(temp_fp);
 	return 0;
 }
@@ -542,8 +795,8 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 			erasure_index[n1] = 0;
 	}
 	
-	printf("display c_in_message\n");
-	displayCharArray(c_in_message,sizeof(c_in_message));
+	//printf("display c_in_message\n");
+	//displayCharArray(c_in_message,sizeof(c_in_message));
 	printf("concatenated Cout decoding...\n");
 	c_index=0;
 	for(i=0;i<v;i++){
@@ -561,8 +814,8 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		for(j=0;j<d1;j++){
 			c_out_codeword[index++]=c_in_message[j+p];		
 		}	
-		printf("display c_out_codeword for %d\n",i);
-		displayCharArray(c_out_codeword,sizeof(c_out_codeword));
+		//printf("display c_out_codeword for %d\n",i);
+		//displayCharArray(c_out_codeword,sizeof(c_out_codeword));
 		
 		if(erasure_index[v]==1) {
 			int ki;
@@ -623,7 +876,8 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 				db[fi].file_blocks[j][m] = block[m];		
 			}
 			db[fi].frequency[j] = 1;
-		}	
+		}
+        /*
 		printf("display db %d:\n",fi);
 		displayCharArray(db[fi].file_blocks[j],32);
 		fseek(fp,fi*32,SEEK_SET);
@@ -631,5 +885,6 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		fread(buffer, 32, 1, fp);
 		printf("real content in the file block %d:\n",fi);
 		displayCharArray(buffer,32);
+         */
 	}
 }

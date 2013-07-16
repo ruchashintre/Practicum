@@ -1,0 +1,16 @@
+start POR extract...
+extract for file "test.txt" with size=70928 m=1850 and t=2116
+
+MAC attached at the end of the file: b32d9c39542d9f6a5ffa32522bd09583
+HMAC using key: 5d3f167a86a83a9fe26cf68b15898441
+hmac complete
+MAC of the file part: b32d9c39542d9f6a5ffa32522bd09583
+File is intact.
+#RESULT#
+0.008359
+0.001624
+0.000000
+0.000000
+0.000650
+0.000000
+0.002490

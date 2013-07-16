@@ -6,9 +6,10 @@ Version 		Date 			Author			Comments
 *******************************************************************************/
 
 #include "FeistelPRP.h"
+#include "jg_timing.h"
 
 static char * count;
-
+static double startTime, endTime;
 int* prp(int blocks, unsigned char* key)
 {
 	int i;
@@ -36,18 +37,14 @@ int* prp(int blocks, unsigned char* key)
 	int bit = ceil(index_bit_length);
 	printf("bit num: %d\n",bit);
 	//declare for block indices table, and permuted indices table
-	int * blockindices;
+	//int * blockindices;
 	int * prpblockindices;
 	//allocate memory for input and output table
-    blockindices = (int *)malloc(blocks*sizeof(int));
+    //blockindices = (int *)malloc(blocks*sizeof(int));
     prpblockindices = (int *)malloc(blocks*sizeof(int));
 
 	//initialize block array to the block indices
     int j=0;
-
-    for (i=0;i<blocks;i++) {
-		blockindices[i] = i;
-    }
 	
 	//hardcoding 6 seeds
 	/*
@@ -83,7 +80,7 @@ int* prp(int blocks, unsigned char* key)
 	round6table = malloc(blocks*sizeof(unsigned int));
 	generateRoundFunctions(seed6,round6table,blocks);
 	printf("6 tables generated\n");
-    //endTime = getCPUTime();
+   //endTime = getCPUTime();
     //fprintf( stderr, "CPU time used for PRNG = %lf\n", (endTime - startTime) );
     
     //startTime = getCPUTime();
@@ -105,10 +102,18 @@ int* prp(int blocks, unsigned char* key)
 		//printf("%d -> %d\n", blockindices[i], prpblockindices[i]);		
 	//}
 
-	//endTime = getCPUTime();
+	 //endTime = getCPUTime();
     //fprintf( stderr, "CPU time used for PRP = %lf\n", (endTime - startTime) );
     printf("PRP: finish \n");
     fflush(stdout);
+    free(round1table);
+    free(round2table);
+    free(round3table);
+    free(round4table);
+    free(round5table);
+    free(round6table);
+    free(count);
+
     return prpblockindices;
 }
 
@@ -140,11 +145,10 @@ void generateRoundFunctions(unsigned char * seed, unsigned int * bufint, int blo
 	}
 		
 
-	for(i=0;i<blocks;i++){
-			
-		fortuna_read(buf,sizeof(buf),&prng);
-		bufint[i] = *(unsigned int *)buf;	
-	}
+	//for(i=0;i<blocks;i++){
+		fortuna_read((unsigned char *)bufint,blocks*sizeof(unsigned int),&prng);
+		//bufint[i] = *(unsigned int *)buf;	
+	//}
 
 }
 
@@ -186,8 +190,9 @@ int Fe(int r, int a, int b, int m, int blocks, int bit){
 	int c = fe(r,a,b,m,bit);
 	//c = c % blocks;
 	if(c < blocks) {
-		while (count[c]!=0)
-			c++;
+		while (count[c]!=0) {
+			c= (c+1)%blocks;
+		}
 		count[c] = 1;
 		return c;
 	}

@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
 	}
 	printf("#RESULT#\n");
 	double totalTime = getCPUTime() - startTime;
-	printf("%lf\n",totalTime);
+	printf("%lf\n",getCPUTime()-startTime);
 	printf("%.2f\n",(double)counter*100.0/q);
 	printf("%d\n",q);
     //system(command);
