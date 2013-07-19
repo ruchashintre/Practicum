@@ -14,7 +14,7 @@
 #define k2 32
 #define BLOCK_SIZE 32
 #define q 100
-#define readLen 1024*1024*1024
+#define readLen 1024*1024*1024 // incremental encoding read amount
 
 static unsigned long t;
 extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
@@ -46,7 +46,7 @@ int hmac(char* filename,unsigned char* dst,unsigned char* key)
 		printf("error registering SHA1\n");
 		return -1;
 	}
-	idx = find_hash("sha1");
+	idx = find_hash("sha1"); // use sha1 for HMAC
 
 	dstlen = 16;
 
@@ -343,6 +343,7 @@ void concat_encode(unsigned char * message,unsigned char* codeword) {
 	}
 }
 
+
 int precompute_response(FILE* fp, Chal * c,char * key) {
 
 	unsigned char message[v*BLOCK_SIZE];
@@ -351,33 +352,36 @@ int precompute_response(FILE* fp, Chal * c,char * key) {
 	char ct[BLOCK_SIZE];
 	int i,j,p;
 	enc_init(key);
+    // for each of the challenge
 	for (j=0;j<q;j++) {
 
 		int index = 0;
 		for (i=0;i<v;i++) {
-
-			fseek(fp,c[j].s[i]*BLOCK_SIZE,SEEK_SET);
+            // read in the random indexed blocks
+            fseek(fp,c[j].s[i]*BLOCK_SIZE,SEEK_SET);
 			unsigned char buffer[BLOCK_SIZE];
-          readStartTime = getCPUTime();
-		clock_gettime(CLOCK_MONOTONIC, &start);
+            readStartTime = getCPUTime();
+            clock_gettime(CLOCK_MONOTONIC, &start);
 			fread(buffer, BLOCK_SIZE, 1, fp);
-		clock_gettime(CLOCK_MONOTONIC, &finish);
-		double addTime = finish.tv_sec - start.tv_sec;
-		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
-         readTime += getCPUTime() - readStartTime+addTime;
+            clock_gettime(CLOCK_MONOTONIC, &finish);
+            double addTime = finish.tv_sec - start.tv_sec;
+            addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+            readTime += getCPUTime() - readStartTime+addTime;
 			for(p=0;p<BLOCK_SIZE;p++) {
 				message[index] = buffer[p];
 				index++;
 			}
 			fflush(stdout);
 		}
-
+        // perform a concatenated encoding
 		concat_encode(message,codeword);
 		for (i=0;i<BLOCK_SIZE;i++) {
+            // get the u-th symbol
 			uth[i] = codeword[BLOCK_SIZE*c[j].u+i];
 		}
 		clock_gettime(CLOCK_MONOTONIC, &start);
 		encStartTime = getCPUTime();
+        // encrypt the response and append at the end
 		encrypt(ct,uth,sizeof(uth));
 		clock_gettime(CLOCK_MONOTONIC, &finish);
 		double addTime = finish.tv_sec - start.tv_sec;
@@ -408,9 +412,10 @@ int main(int argc, char* argv[])
 	int* prptable;
 	unsigned char mac[MAXBLOCKSIZE];
     unsigned long fileLen1,fileLen2;
+    // get the file size
 	fseek(fp,0,SEEK_END);
 	fileLen1 = ftell(fp);
-
+    // generate keys
 	master_keygen(argv[2]);
 
 	printf("key for file permutation: ");
@@ -434,10 +439,13 @@ int main(int argc, char* argv[])
 	printf("key for MAC computation: ");
 	displayCharArray(k_mac,16);	
 	
+    // blockize the file
 	int blocks = blockize(fp);
 	t = blocks;
 	fclose(fp);
     fp = fopen(argv[1],"a+b");
+    
+    // computing MAC
 	printf("\nComputing file's MAC...\n");
 		printf("\nmac size %lu\n",sizeof(mac));
     macStartTime = getCPUTime();
@@ -446,6 +454,7 @@ int main(int argc, char* argv[])
 	printf("\nMAC = ");
 	displayCharArray(mac,16);	
 	
+    // perform a file level PRP
 	printf("\nSRF PRP for the entire file...\n");
     prpStartTime = getCPUTime();
 	prptable = prp(blocks, k_file_perm);
@@ -457,10 +466,12 @@ int main(int argc, char* argv[])
 	
 	printf("\nFile blocks after outer layer encoding: %lu\n",t);
 
+    // precompute q challenge and responsess
 	printf("\nPrecomputation for %d challenges and responses\n",q);
     chalStartTime = getCPUTime();
 	Chal c[q];
 	int j,p;
+    // use k_chal to generate kjc
 	keygen_init();
 	seeding(k_chal);
 	unsigned char * kjc[q];
@@ -468,6 +479,7 @@ int main(int argc, char* argv[])
 		kjc[j] = malloc(16*sizeof(unsigned char *));
 		keygen(kjc[j], 16);
 	}
+    // use kjc to generate random indices
 	for(j=0;j<q;j++) {
 		keygen_init();
 		seeding(kjc[j]);
@@ -479,6 +491,7 @@ int main(int argc, char* argv[])
 			c[j].s[p] = randomIndex % t;
 		}
 	}
+    // use k_ind to generate random index u
 	keygen_init();
 	seeding(k_ind);	
 	for(j=0;j<q;j++) {
@@ -487,20 +500,20 @@ int main(int argc, char* argv[])
 		keygen(rand, 4);
 		randomIndex = *(unsigned int *)rand;	
 		c[j].u = randomIndex % w;
-		//printf("display rand for j=%d,u=%d\n",j,c[j].u);
 	}
 	printf("Precomputation for challenges finishes\n");
-
+    // precompute challenge responses
 	precompute_response(fp,c,k_enc);
 	printf("Precomputation for responses finishes\n");
-	    chalTime+=getCPUTime()-chalStartTime - write2Time;
+    chalTime+=getCPUTime()-chalStartTime - write2Time;
+    // append MAC at the end of the files
 	printf("\nAppend MAC to the end of the file...\n");
     write2StartTime = getCPUTime();
-		clock_gettime(CLOCK_MONOTONIC, &start);
+    clock_gettime(CLOCK_MONOTONIC, &start);
 	fwrite(mac,16,1,fp);
-		clock_gettime(CLOCK_MONOTONIC, &finish);
-		double addTime = finish.tv_sec - start.tv_sec;
-		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+    clock_gettime(CLOCK_MONOTONIC, &finish);
+    double addTime = finish.tv_sec - start.tv_sec;
+    addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
     write2Time += getCPUTime() - write2StartTime+addTime;
     fseek(fp,0,SEEK_END);
 	fileLen2 = ftell(fp);
