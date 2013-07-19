@@ -25,8 +25,9 @@
 
 extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 	k_chal[16],k_ind[16],k_enc[16],k_mac[16];
+static struct timespec start, finish;
 
-
+// display unsigned char array
 void displayCharArray(unsigned char* out,int len)
 {
 	int i;
@@ -48,7 +49,7 @@ void *get_in_addr(struct sockaddr *sa)
 
 int main(int argc, char *argv[])
 {
-	double startTime = getCPUTime();
+	clock_gettime(CLOCK_MONOTONIC, &start); // time the verify process
 	int sockfd, numbytes;  
 	//char buf[MAXDATASIZE];
 	struct addrinfo hints, *servinfo, *p;
@@ -62,10 +63,11 @@ int main(int argc, char *argv[])
 		fprintf(stderr,"usage: ./client hostname masterkey\n");
 		exit(1);
 	}
-    
+   // generate key set from masterkey
 	master_keygen(argv[2]);
 	unsigned char buf[24];
 	int j;
+	// generate k_chal and corresponding kjc
 	keygen_init();
 	seeding(k_chal);
 	unsigned char * kjc[q];
@@ -73,6 +75,7 @@ int main(int argc, char *argv[])
 		kjc[j] = malloc(16*sizeof(unsigned char *));
 		keygen(kjc[j], 16);
 	}
+	// using k_ind to generate random index u
 	keygen_init();
 	seeding(k_ind);	
 	unsigned int u[q];
@@ -83,14 +86,18 @@ int main(int argc, char *argv[])
 		randomIndex = *(unsigned int *)rand;	
 		u[j] = randomIndex % w;
 	}
+	// send to server for each chanllenge
 	for (j=0;j<q;j++) {
+		// first 4 bytes are j
 		buf[0] = (j >> 24) & 0xFF;
 		buf[1] = (j >> 16) & 0xFF;
 		buf[2] = (j >> 8) & 0xFF;
 		buf[3] = j & 0xFF;
+		// then 16 bytes of kjc
 		int i;
 		for (i=0;i<16;i++)
 			buf[4+i] = kjc[j][i];
+		// then 4 bytes are u
 		buf[20] = (u[j] >> 24) & 0xFF;
 		buf[21] = (u[j] >> 16) & 0xFF;
 		buf[22] = (u[j] >> 8) & 0xFF;
@@ -128,6 +135,7 @@ int main(int argc, char *argv[])
 		printf("client: connecting to %s\n", s);
 
 		freeaddrinfo(servinfo); // all done with this structure
+		// send the challenge info
     	if (send(sockfd, buf, 24, 0) == -1)
         perror("send");
     
@@ -136,23 +144,27 @@ int main(int argc, char *argv[])
 		displayCharArray(kjc[j],16);
 		printf("u=%d\n",u[j]);
 		displayCharArray(buf,24);
-		unsigned char recvbufM[32];
-		unsigned char recvbufQ[32];
-		if ((numbytes = recv(sockfd, recvbufM, 32, 0)) == -1) {
+		
+		// receive the response from server for Mj and Qj
+		unsigned char recvbufM[BLOCK_SIZE];
+		unsigned char recvbufQ[BLOCK_SIZE];
+		if ((numbytes = recv(sockfd, recvbufM, BLOCK_SIZE, 0)) == -1) {
 			perror("recv");
 		}
     	printf("client: receive response M%d\n",j);
-		displayCharArray(recvbufM,32);
-		if ((numbytes = recv(sockfd, recvbufQ, 32, 0)) == -1) {
+		displayCharArray(recvbufM,BLOCK_SIZE);
+		if ((numbytes = recv(sockfd, recvbufQ, BLOCK_SIZE, 0)) == -1) {
 			perror("recv");
 		}
     	printf("client: receive response Q%d\n",j);
-		displayCharArray(recvbufQ,32);
+		displayCharArray(recvbufQ,BLOCK_SIZE);
 		printf("client: Decrypting Q%d, dec(Q%d)=\n",j,j);
+		
+		// decrypt and verify
 		enc_init(k_enc);
-		unsigned char newMj[32];
-		decrypt(recvbufQ, newMj,32);
-		displayCharArray(newMj,32);
+		unsigned char newMj[BLOCK_SIZE];
+		decrypt(recvbufQ, newMj,BLOCK_SIZE);
+		displayCharArray(newMj,BLOCK_SIZE);
 		int np;
 		for (np=0;np<BLOCK_SIZE;np++) {
 			if (newMj[np]!=recvbufM[np])
@@ -163,7 +175,9 @@ int main(int argc, char *argv[])
 		}
 	}
 	printf("#RESULT#\n");
-	double totalTime = getCPUTime() - startTime;
+	clock_gettime(CLOCK_MONOTONIC, &finish);
+	double totalTime = finish.tv_sec - start.tv_sec;
+	totalTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
 	printf("%lf\n",totalTime);
 	printf("%.2f\n",(double)counter*100.0/q);
 	printf("%d\n",q);

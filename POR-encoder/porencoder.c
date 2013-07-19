@@ -12,27 +12,31 @@
 #define k1 32
 #define n2 64
 #define k2 32
+#define BLOCK_SIZE 32
+#define q 100
+#define readLen 1024*1024*1024
 
-static unsigned long q,t;
+static unsigned long t;
 extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 	k_chal[16],k_ind[16],k_enc[16],k_mac[16];
-double totalTime,totalStartTime, totalEndTime;
-double readTime,readStartTime, readEndTime;
-double prpTime,prpStartTime, prpEndTime;
-double eccTime,eccStartTime, eccEndTime;
-double macTime,macStartTime, macEndTime;
-double chalTime,chalStartTime, chalEndTime;
-double write1Time,write1StartTime, write1EndTime;
-double write2Time,write2StartTime, write2EndTime;
-double encTime,encStartTime,encEndTime;
-clock_t startTime,endTime;
-struct timespec start, finish;
+static double totalTime,totalStartTime, totalEndTime;
+static double readTime,readStartTime, readEndTime;
+static double prpTime,prpStartTime, prpEndTime;
+static double eccTime,eccStartTime, eccEndTime;
+static double macTime,macStartTime, macEndTime;
+static double chalTime,chalStartTime, chalEndTime;
+static double write1Time,write1StartTime, write1EndTime;
+static double write2Time,write2StartTime, write2EndTime;
+static double encTime,encStartTime,encEndTime;
+static clock_t startTime,endTime;
+static struct timespec start, finish;
 
 typedef struct {
 	unsigned long s[v];
 	unsigned int u;
 } Chal;
 
+// compute the MAC of a given file
 int hmac(char* filename,unsigned char* dst,unsigned char* key)
 {
 	int idx, err;
@@ -55,6 +59,7 @@ int hmac(char* filename,unsigned char* dst,unsigned char* key)
     return 0;
 }
 
+// display unsigned char array
 void displayCharArray(unsigned char* out,int len)
 {
 	int i;
@@ -64,39 +69,46 @@ void displayCharArray(unsigned char* out,int len)
 	printf("\n");
 }
 
+// blockize the file, padding 0 if not divisible by BLOCK_SIZE
 int blockize(FILE* fp)
 {
 	unsigned long fileLen;
 	unsigned int file_blocks;
 	unsigned int i;
 	fseek(fp,0,SEEK_END);
-	fileLen = ftell(fp);
+	fileLen = ftell(fp); // get file length
 	printf("\nfile size: %lu\n",fileLen);
-	if(fileLen % 32==0) {
-		file_blocks = fileLen/32;
-		printf("There are %d 32-byte blocks\n",file_blocks);
+
+	if(fileLen % BLOCK_SIZE==0) {
+		// file divisible by block size
+		file_blocks = fileLen/BLOCK_SIZE;
+		printf("There are %d blocks\n",file_blocks);
 	}
 	else
 	{
-		file_blocks = fileLen/32+1;
-		int padding = 32 - fileLen % 32;
+		// if not divisible, padding 0 at the end
+		file_blocks = fileLen/BLOCK_SIZE+1;
+		int padding = BLOCK_SIZE - fileLen % BLOCK_SIZE;
 		unsigned char paddingBytes[padding];
 		for (i=0;i<padding;i++)
 			paddingBytes[i] = 0;
         write1StartTime = getCPUTime();
 		fwrite(paddingBytes,padding,1,fp);
         write1Time += getCPUTime() - write1StartTime;
-		printf("After padding %d zeros, there are %d 32-byte blocks\n",padding,file_blocks);
+		printf("After padding %d zeros, there are %d blocks\n",padding,file_blocks);
 	}
 	return file_blocks;
 }
 
+// outer layer ECC using incremental encoding
 int inc_encoding (FILE* fp,int* prptable)
 {
 	printf("\nIncremental encoding starts...\n");
 	int i,j,enc_blocks,d=n-k;
+	// get file length
 	fseek(fp,0,SEEK_END);
 	fileLen = ftell(fp);
+	// divide by message length k, get number of encoding blocks
 	if(fileLen % k==0) 
 		enc_blocks = fileLen/k;
 	else
@@ -104,18 +116,23 @@ int inc_encoding (FILE* fp,int* prptable)
 	printf("There are %d encoding blocks\n",enc_blocks);
 	unsigned char message[k];
 	unsigned char codeword[n];
-	unsigned char ** code;//[enc_blocks][d];
-	int readLen = 512*1024*1024;
-
+	unsigned char ** code; // used to store parity part
+	
 	long filecounter = 0;
 	int blockcounter = 0;
 	int round = 0;
 
+	// code is enc_blocks * d
 	code = (unsigned char **) malloc(enc_blocks*sizeof(unsigned char *));  
 	for (i = 0; i < enc_blocks; i++) {
-   	code[i] = (unsigned char *) malloc(d*sizeof(unsigned char));  
+   	code[i] = (unsigned char *) malloc(d*sizeof(unsigned char)); 
+   	int ii;
+   	for (ii=0;ii<d;ii++)
+   		code[i][ii]=0; 
    	}
-   	rewind(fp);
+   	
+
+   rewind(fp);
 	while (!feof(fp))
 	{
 		unsigned char * buf; 
@@ -123,6 +140,7 @@ int inc_encoding (FILE* fp,int* prptable)
 			printf("malloc error: inc_encoding\n");
 			exit(1);
 		}
+		// incremental encoding, read reaLen each time
 		readStartTime = getCPUTime();
 		clock_gettime(CLOCK_MONOTONIC, &start);
 		printf("max read in %d bytes\n",readLen);
@@ -133,27 +151,31 @@ int inc_encoding (FILE* fp,int* prptable)
 		double addTime = finish.tv_sec - start.tv_sec;
 		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
 		readTime += getCPUTime() - readStartTime+addTime;
+		// keep a counter to know where the file pointer up to
 		filecounter = filecounter + br;
 		if (br!=0) {
 			printf("round %d\n",round);
 			printf("filecounter = %lu\n",filecounter);
 			for(i=0;i<enc_blocks;i++) {
 				for(j=0;j<k;j++) {
+					// for each byte in each message, compute index
 					int index = i*k+j;
-					int block_index = index/32;
-					int byte_index = index%32;
+					// get block and byte index
+					int block_index = index/BLOCK_SIZE;
+					int byte_index = index%BLOCK_SIZE;
+					// if reach the end, padding 0s
 					if (index>=fileLen) {
 						int a;
 						for(a=j;a<k;a++)
 							message[a]=0;
 						break;
 					}
-					//printf("block_index=%d, prpind=%d, byteind=%d, ",block_index,prptable[block_index],byte_index);
-					unsigned long file_index = prptable[block_index]*32+byte_index;
-					//printf("file_index=%lu, ",file_index);
+					// compute the PRPed index in the file
+					unsigned long file_index = prptable[block_index]*BLOCK_SIZE+byte_index;
+					
+					// check if this byte is read in the memory or not, copy if yes, put 0 otherwise
 					if(file_index<filecounter && file_index>=(filecounter-br)) {
 						unsigned long newind = file_index-filecounter+br;
-						//printf("newind=%lu\n ",newind);
 						message[j] = buf[newind];
 					}
 					else 
@@ -161,15 +183,24 @@ int inc_encoding (FILE* fp,int* prptable)
 				}
 				//printf("msg for block %d: ",i);
 				//displayCharArray(message,k);
+				// do a partial encoding on the message
 				encode_data(message,k,codeword);
+				// concatenate with previous code to get a whole
+				/*printf("code for block %d: ",i);
+				displayCharArray(codeword,n);
+				printf("parity (before) for block %d: ",i);
+				displayCharArray(code[i],n-k);*/
 				for(j=0;j<d;j++)
 					code[i][j] = code[i][j] ^ codeword[k+j];
+				//printf("parity for block %d: ",i);
+				//displayCharArray(code[i],n-k);
+				//printf("\n");
 			}
 			round = round + 1;
 		}
 		free(buf);
 	}
-	/*// ------------- bug checking
+	/*// ------------- for debugging
 	unsigned char a[fileLen],r[fileLen];
 	unsigned char newc[n],newm[k];
 	rewind(fp);
@@ -227,35 +258,44 @@ int inc_encoding (FILE* fp,int* prptable)
 		printf("decode %d: ",i);
 		displayCharArray(newcode,n);
 	}
-	//--------------- bug checking*/
+	//--------------- for debugging */
 	free(prptable);
 	prptable = NULL;
-	//free(buf);
+	// perform another PRP for parity part
 	prptable = malloc(sizeof(int)*(enc_blocks));
 	printf("\nSRF PRP for the outer layer ECC...\n");
    prpStartTime = getCPUTime();
 	prptable = prp(enc_blocks, k_ecc_perm);
    prpTime += getCPUTime() - prpStartTime;
+   
+   // encrypt parity part and append to the file with PRPed order
 	enc_init(k_ecc_enc);
-	//printf("check here...%lu\n",sizeof(prptable));
 	for (i=0;i<enc_blocks;i++) {
-		//initialize_ecc();
 		unsigned char ct[d];
-    	//printf("%d,",prptable[i]);
+
+    	clock_gettime(CLOCK_MONOTONIC, &start);
     	encStartTime = getCPUTime();
 		encrypt(ct,code[prptable[i]],sizeof(ct));
-		encTime += getCPUTime()-encStartTime;
+		clock_gettime(CLOCK_MONOTONIC, &finish);
+		double addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		encTime += getCPUTime()-encStartTime+addTime;
+
 		//printf("encrypted for %d: ",i);
 		//displayCharArray(ct,sizeof(ct));
 		//unsigned char pt[d];
 		//decrypt(ct,pt,sizeof(ct));
 		//printf("decrypted for %d: ",i);
 		//displayCharArray(pt,sizeof(ct));
+    	clock_gettime(CLOCK_MONOTONIC, &start);
 		write1StartTime = getCPUTime();
 		fwrite(ct,d,1,fp);
+		clock_gettime(CLOCK_MONOTONIC, &finish);
+		addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
     	write1Time += getCPUTime()-write1StartTime;
 	}
-	//printf("check here...\n");
+	// update t for later challenge computation
 	t = t+enc_blocks;
 	printf("\nIncremental encoding finishes...\n");
 	free(prptable);
@@ -266,29 +306,35 @@ int inc_encoding (FILE* fp,int* prptable)
 	return 0;
 }
 
+// concatenate two RS code for encoding
 void concat_encode(unsigned char * message,unsigned char* codeword) {
-	unsigned char tmp_code[v*32*n1/k1],stripe[k1],stripe_code[n1];
+	unsigned char tmp_code[v*BLOCK_SIZE*n1/k1],stripe[k1],stripe_code[n1];
 	int index,i,j;
-	
-	for (index=0;index<v*32;index++) {
+	// read in the message part
+	for (index=0;index<v*BLOCK_SIZE;index++) {
 		tmp_code[index] = message[index];
 	}
+	// outer encoding on the message
 	for (i=0;i<v;i++) {
 		for (j=0;j<sizeof(stripe);j++) {
 			stripe[j] = message[i*k1+j];
 		}
 		initialize_ecc();
+		// encode for each outer stripe
 		encode_data(stripe,k1,stripe_code);
+		// append parity at the end
 		for (j=0;j<n1-k1;j++) {
 			tmp_code[index] = stripe_code[k1+j];
 			index++;
 		}
 	}
 	index = 0;
+	// perform inner encoding
 	for (i=0;i<v*n1/k1;i++) {
 		for (j=0;j<sizeof(stripe);j++) {
 			stripe[j] = tmp_code[i*k2+j];
 		}
+		// encode for each inner stripe
 		encode_data(stripe,k2,stripe_code);
 		for (j=0;j<n2;j++) {
 			codeword[index] = stripe_code[j];
@@ -298,28 +344,28 @@ void concat_encode(unsigned char * message,unsigned char* codeword) {
 }
 
 int precompute_response(FILE* fp, Chal * c,char * key) {
-    //chalStartTime = getCPUTime();
-	unsigned char message[v*32];
-	unsigned char codeword[w*32];
-	char uth[32];
-	char ct[32];
+
+	unsigned char message[v*BLOCK_SIZE];
+	unsigned char codeword[w*BLOCK_SIZE];
+	char uth[BLOCK_SIZE];
+	char ct[BLOCK_SIZE];
 	int i,j,p;
 	enc_init(key);
 	for (j=0;j<q;j++) {
-	//printf("Precomputation for challenges No.%d\n",j);
+
 		int index = 0;
 		for (i=0;i<v;i++) {
-			//printf("s[%d]=%lu\n",i,c[j].s[i]);
-			fseek(fp,c[j].s[i]*32,SEEK_SET);
-			unsigned char buffer[32];
+
+			fseek(fp,c[j].s[i]*BLOCK_SIZE,SEEK_SET);
+			unsigned char buffer[BLOCK_SIZE];
           readStartTime = getCPUTime();
 		clock_gettime(CLOCK_MONOTONIC, &start);
-			fread(buffer, 32, 1, fp);
+			fread(buffer, BLOCK_SIZE, 1, fp);
 		clock_gettime(CLOCK_MONOTONIC, &finish);
 		double addTime = finish.tv_sec - start.tv_sec;
 		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
          readTime += getCPUTime() - readStartTime+addTime;
-			for(p=0;p<32;p++) {
+			for(p=0;p<BLOCK_SIZE;p++) {
 				message[index] = buffer[p];
 				index++;
 			}
@@ -327,24 +373,25 @@ int precompute_response(FILE* fp, Chal * c,char * key) {
 		}
 
 		concat_encode(message,codeword);
-		for (i=0;i<32;i++) {
-			uth[i] = codeword[32*c[j].u+i];
+		for (i=0;i<BLOCK_SIZE;i++) {
+			uth[i] = codeword[BLOCK_SIZE*c[j].u+i];
 		}
-		//printf("u=%d\n",c[j].u);
-        //chalTime += getCPUTime() - chalStartTime;
-
+		clock_gettime(CLOCK_MONOTONIC, &start);
 		encStartTime = getCPUTime();
 		encrypt(ct,uth,sizeof(uth));
-		encTime += getCPUTime()-encStartTime;
-		//printf("Precomputation for response No.%d\n",j);
-        write2StartTime = getCPUTime();
-		clock_gettime(CLOCK_MONOTONIC, &start);
-		fwrite(ct,32,1,fp);
 		clock_gettime(CLOCK_MONOTONIC, &finish);
 		double addTime = finish.tv_sec - start.tv_sec;
 		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		encTime += getCPUTime()-encStartTime+addTime;
+
+        write2StartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
+		fwrite(ct,BLOCK_SIZE,1,fp);
+		clock_gettime(CLOCK_MONOTONIC, &finish);
+		addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
         write2Time+=getCPUTime()-write2StartTime+addTime;
-		//fflush(stdout);
+
 	}
 }
 
@@ -363,30 +410,27 @@ int main(int argc, char* argv[])
     unsigned long fileLen1,fileLen2;
 	fseek(fp,0,SEEK_END);
 	fileLen1 = ftell(fp);
-	//k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
-	//k_chal[16],k_ind[16],k_enc[16],k_mac[16];
-	
+
 	master_keygen(argv[2]);
-	//keygen(k_file_perm,16);
+
 	printf("key for file permutation: ");
 	displayCharArray(k_file_perm,16);
-	//keygen(k_ecc_perm,16);
+
 	printf("key for ecc permutation: ");
 	displayCharArray(k_ecc_perm,16);
-	//keygen(k_ecc_enc,16);
 
 	printf("key for ecc encryption: ");
 	displayCharArray(k_ecc_enc,16);
-	//keygen(k_chal,16);
+
 	printf("key for challenge generation: ");
 	displayCharArray(k_chal,16);
-	//keygen(k_ind,16);
+
 	printf("key for random index generation: ");
 	displayCharArray(k_ind,16);
-	//keygen(k_enc,16);
+
 	printf("key for response encryption: ");
 	displayCharArray(k_enc,16);
-	//keygen(k_mac,16);
+
 	printf("key for MAC computation: ");
 	displayCharArray(k_mac,16);	
 	
@@ -402,13 +446,10 @@ int main(int argc, char* argv[])
 	printf("\nMAC = ");
 	displayCharArray(mac,16);	
 	
-	prptable = malloc(sizeof(int)*blocks);
 	printf("\nSRF PRP for the entire file...\n");
     prpStartTime = getCPUTime();
 	prptable = prp(blocks, k_file_perm);
     prpTime += getCPUTime() - prpStartTime;
-	//for(i=0;i<blocks;i++)
-	//	printf("%d -> %d\n",i,prptable[i]);
     eccStartTime = getCPUTime();
 	initialize_ecc();
 	inc_encoding(fp,prptable);
@@ -416,8 +457,7 @@ int main(int argc, char* argv[])
 	
 	printf("\nFile blocks after outer layer encoding: %lu\n",t);
 
-	q = 100;
-	printf("\nPrecomputation for %lu challenges and responses\n",q);
+	printf("\nPrecomputation for %d challenges and responses\n",q);
     chalStartTime = getCPUTime();
 	Chal c[q];
 	int j,p;
@@ -427,8 +467,6 @@ int main(int argc, char* argv[])
 	for(j=0;j<q;j++) {
 		kjc[j] = malloc(16*sizeof(unsigned char *));
 		keygen(kjc[j], 16);
-		//printf("display kjc for j=%d\n",j);
-		//displayCharArray(kjc[j],16);
 	}
 	for(j=0;j<q;j++) {
 		keygen_init();
@@ -437,10 +475,8 @@ int main(int argc, char* argv[])
 			unsigned long randomIndex;
 			char rand[8];
 			keygen(rand, 8);
-			//printf("display rand for j=%d,v=%d\n",j,p);
 			randomIndex = *(unsigned long *)rand;	
 			c[j].s[p] = randomIndex % t;
-			//printf("display random index for j=%d,v=%d: %lu\n",j,p,c[j].s[p]);
 		}
 	}
 	keygen_init();
@@ -455,7 +491,6 @@ int main(int argc, char* argv[])
 	}
 	printf("Precomputation for challenges finishes\n");
 
-    //printf("%lf\n",chalTime);
 	precompute_response(fp,c,k_enc);
 	printf("Precomputation for responses finishes\n");
 	    chalTime+=getCPUTime()-chalStartTime - write2Time;
@@ -470,9 +505,10 @@ int main(int argc, char* argv[])
     fseek(fp,0,SEEK_END);
 	fileLen2 = ftell(fp);
 	fclose(fp);
-	//free(kjc);
+
 	printf("\nPOR encoding done\n");
-	//printf("%lf\n",getCPUTime());
+
+	// display time performance
     totalTime = getCPUTime() - totalStartTime;
     printf("#RESULT#\n");
     printf("%lu\n",fileLen1);

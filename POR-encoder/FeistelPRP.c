@@ -68,16 +68,28 @@ int* prp(int blocks, unsigned char* key)
     //startTime = getCPUTime();
 	//Generate 6 functions
 	round1table = malloc(blocks*sizeof(unsigned int));
+	if (round1table==NULL)
+		printf("fail malloc round1table: FeistalPRP\n");
 	generateRoundFunctions(seed1,round1table,blocks);
 	round2table = malloc(blocks*sizeof(unsigned int));
+	if (round2table==NULL)
+		printf("fail malloc round2table: FeistalPRP\n");
 	generateRoundFunctions(seed2,round2table,blocks);
 	round3table = malloc(blocks*sizeof(unsigned int));
+	if (round3table==NULL)
+		printf("fail malloc round3table: FeistalPRP\n");
 	generateRoundFunctions(seed3,round3table,blocks);
 	round4table = malloc(blocks*sizeof(unsigned int));	
+	if (round4table==NULL)
+		printf("fail malloc round4table: FeistalPRP\n");
 	generateRoundFunctions(seed4,round4table,blocks);
 	round5table = malloc(blocks*sizeof(unsigned int));
+	if (round5table==NULL)
+		printf("fail malloc round5table: FeistalPRP\n");
 	generateRoundFunctions(seed5,round5table,blocks);
 	round6table = malloc(blocks*sizeof(unsigned int));
+	if (round6table==NULL)
+		printf("fail malloc round6table: FeistalPRP\n");
 	generateRoundFunctions(seed6,round6table,blocks);
 	printf("6 tables generated\n");
    //endTime = getCPUTime();
@@ -118,7 +130,7 @@ int* prp(int blocks, unsigned char* key)
 }
 
 //generate 6 different functions and store in memory
-void generateRoundFunctions(unsigned char * seed, unsigned int * bufint, int blocks)
+void generateRoundFunctions(unsigned char * seed, unsigned int * bufint,unsigned int blocks)
 {
 
 

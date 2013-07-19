@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "keygenwrapper.h"
+//#include "keygenwrapper.h"
 //#include "jg_timing.h"
 
 // block length is 32 bytes = 2^5

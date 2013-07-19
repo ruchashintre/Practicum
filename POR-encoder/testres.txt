@@ -1,3 +1,204 @@
+gundamwings@ubuntu:~/POR-encoder$ bash autotest.sh
+0.001857
+key for file permutation: 255c2ee8459ce94846c8167623ffcacb
+key for ecc permutation: e9ad27154327893d48bcf1540c7ed3f8
+key for ecc encryption: 3fb9cd5623602d4bbbdb1c7ce6c10889
+key for challenge generation: 1d7e656ca5880afdf8e3072c2298fc40
+key for random index generation: bbae50a42a67507a952b1ded0370d7cc
+key for response encryption: 85795766d5bb6f4edb15d9320b686b43
+key for MAC computation: d5fb5952fd3b47445203bc155c7ebe20
+
+file size: 1073741824
+There are 33554432 32-byte blocks
+
+Computing file's MAC...
+
+mac size 128
+hmac complete
+
+MAC = f315a07cb227028c4ead14d3501db738
+
+SRF PRP for the entire file...
+block num: 33554432
+bit num: 25
+6 tables generated
+a=5793,b=5794
+PRP: finish 
+
+Incremental encoding starts...
+There are 4814986 encoding blocks
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 0
+filecounter = 1073741824
+max read in 1073741824 bytes
+Read in 0 bytes
+
+SRF PRP for the outer layer ECC...
+block num: 4814986
+bit num: 23
+6 tables generated
+a=2195,b=2196
+PRP: finish 
+
+Incremental encoding finishes...
+
+File blocks after outer layer encoding: 38369418
+
+Precomputation for 100 challenges and responses
+Precomputation for challenges finishes
+Precomputation for responses finishes
+
+Append MAC to the end of the file...
+
+POR encoding done
+#RESULT#
+1073741824
+1227824592
+320.105278
+1.371565
+25.679096
+283.251547
+3.482819
+8.676922
+4.583762
+13.905897
+0.000538
+key for file permutation: 255c2ee8459ce94846c8167623ffcacb
+key for ecc permutation: e9ad27154327893d48bcf1540c7ed3f8
+key for ecc encryption: 3fb9cd5623602d4bbbdb1c7ce6c10889
+key for challenge generation: 1d7e656ca5880afdf8e3072c2298fc40
+key for random index generation: bbae50a42a67507a952b1ded0370d7cc
+key for response encryption: 85795766d5bb6f4edb15d9320b686b43
+key for MAC computation: d5fb5952fd3b47445203bc155c7ebe20
+
+file size: 2147483648
+There are 67108864 32-byte blocks
+
+Computing file's MAC...
+
+mac size 128
+hmac complete
+
+MAC = af7863c7485bf9d7afea77fbbfd5845d
+
+SRF PRP for the entire file...
+block num: 67108864
+bit num: 26
+6 tables generated
+a=8192,b=8193
+PRP: finish 
+
+Incremental encoding starts...
+There are 9629972 encoding blocks
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 0
+filecounter = 1073741824
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 1
+filecounter = 2147483648
+max read in 1073741824 bytes
+Read in 0 bytes
+
+SRF PRP for the outer layer ECC...
+block num: 9629972
+bit num: 24
+6 tables generated
+a=3104,b=3105
+PRP: finish 
+
+Incremental encoding finishes...
+
+File blocks after outer layer encoding: 76738836
+
+Precomputation for 100 challenges and responses
+Precomputation for challenges finishes
+Precomputation for responses finishes
+
+Append MAC to the end of the file...
+
+POR encoding done
+#RESULT#
+2147483648
+2455645968
+1115.335474
+5.784121
+53.777243
+1045.301802
+7.014674
+8.739337
+9.907144
+31.019654
+0.001636
+key for file permutation: 255c2ee8459ce94846c8167623ffcacb
+key for ecc permutation: e9ad27154327893d48bcf1540c7ed3f8
+key for ecc encryption: 3fb9cd5623602d4bbbdb1c7ce6c10889
+key for challenge generation: 1d7e656ca5880afdf8e3072c2298fc40
+key for random index generation: bbae50a42a67507a952b1ded0370d7cc
+key for response encryption: 85795766d5bb6f4edb15d9320b686b43
+key for MAC computation: d5fb5952fd3b47445203bc155c7ebe20
+
+file size: 4294967296
+There are 134217728 32-byte blocks
+
+Computing file's MAC...
+
+mac size 128
+hmac complete
+
+MAC = 5182eb16daecdcd5c7c4bf6bbe8eee98
+
+SRF PRP for the entire file...
+block num: 134217728
+bit num: 27
+6 tables generated
+a=11586,b=11587
+PRP: finish 
+
+Incremental encoding starts...
+There are 19259944 encoding blocks
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 0
+filecounter = 1073741824
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 1
+filecounter = 2147483648
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 2
+filecounter = 3221225472
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 3
+filecounter = 4294967296
+
+4G
+
+3258.611744
+13.858925
+127.663061
+3106.431022
+14.589930
+8.950954
+16.917273
+54.023051
+
+6G
+
+7406.381019
+22.685056
+234.052938
+7135.724939
+23.324925
+8.991924
+28.254774
+90.858916
+
+----------------------------------------------------------
 1G
 675.923558
 1.683622
@@ -30,5 +231,283 @@
 0.001260
 
 6G
+6442450944
+7366931440
+13547.261279
+21.792849
+226.835995
+13287.029792
+21.310888
+9.166492
+29.063877
+51.107267
+0.001052
+
+
+==============================
+gundamwings@ubuntu:~/POR-encoder$ bash autotest.sh
+0.001377
+key for file permutation: 255c2ee8459ce94846c8167623ffcacb
+key for ecc permutation: e9ad27154327893d48bcf1540c7ed3f8
+key for ecc encryption: 3fb9cd5623602d4bbbdb1c7ce6c10889
+key for challenge generation: 1d7e656ca5880afdf8e3072c2298fc40
+key for random index generation: bbae50a42a67507a952b1ded0370d7cc
+key for response encryption: 85795766d5bb6f4edb15d9320b686b43
+key for MAC computation: d5fb5952fd3b47445203bc155c7ebe20
+
+file size: 1227824592
+After padding 16 zeros, there are 38369519 32-byte blocks
+
+Computing file's MAC...
+
+mac size 128
+hmac complete
+
+MAC = d10c0ad220be147a1bdd695f3ac228ae
+
+SRF PRP for the entire file...
+block num: 38369519
+bit num: 26
+6 tables generated
+a=6195,b=6196
+PRP: finish 
+
+Incremental encoding starts...
+There are 5505940 encoding blocks
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 0
+filecounter = 1073741824
+max read in 1073741824 bytes
+Read in 154082784 bytes
+round 1
+filecounter = 1227824608
+
+SRF PRP for the outer layer ECC...
+block num: 5505940
+bit num: 23
+6 tables generated
+a=2347,b=2348
+PRP: finish 
+
+Incremental encoding finishes...
+
+File blocks after outer layer encoding: 43875459
+
+Precomputation for 100 challenges and responses
+Precomputation for challenges finishes
+Precomputation for responses finishes
+
+Append MAC to the end of the file...
+
+POR encoding done
+#RESULT#
+1227824592
+1404017904
+608.389558
+1.543928
+31.107435
+565.997675
+3.760880
+8.593502
+8.002364
+22.477744
+0.001254
+key for file permutation: 255c2ee8459ce94846c8167623ffcacb
+key for ecc permutation: e9ad27154327893d48bcf1540c7ed3f8
+key for ecc encryption: 3fb9cd5623602d4bbbdb1c7ce6c10889
+key for challenge generation: 1d7e656ca5880afdf8e3072c2298fc40
+key for random index generation: bbae50a42a67507a952b1ded0370d7cc
+key for response encryption: 85795766d5bb6f4edb15d9320b686b43
+key for MAC computation: d5fb5952fd3b47445203bc155c7ebe20
+
+file size: 2455645968
+After padding 16 zeros, there are 76738937 32-byte blocks
+
+Computing file's MAC...
+
+mac size 128
+hmac complete
+
+MAC = 32ac6c22d83b5fd79f4d4481cb0e00dc
+
+SRF PRP for the entire file...
+block num: 76738937
+bit num: 27
+6 tables generated
+a=8761,b=8762
+PRP: finish 
+
+Incremental encoding starts...
+There are 11011866 encoding blocks
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 0
+filecounter = 1073741824
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 1
+filecounter = 2147483648
+max read in 1073741824 bytes
+Read in 308162336 bytes
+round 2
+filecounter = 2455645984
+
+SRF PRP for the outer layer ECC...
+block num: 11011866
+bit num: 24
+6 tables generated
+a=3319,b=3320
+PRP: finish 
+
+Incremental encoding finishes...
+
+File blocks after outer layer encoding: 87750803
+
+Precomputation for 100 challenges and responses
+Precomputation for challenges finishes
+Precomputation for responses finishes
+
+Append MAC to the end of the file...
+
+POR encoding done
+#RESULT#
+2455645968
+2808028912
+1620.827831
+9.770422
+61.358957
+1539.435230
+8.141843
+8.712408
+15.812618
+44.979126
+0.001445
+key for file permutation: 255c2ee8459ce94846c8167623ffcacb
+key for ecc permutation: e9ad27154327893d48bcf1540c7ed3f8
+key for ecc encryption: 3fb9cd5623602d4bbbdb1c7ce6c10889
+key for challenge generation: 1d7e656ca5880afdf8e3072c2298fc40
+key for random index generation: bbae50a42a67507a952b1ded0370d7cc
+key for response encryption: 85795766d5bb6f4edb15d9320b686b43
+key for MAC computation: d5fb5952fd3b47445203bc155c7ebe20
+
+file size: 4911288736
+There are 153477773 32-byte blocks
+
+Computing file's MAC...
+
+mac size 128
+hmac complete
+
+MAC = e3cb981f6feca215c2678f34154e579f
+
+SRF PRP for the entire file...
+block num: 153477773
+bit num: 28
+6 tables generated
+a=12389,b=12390
+PRP: finish 
+
+Incremental encoding starts...
+There are 22023717 encoding blocks
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 0
+filecounter = 1073741824
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 1
+filecounter = 2147483648
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 2
+filecounter = 3221225472
+max read in 1073741824 bytes
+Read in 1073741824 bytes
+round 3
+filecounter = 4294967296
+max read in 1073741824 bytes
+Read in 616321440 bytes
+round 4
+filecounter = 4911288736
+
+SRF PRP for the outer layer ECC...
+block num: 22023717
+bit num: 25
+6 tables generated
+a=4693,b=4694
+PRP: finish 
+
+Incremental encoding finishes...
+
+File blocks after outer layer encoding: 175501490
+
+Precomputation for 100 challenges and responses
+Precomputation for challenges finishes
+Precomputation for responses finishes
+
+Append MAC to the end of the file...
+
+POR encoding done
+#RESULT#
+4911288736
+5616050896
+4566.318842
+16.694049
+138.460966
+4397.780983
+16.087078
+9.333827
+31.869066
+92.749200
+0.000710
+key for file permutation: 255c2ee8459ce94846c8167623ffcacb
+key for ecc permutation: e9ad27154327893d48bcf1540c7ed3f8
+key for ecc encryption: 3fb9cd5623602d4bbbdb1c7ce6c10889
+key for challenge generation: 1d7e656ca5880afdf8e3072c2298fc40
+key for random index generation: bbae50a42a67507a952b1ded0370d7cc
+key for response encryption: 85795766d5bb6f4edb15d9320b686b43
+key for MAC computation: d5fb5952fd3b47445203bc155c7ebe20
+
+file size: 7366931440
+After padding 16 zeros, there are 230216608 32-byte blocks
+
+Computing file's MAC...
+
+mac size 128
+hmac complete
+
+MAC = 5e4f7873800efdf8d62cee9f521f5760
+
+SRF PRP for the entire file...
+block num: 230216608
+bit num: 28
+6 tables generated
+a=15173,b=15174
+autotest.sh: line 5:  9136 Killed                  ./porencoder /host/Test6G gundamwings
+0.003248
+key for file permutation: 255c2ee8459ce94846c8167623ffcacb
+key for ecc permutation: e9ad27154327893d48bcf1540c7ed3f8
+key for ecc encryption: 3fb9cd5623602d4bbbdb1c7ce6c10889
+key for challenge generation: 1d7e656ca5880afdf8e3072c2298fc40
+key for random index generation: bbae50a42a67507a952b1ded0370d7cc
+key for response encryption: 85795766d5bb6f4edb15d9320b686b43
+key for MAC computation: d5fb5952fd3b47445203bc155c7ebe20
+
+file size: 8589934592
+There are 268435456 32-byte blocks
+
+Computing file's MAC...
+
+mac size 128
+hmac complete
+
+MAC = eabe1f70b75eaaf74636be1ca66ebfb6
+
+SRF PRP for the entire file...
+block num: 268435456
+bit num: 28
+LTC_ARGCHK 'out != NULL' failure on line 232 of file src/prngs/fortuna.c
+autotest.sh: line 6:  9137 Aborted                 (core dumped) ./porencoder /host/Test8G gundamwings
 
 

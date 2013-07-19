@@ -24,5 +24,5 @@ static unsigned int * round4table;
 static unsigned int * round5table;
 static unsigned int * round6table;
 
-void generateRoundFunctions(unsigned char * seed, unsigned int * bufint,int blocks); 
+void generateRoundFunctions(unsigned char * seed, unsigned int * bufint,unsigned int blocks); 
 int* prp(int blocks, unsigned char* key);

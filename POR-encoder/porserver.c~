@@ -24,17 +24,18 @@
 #define BLOCK_SIZE 32
 #define q 100
 #define BACKLOG 10     // how many pending connections queue will hold
-#define n1 64
+#define n1 64          // n1,k1,d1 is for outer code
 #define k1 32
 #define d1 32
-#define n2 64
+#define n2 64			// n2,k2,d2 is for inner code
 #define k2 32
 #define d2 32
 #define MAXDATASIZE 100
 
 static unsigned long t;
-static unsigned	char uth[32];
+static unsigned	char uth[BLOCK_SIZE];
 
+// display unsigned char array
 void displayCharArray(unsigned char* out,int len)
 {
 	int i;
@@ -43,29 +44,36 @@ void displayCharArray(unsigned char* out,int len)
 	}
 	printf("\n");
 }
+
+// concatenate two RS code for encoding
 void concat_encode(unsigned char * message,unsigned char* codeword) {
-	unsigned char tmp_code[v*32*n1/k1],stripe[k1],stripe_code[n1];
+	unsigned char tmp_code[v*BLOCK_SIZE*n1/k1],stripe[k1],stripe_code[n1];
 	int index,i,j;
-	
-	for (index=0;index<v*32;index++) {
+	// read in the message part
+	for (index=0;index<v*BLOCK_SIZE;index++) {
 		tmp_code[index] = message[index];
 	}
+	// outer encoding on the message
 	for (i=0;i<v;i++) {
 		for (j=0;j<sizeof(stripe);j++) {
 			stripe[j] = message[i*k1+j];
 		}
 		initialize_ecc();
+		// encode for each outer stripe
 		encode_data(stripe,k1,stripe_code);
 		for (j=0;j<n1-k1;j++) {
+			// append parity at the end
 			tmp_code[index] = stripe_code[k1+j];
 			index++;
 		}
 	}
+	// perform inner encoding
 	index = 0;
 	for (i=0;i<v*n1/k1;i++) {
 		for (j=0;j<sizeof(stripe);j++) {
 			stripe[j] = tmp_code[i*k2+j];
 		}
+		// encode for each inner stripe
 		encode_data(stripe,k2,stripe_code);
 		for (j=0;j<n2;j++) {
 			codeword[index] = stripe_code[j];
@@ -74,36 +82,44 @@ void concat_encode(unsigned char * message,unsigned char* codeword) {
 	}
 }
 
+// execute challenge and generate the response
 unsigned char * execute_challenge(FILE* fp, int j, char * kjc, int u, unsigned long * indices) {
-	unsigned char message[v*32];
-	unsigned char codeword[w*32];
+	unsigned char message[v*BLOCK_SIZE];
+	unsigned char codeword[w*BLOCK_SIZE];
 
 	int pos = 0;
 	int i,p;
 	keygen_init();
+	// using kjc for keygen
 	seeding(kjc);
+	// generate random indices from kjc
 	for(p=0;p<v;p++) {
 		unsigned long randomIndex;
 		char rand[8];
 		keygen(rand, 8);
 		indices[p] = *(unsigned long *)rand%t;
 	}
+	// retrieve the corresponding blocks from random indices
 	int index = 0;
 	for (i=0;i<v;i++) {
-		fseek(fp,indices[i]*32,SEEK_SET);
-		unsigned char buffer[32];
-		fread(buffer, 32, 1, fp);
-		for(p=0;p<32;p++) {
+		fseek(fp,indices[i]*BLOCK_SIZE,SEEK_SET);
+		unsigned char buffer[BLOCK_SIZE];
+		fread(buffer, BLOCK_SIZE, 1, fp);
+		for(p=0;p<BLOCK_SIZE;p++) {
 			message[index] = buffer[p];
 			index++;
 		}
 	}
+	// perform concatenated encoding on the message
 	concat_encode(message,codeword);
-	for (i=0;i<32;i++) {
-		uth[i] = codeword[32*u+i];
+	// get the u-th symbol of the code
+	for (i=0;i<BLOCK_SIZE;i++) {
+		uth[i] = codeword[BLOCK_SIZE*u+i];
 	}
 	return uth;
 }
+
+// handle child's signal for fork
 void sigchld_handler(int s)
 {
     while(waitpid(-1, NULL, WNOHANG) > 0);
@@ -142,7 +158,7 @@ int main(int argc, char ** argv)
     if ((rv = getaddrinfo(NULL, PORT, &hints, &servinfo)) != 0) {
         fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
         return 1;
-    }
+    	}
 
     // loop through all the results and bind to the first we can
     for(p = servinfo; p != NULL; p = p->ai_next) {
@@ -150,27 +166,27 @@ int main(int argc, char ** argv)
                 p->ai_protocol)) == -1) {
             perror("server: socket");
             continue;
-        }
+        	}
 
         if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes,
                 sizeof(int)) == -1) {
             perror("setsockopt");
             exit(1);
-        }
+        	}
 
         if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
             close(sockfd);
             perror("server: bind");
             continue;
-        }
+        	}
 
         break;
-    }
+    	}
 
     if (p == NULL)  {
         fprintf(stderr, "server: failed to bind\n");
         return 2;
-    }
+    	}
 
     freeaddrinfo(servinfo); // all done with this structure
 
@@ -192,6 +208,7 @@ int main(int argc, char ** argv)
 	while(1) {  // main accept() loop
 		sin_size = sizeof their_addr;
 		new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size);
+		// accept the connection
 		if (new_fd == -1) {
 		    perror("accept");
 		    continue;
@@ -206,6 +223,7 @@ int main(int argc, char ** argv)
 			close(sockfd); // child doesn't need the listener
 
 			unsigned char buf[24];
+			// receive message from new_fd
 			if ((numbytes = recv(new_fd, buf, 24, 0)) == -1) {
 				perror("recv");
 				exit(1);
@@ -215,18 +233,20 @@ int main(int argc, char ** argv)
 			int j;
 			unsigned char kjc[16];
 			unsigned int u;
+			// first 4 bytes are j
 			j = buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3];
-			//memcpy(&j, (void *)buf[0], 4);
+			// next 16 bytes are kjc
 			int i;
 			for (i=0;i<16;i++)
 				kjc[i] = buf[4+i];
-			//memcpy(&u, (void *)buf[20], 8);
+			// last 4 bytes are u
 			u = buf[20]<<24 | buf[21]<<16 | buf[22]<<8 | buf[23];
 	    	printf("server: receive challenge #%d\n",j);
 			printf("j=%d\nkjc=",j);
 			displayCharArray(kjc,16);
 			printf("u=%d\n",u);
 			unsigned long indices[v];
+			// read the file for computing response
 			FILE *fp;
 			unsigned long fileLen;
 			if ((fp = fopen(argv[1], "r")) == NULL){
@@ -235,20 +255,23 @@ int main(int argc, char ** argv)
 			}
 			fseek(fp,0,SEEK_END);
 			fileLen = ftell(fp);
+			// get the number of blocks
 			t = (fileLen - 16 - q*BLOCK_SIZE) / BLOCK_SIZE;
 			printf("t=%lu\n",t);
+			// execute the challenge to get response
 			unsigned char * code = execute_challenge(fp,j,kjc,u,indices);
-
-			if (send(new_fd, code, 32, 0) == -1)
+			// send computed response
+			if (send(new_fd, code, BLOCK_SIZE, 0) == -1)
         		perror("send");
         	printf("server: send response M%d\n",j);
-        	displayCharArray(code,32);
-        	fseek(fp,t*32+j*32,SEEK_SET);
-        	fread(code,32,1,fp);
-			if (send(new_fd, code, 32, 0) == -1)
+        	displayCharArray(code,BLOCK_SIZE);
+        	// get and send appended response
+        	fseek(fp,t*BLOCK_SIZE+j*BLOCK_SIZE,SEEK_SET);
+        	fread(code,BLOCK_SIZE,1,fp);
+			if (send(new_fd, code, BLOCK_SIZE, 0) == -1)
         		perror("send");
         	printf("server: send response Q%d\n",j);
-        	displayCharArray(code,32);
+        	displayCharArray(code,BLOCK_SIZE);
         	//unsigned char check[100];
         	//fseek(fp,t*32,SEEK_SET);
         	//fread(check,100,1,fp);
