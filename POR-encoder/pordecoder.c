@@ -189,7 +189,7 @@ int checkFile(FILE* fp1,unsigned char * mac) {
         clock_gettime(CLOCK_MONOTONIC, &start);
         fwrite(buf,BLOCK_SIZE,1,orifp);
         clock_gettime(CLOCK_MONOTONIC, &finish);
-		double addTime = finish.tv_sec - start.tv_sec;
+        addTime = finish.tv_sec - start.tv_sec;
 		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
 		writeTime += getCPUTime() - writeStartTime+addTime;
 	}
@@ -237,7 +237,7 @@ int initial_outer_decoding(FILE* fp1,unsigned char * mac) {
         clock_gettime(CLOCK_MONOTONIC, &start);
         fwrite(buf,BLOCK_SIZE,1,parifp);
         clock_gettime(CLOCK_MONOTONIC, &finish);
-		double addTime = finish.tv_sec - start.tv_sec;
+        addTime = finish.tv_sec - start.tv_sec;
 		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
 		writeTime += getCPUTime() - writeStartTime+addTime;
 	}
@@ -527,7 +527,7 @@ int main(int argc,char** argv)
 	unsigned char newmac[16];
     macStartTime = getCPUTime()
 	hmac("recovered",newmac,k_mac);
-    macTime = getCPUTime() - macStartTime();
+    macTime = getCPUTime() - macStartTime;
     //printf("display MAC\n");
     //displayCharArray(newmac,16);
 	
@@ -695,7 +695,7 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
 		clock_gettime(CLOCK_MONOTONIC, &start);
 		fwrite(prpbuf,1,BLOCK_SIZE,prp);
         clock_gettime(CLOCK_MONOTONIC, &finish);
-		double addTime = finish.tv_sec - start.tv_sec;
+        addTime = finish.tv_sec - start.tv_sec;
 		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
 		writeTime += getCPUTime() - writeStartTime+addTime;
 	}
@@ -736,7 +736,7 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
         clock_gettime(CLOCK_MONOTONIC, &start);
 		fwrite(code,1,br,tempfp);
         clock_gettime(CLOCK_MONOTONIC, &finish);
-		double addTime = finish.tv_sec - start.tv_sec;
+        addTime = finish.tv_sec - start.tv_sec;
 		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
 		writeTime += getCPUTime() - writeStartTime+addTime;
 	}
@@ -771,7 +771,7 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
         fwrite(buf,BLOCK_SIZE,1,output);
       	writeEndTime = getCPUTime();
         clock_gettime(CLOCK_MONOTONIC, &finish);
-		double addTime = finish.tv_sec - start.tv_sec;
+        addTime = finish.tv_sec - start.tv_sec;
 		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
 		writeTime += writeEndTime-writeStartTime+addTime;
 	}
