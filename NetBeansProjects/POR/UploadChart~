@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Step', 'Seconds'],
+          ['Total Pre-processing time',  10.502296 ],
+          ['Read Time',  0.001132 ],
+          ['PRP',  0.016354 ],
+          ['ECC Encode',  0.023279 ],
+          ['MAC',  0.000521 ],
+          ['Challenges',  10.463260 ],
+          ['Encrypt',  0.000993 ]
+         
+        ]);
+
+        var options = {
+          title: 'POR Performance',
+          hAxis: {title: 'Step', titleTextStyle: {color: 'red'}},
+vAxis: {title: 'time', titleTextStyle: {color: 'red'}}
+        }; 
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>
