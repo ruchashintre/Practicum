@@ -1,5 +1,6 @@
 package por;
 
+import por.util.PORPropertyConfigurator;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Scanner;
@@ -23,8 +24,8 @@ public class DownloadSuccess extends javax.swing.JFrame {
      * Creates new form UploadSuccess
      */
     public DownloadSuccess(String filename, String masterkey, String userName, String pemFilePath,String downloadPath) {
-        //PropertyConfigurator.configure(PORPropertyConfigurator.logger_path);
-        System.out.println("Entering DownloadSuccess");
+        PropertyConfigurator.configure(PORPropertyConfigurator.logger_path);
+        logger.info("Entering DownloadSuccess");
 
         ConnectToAmazonEC2.fileDownload(userName, pemFilePath, filename,downloadPath);
         this.userName = userName;
@@ -44,20 +45,13 @@ public class DownloadSuccess extends javax.swing.JFrame {
             pr.waitFor();
             pr.destroy();
             command = PORPropertyConfigurator.executable_path+ PORPropertyConfigurator.por_decoder_executable + " " + downloadPath +"/"+ filename + " " + masterkey;
-            System.out.println(command);
+            logger.info(command);
             pr = Runtime.getRuntime().exec(command);
             Scanner in = new Scanner(pr.getInputStream());
             Scanner err = new Scanner(pr.getErrorStream());
-            while(in.hasNextLine()) {
-                System.out.println(in.nextLine());
-            }
-            while(err.hasNextLine()) {
-                System.out.println(err.nextLine());
-            }
-
             while (in.hasNextLine()) {
                 String result = in.nextLine();
-                System.out.println("result "+result);
+                logger.info("result "+result);
                 
                 if (result.equals("#RESULT#")) {
                     result = in.nextLine();
@@ -89,7 +83,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
             pr.waitFor();
             pr.destroy();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -361,7 +355,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
         MainMenu connectToCloud = new MainMenu(userName, pemFilePath);
         connectToCloud.setVisible(true);
         setVisible(false);
-        System.out.println("Exiting class");
+        logger.info("Exiting class");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
@@ -392,7 +386,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-            System.out.println("Entering the method");
+            logger.info("Entering the method");
             FileWriter fileWritter = new FileWriter(PORPropertyConfigurator.chart_path+"DownloadChart.html", true);
             BufferedWriter bufferWritter;
             bufferWritter = new BufferedWriter(fileWritter);
@@ -433,7 +427,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
             bufferWritter.close();
             Runtime.getRuntime().exec("firefox "+PORPropertyConfigurator.chart_path+"DownloadChart.html");
         } catch (Exception e) {
-            System.out.println(e.toString());
+            logger.info(e.toString());
         }
 
     }//GEN-LAST:event_jButton3ActionPerformed

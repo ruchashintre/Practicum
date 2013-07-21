@@ -1,6 +1,7 @@
 package por;
 
 
+import por.util.PORPropertyConfigurator;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Scanner;
@@ -451,14 +452,14 @@ public class UploadSuccess extends javax.swing.JFrame {
                     + "      function drawChart() {\n"
                     + "        var data = google.visualization.arrayToDataTable([\n"
                     + "          ['Step', 'Time in seconds'],\n"
-                    + "          ['" + jLabel5.getText() + "',  " + jTextField3.getText() + " ],\n"
+                 //   + "          ['" + jLabel5.getText() + "',  " + jTextField3.getText() + " ],\n"
                     + "          ['" + jLabel6.getText() + "',  " + jTextField4.getText() + " ],\n"
                     + "          ['" + jLabel7.getText() + "',  " + jTextField5.getText() + " ],\n"
                     + "          ['" + jLabel8.getText() + "',  " + jTextField6.getText() + " ],\n"
                     + "          ['" + jLabel9.getText() + "',  " + jTextField7.getText() + " ],\n"
                     + "          ['" + jLabel10.getText() + "',  " + jTextField8.getText() + " ],\n"
                     + "          ['" + jLabel11.getText() + "',  " + jTextField9.getText() + " ]\n"
-                    // + "          ['"+ jLabel12.getText()+"',  "+ jTextField10.getText()+" ]\n"
+                     + "          ['"+ jLabel12.getText()+"',  "+ jTextField10.getText()+" ]\n"
 
                     + "        ]);\n"
                     + "\n"

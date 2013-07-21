@@ -1,7 +1,11 @@
 package por;
 
+import por.util.PORPropertyConfigurator;
+import por.util.KeyStore;
 import java.awt.Cursor;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import javax.swing.JFileChooser;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -23,7 +27,7 @@ public class FileDownload extends javax.swing.JFrame {
     /**
      * Creates new form CheckRetrievability
      */
-    public FileDownload(String userName, String pemFilePath) {
+    public FileDownload(String userName, String pemFilePath,ArrayList<String> list) {
 
         PropertyConfigurator.configure(PORPropertyConfigurator.logger_path);
         logger.info("Entering class");
@@ -34,15 +38,16 @@ public class FileDownload extends javax.swing.JFrame {
         jTextField2.setEditable(false);
         jLabel3.setVisible(false);
 
-        ArrayList<String> list = ConnectToAmazonEC2.getFileList(pemFilePath, userName);
+       
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 jComboBox1.addItem(list.get(i));
             }
         } else {
             jLabel3.setText("Can not retrieve list of the files. Kindly try again");
-
+            jLabel3.setVisible(rootPaneCheckingEnabled);
         }
+
     }
 
     /**
@@ -218,7 +223,6 @@ public class FileDownload extends javax.swing.JFrame {
         JFileChooser jFileChooser1 = new JFileChooser();
         int rVal = jFileChooser1.showSaveDialog(this);
         if (rVal == JFileChooser.APPROVE_OPTION) {
-
             jTextField2.setText(jFileChooser1.getCurrentDirectory().toString());
         }
         if (rVal == JFileChooser.CANCEL_OPTION) {
@@ -250,17 +254,25 @@ public class FileDownload extends javax.swing.JFrame {
             String filename = jComboBox1.getSelectedItem().toString();
             String masterkey = jTextField1.getText().toString();
             String saveTo = jTextField2.getText();
-            int flag = KeyStore.validateKey(userName, filename, masterkey, ConnectToAmazonCloud.admPassword);
-            if (flag == 0) {
+
+            try {
+                KeyStore.validateKey(userName, filename, masterkey, ConnectToAmazonCloud.admPassword);
                 DownloadSuccess success = new DownloadSuccess(filename, masterkey, userName, pemFilePath, saveTo);
                 success.setVisible(true);
                 setVisible(false);
                 logger.info("Exiting the class");
-            } else {
-                jLabel3.setText("Invalid Password. Please re-enter");
+            } catch (IOException ie) {
+                logger.info("Invalid masterKey");
+                jLabel3.setText("Invalid master key. Please re-enter");
+                jLabel3.setVisible(true);
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            } catch (RuntimeException re) {
+                logger.info(re.getMessage());
+                jLabel3.setText(re.getMessage());
                 jLabel3.setVisible(true);
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
+
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
