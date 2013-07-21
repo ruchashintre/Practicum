@@ -57,10 +57,16 @@ typedef struct d_b{
 extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 	k_chal[16],k_ind[16],k_enc[16],k_mac[16];
 
+// outer layer decoding of RS code
 int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decoded_blocks *db);
+
+// inner layer decoding of concatenated code
 void inner_decoding(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices);
+
+// using GMD to decoding concatenated code
 void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices,FILE * fp);
 
+// display the unsigned char array
 void displayCharArray(unsigned char* out,int len)
 {
 	int i;
@@ -70,6 +76,7 @@ void displayCharArray(unsigned char* out,int len)
 	printf("\n");
 }
 
+// compute the MAC of a file using HMAC
 int hmac(char* filename,unsigned char* dst,unsigned char* key)
 {
 	int idx, err;
@@ -141,7 +148,13 @@ unsigned char * execute_challenge(FILE* fp, int j, char * kjc, int u, unsigned l
 	for (i=0;i<v;i++) {
 		fseek(fp,indices[i]*32,SEEK_SET);
 		unsigned char buffer[32];
+        readStartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
 		fread(buffer, 32, 1, fp);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+        double addTime = finish.tv_sec - start.tv_sec;
+        addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+        readTime += getCPUTime() - readStartTime+addTime;
 		for(p=0;p<32;p++) {
 			message[index] = buffer[p];
 			index++;
@@ -165,19 +178,25 @@ int checkFile(FILE* fp1,unsigned char * mac) {
 		return -1;
         }
 	for (i=0;i<m;i++) {
-		readStartTime = getCPUTime();
-		fread(buf, BLOCK_SIZE, 1, fp1);
-		readEndTime = getCPUTime();
-		readTime += readEndTime-readStartTime;
+        readStartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
+        fread(buf, BLOCK_SIZE, 1, fp1);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+        double addTime = finish.tv_sec - start.tv_sec;
+        addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+        readTime += getCPUTime() - readStartTime+addTime;
 		writeStartTime = getCPUTime();
-   	fwrite(buf,BLOCK_SIZE,1,orifp);
-      	writeEndTime = getCPUTime();
-		writeTime += writeEndTime-writeStartTime;
+        clock_gettime(CLOCK_MONOTONIC, &start);
+        fwrite(buf,BLOCK_SIZE,1,orifp);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+        addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		writeTime += getCPUTime() - writeStartTime+addTime;
 	}
 	fclose(orifp);
 	macStartTime = getCPUTime();
 	printf("HMAC using key: ");
-	displayCharArray(k_mac,16);	
+	displayCharArray(k_mac,16);
 	hmac("original",newMac,k_mac);
 	macEndTime = getCPUTime();
 	macTime = macEndTime - macStartTime;
@@ -207,14 +226,20 @@ int initial_outer_decoding(FILE* fp1,unsigned char * mac) {
         }
 	fseek(fp1,m*BLOCK_SIZE,SEEK_SET);
 	for (i=0;i<t-m;i++) {
-		readStartTime = getCPUTime();
-		fread(buf, BLOCK_SIZE, 1, fp1);
-		readEndTime = getCPUTime();
-		readTime += readEndTime-readStartTime;
-		writeStartTime = getCPUTime();
-   	fwrite(buf,BLOCK_SIZE,1,parifp);
-      	writeEndTime = getCPUTime();
-		writeTime += writeEndTime-writeStartTime;
+        readStartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
+        fread(buf, BLOCK_SIZE, 1, fp1);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+        double addTime = finish.tv_sec - start.tv_sec;
+        addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+        readTime += getCPUTime() - readStartTime+addTime;
+        writeStartTime = getCPUTime();
+        clock_gettime(CLOCK_MONOTONIC, &start);
+        fwrite(buf,BLOCK_SIZE,1,parifp);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+        addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		writeTime += getCPUTime() - writeStartTime+addTime;
 	}
 	fclose(parifp);
 	if ((parifp = fopen("parity", "r+b")) == NULL){
@@ -252,12 +277,12 @@ int main(int argc,char** argv)
 	//endTime = getCPUTime();
 	printf("start POR extract...\n");
 	char * filename = argv[1];
-    FILE *fp1,*fp2,*temp_fp;
+    FILE *fp1,*fp2,*ori_fp, *pari_fp, *temp_fp;
 	//open encoded file for reading
   	if ((fp1 = fopen(argv[1], "r+b")) == NULL){
         printf("couldn't open input file for reading.\n");
         return -1;
-        }
+    }
     
 	int p;
 	//t = atoi(argv[3]);
@@ -273,15 +298,18 @@ int main(int argc,char** argv)
 	//read mac from the end of the old file	
 	unsigned char originalmac[16];
 	int bufLength=16;
-	readStartTime = getCPUTime();
-	fseek(fp1, fileLen-bufLength, SEEK_SET);
+    readStartTime = getCPUTime();
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    fseek(fp1, fileLen-bufLength, SEEK_SET);
 	fread(originalmac, sizeof(originalmac), 1, fp1);
-	readEndTime = getCPUTime();
-	readTime += readEndTime-readStartTime;
+    clock_gettime(CLOCK_MONOTONIC, &finish);
+    double addTime = finish.tv_sec - start.tv_sec;
+    addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+    readTime += getCPUTime() - readStartTime+addTime;
 	printf("\nMAC attached at the end of the file: ");
 	displayCharArray(originalmac,16);
 	
-	if (checkFile(fp1,originalmac)==10) {
+	if (checkFile(fp1,originalmac)==0) {
 		printf("File is intact.\n");
 		fclose(fp1);
 		totalEndTime = getCPUTime();
@@ -295,6 +323,7 @@ int main(int argc,char** argv)
 		printf("%lf\n",macTime);
 		printf("%lf\n",chalTime);
 		printf("%lf\n",writeTime);
+        printf("%lf\n",decTime);
 		exit(0);
 	}
 	else if (initial_outer_decoding(fp1,originalmac)==0){
@@ -313,10 +342,11 @@ int main(int argc,char** argv)
 			printf("%lf\n",macTime);
 			printf("%lf\n",chalTime);
 			printf("%lf\n",writeTime);
+            printf("%lf\n",decTime);
 			exit(0);
 		//}
 	}
-	else {
+	/*else {
 		printf("File is corrupted.\n");
 		printf("#RESULT#\n");
 		printf("2\n");
@@ -339,18 +369,29 @@ int main(int argc,char** argv)
 
 
 	//open output file for writing
-	if ((fp2 = fopen(r_file, "w+")) == NULL){
+	if ((fp2 = fopen(r_file, "w+b")) == NULL){
 	         printf("couldn't open output file for writing.\n");
 	         return -1;
     }
 
-	//open temp file for writing
-	if ((temp_fp = fopen(temp, "w+")) == NULL){
+	//open temp file for writing file part
+	if ((ori_fp = fopen("original", "w+b")) == NULL){
 	         printf("couldn't open temperory file for writing.\n");
 	         return -1;
-    	}
+    }
+    
+    //open temp file for writing parity part
+	if ((pari_fp = fopen("parity", "w+b")) == NULL){
+        printf("couldn't open temperory file for writing.\n");
+        return -1;
+    }
+    
+    if ((temp_fp = fopen("tempfile", "w+b")) == NULL){
+        printf("couldn't open output file for writing.\n");
+        return -1;
+    }
 
-	//allocate memory for d1
+	//allocate memory for D
 	db = malloc (sizeof(struct d_b)*t);  
 	//for(i=0;i<t;i++) {
 	//	printf("for db[%d], sizeof frequency=%lu\n",i,sizeof(db[i].frequency));
@@ -381,6 +422,7 @@ int main(int argc,char** argv)
 	}
 	printf("kjc for each challenge generated\n");
 	
+    chalStartTime = getCPUTime();
     // for each challenge
 	for (i=0;i<q;i++){
 		
@@ -425,32 +467,67 @@ int main(int argc,char** argv)
 		if(max_frequency==0) {
 			fseek(fp1,i*32,SEEK_SET);
 			unsigned char buffer[32];
+            readStartTime = getCPUTime();
+            clock_gettime(CLOCK_MONOTONIC, &start);
 			fread(buffer, 32, 1, fp1);
-			fwrite(buffer,32,1,temp_fp);
+            clock_gettime(CLOCK_MONOTONIC, &finish);
+            double addTime = finish.tv_sec - start.tv_sec;
+            addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+            readTime += getCPUTime() - readStartTime+addTime;
+            if (i<m) {
+                writeStartTime = getCPUTime();
+                clock_gettime(CLOCK_MONOTONIC, &start);
+                fwrite(buffer,32,1,ori_fp);
+                clock_gettime(CLOCK_MONOTONIC, &finish);
+                double addTime = finish.tv_sec - start.tv_sec;
+                addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+                writeTime += getCPUTime() - writeStartTime+addTime;
+            }
+            else {
+                writeStartTime = getCPUTime();
+                clock_gettime(CLOCK_MONOTONIC, &start);
+                fwrite(buffer,32,1,pari_fp);
+                clock_gettime(CLOCK_MONOTONIC, &finish);
+                double addTime = finish.tv_sec - start.tv_sec;
+                addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+                writeTime += getCPUTime() - writeStartTime+addTime;
+            }
 		 }
 		else {
-		//check if the location can be corrected or has erasure 
-		if(ceil(max_frequency / sizeof(db[i].frequency)) > (delta+0.5)){
-			fwrite(db[i].file_blocks[max_index],32,1,temp_fp);
-		}else{
-			fwrite(db[i].file_blocks[max_index],32,1,temp_fp);
-			//where to get the index from
-			//db[i].file_blocks[0]=NULL;
-	
-			//-1 indicating erasure
-			db[i].frequency[0]=-1;
-		}
+            if (i<m) {
+                writeStartTime = getCPUTime();
+                clock_gettime(CLOCK_MONOTONIC, &start);
+                fwrite(db[i].file_blocks[max_index],32,1,ori_fp);
+                clock_gettime(CLOCK_MONOTONIC, &finish);
+                double addTime = finish.tv_sec - start.tv_sec;
+                addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+                writeTime += getCPUTime() - writeStartTime+addTime;
+            }
+            else{
+                writeStartTime = getCPUTime();
+                clock_gettime(CLOCK_MONOTONIC, &start);
+                fwrite(db[i].file_blocks[max_index],32,1,pari_fp);
+                clock_gettime(CLOCK_MONOTONIC, &finish);
+                double addTime = finish.tv_sec - start.tv_sec;
+                addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+                writeTime += getCPUTime() - writeStartTime+addTime;
+            }
+            //check if the location can be corrected or has erasure
+            if(ceil(max_frequency / sizeof(db[i].frequency)) < (delta+0.5)){
+                db[i].frequency[0]=-1;
+            }
         }
 	}
     fclose(fp1);
-	fclose(temp_fp);
-	
+	chalTime = getCPUTime() - chalStartTime;
 	//perform outer decoding
-	//outer_decoding(temp_fp,fp2,db);
+	outer_decoding(ori_fp,pari_fp,fp2,temp_fp,db);
 	
 	//compute mac
-	unsigned char newmac[16]; 
-	//hmac("temp",newmac,k_mac);
+	unsigned char newmac[16];
+    macStartTime = getCPUTime()
+	hmac("recovered",newmac,k_mac);
+    macTime = getCPUTime() - macStartTime;
     //printf("display MAC\n");
     //displayCharArray(newmac,16);
 	
@@ -475,18 +552,20 @@ int main(int argc,char** argv)
 	    printf("%lf\n",macTime);
 	    printf("%lf\n",chalTime);
 	    printf("%lf\n",writeTime);
+        printf("%lf\n",decTime);
 	}else{
 		totalEndTime = getCPUTime();
 		totalTime = totalEndTime - totalStartTime;
     	printf("#RESULT#\n");
  		printf("2\n");
-	   printf("%lf\n",totalTime);
-	   printf("%lf\n",readTime);
+        printf("%lf\n",totalTime);
+        printf("%lf\n",readTime);
 	    printf("%lf\n",prpTime);
 	    printf("%lf\n",eccTime);
 	    printf("%lf\n",macTime);
 	    printf("%lf\n",chalTime);
 	    printf("%lf\n",writeTime);
+        printf("%lf\n",decTime);
 		printf("Your file can not be recovered.\n");
 		//return -1;
 	}
@@ -551,8 +630,10 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
 	reverse_prp_table = malloc(sizeof(int)*stripes);
 	
 	//perform reverse prp
+    prpStartTime = getCPUTime();
 	prp_table = prp(stripes, k_ecc_perm);
 	reverseprp(stripes,prp_table,reverse_prp_table);
+    prpTime += getCPUTime() - prpStartTime;
 	/*for(i=0;i<stripes;i++){
 		printf("prp %d: %d\n",i,prp_table[i]);
 		printf("rev prp %d: %d\n",i,reverse_prp_table[i]);
@@ -570,10 +651,16 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
 	for (i=0;i<stripes;i++) {
 		unsigned char ct[d];
 		//unsigned char pt[d];	
-		
+        readStartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
 		fread(ct,sizeof(ct),1,parifp);
-		
-		decrypt(ct,paritybytes[prp_table[i]],sizeof(ct)); 
+		clock_gettime(CLOCK_MONOTONIC, &finish);
+		double addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		readTime += getCPUTime() - readStartTime+addTime;
+		decStartTime = getCPUTime();
+		decrypt(ct,paritybytes[prp_table[i]],sizeof(ct));
+        decTime += getCPUTime() -decStartTime;
 		//printf("prp rev for %d: ",i);
 		//displayCharArray(paritybytes[i],sizeof(ct));
 		for(j=0;j<d;j++){
@@ -587,24 +674,43 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
 	free(reverse_prp_table);
 	reverse_prp_table = malloc(sizeof(int)*m);
 	prp_table =malloc(sizeof(int)*m);
+    prpStartTime = getCPUTime();
 	prp_table = prp(m, k_file_perm);
 	reverseprp(m,prp_table,reverse_prp_table);
+    prpTime+=getCPUTime()-prpStartTime;
 	//get the message and the parity, create codeword and decode it
 	//rewind(temp_fp);
 	FILE * prp = fopen("prp","w+b");
 	for(i=0;i<m;i++) {
 		unsigned char prpbuf[BLOCK_SIZE];
+        readStartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
 		fseek(orifp,prp_table[i]*32,SEEK_SET);
 		size_t br = fread(prpbuf,1,BLOCK_SIZE,orifp);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+		double addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		readTime += getCPUTime() - readStartTime+addTime;
+        writeStartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
 		fwrite(prpbuf,1,BLOCK_SIZE,prp);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+        addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		writeTime += getCPUTime() - writeStartTime+addTime;
 	}
 	fclose(prp);
 	prp = fopen("prp","r+b");
 	for(i=0;i<stripes;i++) {
 		index=0;
 		unsigned char code[n];
-
+        readStartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
 		size_t br = fread(code,1,k,prp);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+		double addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		readTime += getCPUTime() - readStartTime+addTime;
 		int pad = k-br;
 		int ii;
 		for (ii=0;ii<pad;ii++)
@@ -613,6 +719,7 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
 		for(j=0;j<d;j++) {
 			code[k+j] = paritybytes[i][j]; 
 		}
+        eccStartTime = getCPUTime();
 		//printf("whole code %d: ",i);
 		//displayCharArray(code,n);
 		decode_data(code, n);
@@ -621,20 +728,27 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
 		if (syn != 0) {
 			correct_errors_erasures(code,n,0,erasure);
 		}
+        eccTime = getCPUTime() - eccStartTime;
 		//printf("decoded code %d: ",i);
 		// displayCharArray(code,n);
 		//calculate block index of the parity part
+        writeStartTime = getCPUTime();
+        clock_gettime(CLOCK_MONOTONIC, &start);
 		fwrite(code,1,br,tempfp);
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+        addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		writeTime += getCPUTime() - writeStartTime+addTime;
 	}
 	fclose(tempfp);
 	for (i = 0; i < stripes; i++){  
-   	free(parity[i]);  
+        free(parity[i]);
 	}  
 	free(parity);
 	if ((tempfp = fopen("tempfile", "r+b")) == NULL){
  		printf("couldn't open temperory file for writing.\n");
  		return -1;
-    	}
+    }
 	// write data to the file by applying second level of permutation
 	//free(prp_table);
 	//free(reverse_prp_table);
@@ -644,22 +758,27 @@ int outer_decoding(FILE* orifp, FILE* parifp, FILE *output, FILE* tempfp, decode
 	rewind(output);
 	unsigned char buf[BLOCK_SIZE];
 	for(i=0;i<m;i++) {
-		readStartTime = getCPUTime();
-		fseek(tempfp,reverse_prp_table[i]*32,SEEK_SET);
+        readStartTime = getCPUTime();
+		clock_gettime(CLOCK_MONOTONIC, &start);
+        fseek(tempfp,reverse_prp_table[i]*32,SEEK_SET);
 		fread(buf, BLOCK_SIZE, 1, tempfp);
-		readEndTime = getCPUTime();
-		readTime += readEndTime-readStartTime;
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+		double addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		readTime += getCPUTime() - readStartTime+addTime;
 		writeStartTime = getCPUTime();
-   	fwrite(buf,BLOCK_SIZE,1,output);
+        clock_gettime(CLOCK_MONOTONIC, &start);
+        fwrite(buf,BLOCK_SIZE,1,output);
       	writeEndTime = getCPUTime();
-		writeTime += writeEndTime-writeStartTime;		
+        clock_gettime(CLOCK_MONOTONIC, &finish);
+        addTime = finish.tv_sec - start.tv_sec;
+		addTime += (finish.tv_nsec - start.tv_nsec)/1000000000.0;
+		writeTime += writeEndTime-writeStartTime+addTime;
 	}
-	printf("check4\n");
 	fclose(tempfp);
 	fclose(output);
 	fclose(orifp);
 	fclose(parifp);
-	printf("check5\n");
 	//delete(temp_fp);
 	return 0;
 }
@@ -761,7 +880,7 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 	unsigned char c_in_message[n1*k2],temp[n2],c_out_codeword[n1],c_out_message[v*32];
 	int c_index=0,m_index=0,i,j,m,index=0;
 	int erasure_index[n1];
-	
+	fflush(stdout);
 	// cin decoding
 	printf("concatenated Cin decoding...\n");
 	for(j=0;j<n1;j++){

@@ -525,7 +525,7 @@ int main(int argc,char** argv)
 	
 	//compute mac
 	unsigned char newmac[16];
-    macStartTime = getCPUTime()
+    macStartTime = getCPUTime();
 	hmac("recovered",newmac,k_mac);
     macTime = getCPUTime() - macStartTime;
     //printf("display MAC\n");
@@ -880,7 +880,7 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 	unsigned char c_in_message[n1*k2],temp[n2],c_out_codeword[n1],c_out_message[v*32];
 	int c_index=0,m_index=0,i,j,m,index=0;
 	int erasure_index[n1];
-	
+	fflush(stdout);
 	// cin decoding
 	printf("concatenated Cin decoding...\n");
 	for(j=0;j<n1;j++){
