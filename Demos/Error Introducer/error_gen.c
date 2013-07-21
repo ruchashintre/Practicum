@@ -1,0 +1,60 @@
+#include <tomcrypt.h>
+
+int main(int argc, char ** argv) {
+	char type;
+	long errorbytes;
+	prng_state prng;
+	if (argc!=5) {
+		printf("usage: ./error_gen -[b|r] errorbytes masterkey filename\n");
+		exit(0);
+	}
+	if (strcmp(argv[1],"-b")==0) {
+		type = 'b';
+	}
+	else if (strcmp(argv[1],"-r")==0) {
+		type = 'r';
+	}
+	else {
+		printf("invalid error type\n");
+		exit(0);
+	}
+	errorbytes = atol(argv[2]);
+	FILE *fp;
+	if ((fp = fopen(argv[4],"r+b"))==NULL) {
+		printf("cannot open file %s\n",argv[4]);
+		exit(0);
+	}
+	fseek(fp, 0, SEEK_END);
+	unsigned long fileLen;
+   fileLen = ftell(fp);
+	unsigned long i, index;
+	char random[8];
+	int err;
+	if ((err = fortuna_start(&prng)) != CRYPT_OK) {
+		printf("start error: %s\n", error_to_string(err));
+	}
+	if ((err = fortuna_add_entropy(argv[3], strlen(argv[3]), &prng))!= CRYPT_OK) {
+		printf("Add entropy error: %s\n", error_to_string(err));
+	}
+	if ((err = fortuna_ready(&prng)) != CRYPT_OK) {
+		printf("Ready error: %s\n", error_to_string(err));
+	}
+ 
+	fortuna_read(random,8,&prng);
+	index = *(unsigned long *)random;
+ 	index = index % fileLen;
+
+	for (i=0;i<errorbytes;i++) {
+		fseek(fp, index, SEEK_SET);
+		fortuna_read(random,1,&prng);
+      	fwrite(&random, 1, 1, fp);
+		if(type=='r') {
+			fortuna_read(random,8,&prng);
+			index = *(unsigned long *)random;
+ 			index = index % fileLen;
+		}
+		else {
+			index = (index+1)%fileLen;
+		}
+	}
+}
