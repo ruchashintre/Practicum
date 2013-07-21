@@ -1,5 +1,6 @@
 package por;
 
+import por.util.PORPropertyConfigurator;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -23,10 +24,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import por.util.CommandExecutor;
+import static por.util.CommandExecutor.prcs;
 
 /*
  * To change this template, choose Tools | Templates
@@ -40,7 +41,6 @@ public class ConnectToAmazonEC2 {
 
     static Logger logger = Logger.getLogger(ConnectToAmazonEC2.class);
     protected static String pubDnsName = null;
-    private static Process prcs = null;
 
     public static int connectToCloud(String pemFilePath, String accessKey, String secretKey) {
         //INPUT USER ACCOUNT DATA
@@ -158,59 +158,19 @@ public class ConnectToAmazonEC2 {
     }
 
     public static int fileUpload(String fileToUploadPath, String pemFilePath, String userName) {
+        String command = null;
+        logger.info("Entering the method");
+
         try {
-            logger.info("Entering the method");
-            String line = null;
-            Runtime rt = Runtime.getRuntime();
             sshToCloud(pemFilePath);
+
             //create directory for each user, and then store it into the directory
-
-            PrintWriter out = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(prcs.getOutputStream())), true);
-
             logger.info("Creating a directory");
-            String command = "mkdir -p " + userName;
-            logger.info(command);
-            out.println(command);
-            out.println("exit");
-
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(prcs.getErrorStream()));
-
-            logger.info("ERROR in the process - create directory(if any)");
-            while ((line = stdError.readLine()) != null) {
-                logger.info(line);
-            }
-            logger.info("End of error");
-
-
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(prcs.getInputStream()));
-            logger.info("Output of the process - create Directory");
-            while ((line = stdInput.readLine()) != null) {
-                logger.info(line);
-            }
-            logger.info("End of output");
+            command = "mkdir -p " + userName;
+            CommandExecutor.executeInTerminalCommandAndExit(command);
 
             command = "scp -i " + pemFilePath + " " + fileToUploadPath + " " + PORPropertyConfigurator.instance_user_name + "@" + pubDnsName + ":~" + "/" + userName;
-            logger.info(command);
-            prcs = rt.exec(command);
-            stdInput = new BufferedReader(new InputStreamReader(prcs.getInputStream()));
-            logger.info("Output of the process - file upload");
-            while ((line = stdInput.readLine()) != null) {
-                logger.info(line);
-            }
-            logger.info("End of output");
-
-            stdError = new BufferedReader(new InputStreamReader(prcs.getErrorStream()));
-
-            logger.info("ERROR in the process -file upload(if any)");
-            while ((line = stdError.readLine()) != null) {
-                logger.info(line);
-            }
-            logger.info("End of error");
-
-            int exitVal = prcs.waitFor();
-            logger.info("Process exitValue: " + exitVal);
-
-            prcs.destroy();
+            CommandExecutor.executeCommandAndExit(command);
 
         } catch (IOException | InterruptedException ioe) {
             logger.info(ioe.getMessage());
@@ -219,39 +179,15 @@ public class ConnectToAmazonEC2 {
         }
         logger.info("Exiting the method");
         return 0;
-
     }
 
     public static int fileDownload(String userName, String pemFilePath, String filNameToBeDownloaded, String saveTo) {
-        String line;
+        String command = null;
+        logger.info("Entering the method");
+
         try {
-            logger.info("Entering the method");
-            Runtime rt = Runtime.getRuntime();
-            String command = "scp -i " + pemFilePath + " " + PORPropertyConfigurator.instance_user_name + "@" + pubDnsName + ":~/" + userName + "/" + filNameToBeDownloaded + " " + saveTo + "/";
-            logger.info(command);
-            prcs = rt.exec(command);
-
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(prcs.getErrorStream()));
-
-            logger.info("ERROR in the process - create volume(if any)");
-            while ((line = stdError.readLine()) != null) {
-                logger.info(line);
-            }
-            logger.info("End of error");
-
-
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(prcs.getInputStream()));
-            logger.info("Output of the process - create Volume");
-
-            while ((line = stdInput.readLine()) != null) {
-                logger.info(line);
-            }
-            logger.info("End of output");
-
-            int exitVal = prcs.waitFor();
-            logger.info("Process exitValue: " + exitVal);
-
-            prcs.destroy();
+            command = "scp -i " + pemFilePath + " " + PORPropertyConfigurator.instance_user_name + "@" + pubDnsName + ":~/" + userName + "/" + filNameToBeDownloaded + " " + saveTo + "/";
+            CommandExecutor.executeCommandAndExit(command);
 
         } catch (InterruptedException | IOException ioe) {
             logger.info(ioe.getMessage());
@@ -259,163 +195,103 @@ public class ConnectToAmazonEC2 {
             return -1;
         }
         logger.info("Exiting the method");
-
         return 0;
     }
 
     public static int verify(String pemFilePath, String fileName, String userName) {
 
+        String command;
         logger.info("In the start of verify");
         try {
-            Runtime rt = Runtime.getRuntime();
-            prcs = null;
-            String line = null;
-
-            String command;
             command = "scp -i " + pemFilePath + " " + PORPropertyConfigurator.executable_path + PORPropertyConfigurator.por_server_executable + " " + PORPropertyConfigurator.instance_user_name + "@" + pubDnsName + ":~";
-            prcs = rt.exec(command);
+            CommandExecutor.executeCommandAndExit(command);
 
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(prcs.getErrorStream()));
+            sshToCloud(pemFilePath);
+            try {
+                command = "pkill -9 -f porserver";
+                CommandExecutor.executeInTerminalCommand(command);
 
-            logger.info("ERROR in the process - create volume(if any)");
-            while ((line = stdError.readLine()) != null) {
-                logger.info(line);
+                command = "./porserver " + "~/" + userName + "/" + fileName + " &";
+                CommandExecutor.executeInTerminalCommandAndExit(command);
+
+            } catch (IOException | InterruptedException ioe) {
+                logger.info(ioe.getMessage());
+                logger.info("Exiting the method");
+                return -1;
             }
-            logger.info("End of error");
-
-
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(prcs.getInputStream()));
-            logger.info("Output of the process - create Volume");
-
-            while ((line = stdInput.readLine()) != null) {
-                logger.info(line);
-            }
-            logger.info("End of output");
-
-            int exitVal = prcs.waitFor();
-            logger.info("Process exitValue: " + exitVal);
-
-            int status = sshToCloud(pemFilePath);
-            if (status == 0) {
-                try {
-                    command = "pkill -9 -f porserver";
-                    PrintWriter out = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(prcs.getOutputStream())), true);
-                    out.println(command);
-                    command = "./porserver " + "~/" + userName + "/" + fileName + " &";
-                    logger.info(command);
-
-                    out.println(command);
-                    out.println("exit");
-                    Scanner in = new Scanner(prcs.getInputStream());
-                    while (in.hasNextLine()) {
-                        logger.info(in.nextLine());
-                    }
-                } catch (Exception ioe) {
-                    logger.info(ioe.getMessage());
-                    logger.info("Exiting the method");
-                    return -1;
-                }
-            }
-            prcs.destroy();
 
         } catch (IOException | InterruptedException ioe) {
             logger.info(ioe.getMessage());
             logger.info("Exiting the method");
             return -1;
-
         }
         logger.info("Exiting the method");
-
         return 0;
     }
 
-    public static int sshToCloud(String pemFilePath) {
+    public static void sshToCloud(String pemFilePath) throws IOException, InterruptedException {
 
-        logger.info("Entering the method");
-        try {
-            Runtime rt = Runtime.getRuntime();
-            String command;
-            command = "pkill -9 -f ssh";
-            prcs = rt.exec(command);
-            prcs.waitFor();
-            prcs.destroy();
-            command = "ssh -t -t -i " + pemFilePath + " " + PORPropertyConfigurator.instance_user_name + "@" + pubDnsName + " \'/bin/bash\'";
-            logger.info(command);
-            prcs = rt.exec(command);
+        logger.info("Enterin the method");
 
+        String command = null;
+        Runtime rt = Runtime.getRuntime();
 
-            logger.info("SSHed into instance");
+        CommandExecutor.executeCommandAndExit("pkill -9 -f ssh");
+        command = "ssh -t -t -i " + pemFilePath + " " + PORPropertyConfigurator.instance_user_name + "@" + pubDnsName + " \'/bin/bash\'";
 
-        } catch (Exception ioe) {
-            logger.info(ioe.getMessage());
-            logger.info("Exiting the method");
-            return -1;
-        }
+        logger.info("Command to be executed = " + command);
+        prcs = rt.exec(command);
+
         logger.info("Exiting the method");
 
-        return 0;
     }
 
-    public static ArrayList<String> getFileList(String pemFilePath, String userName) {
+    public static ArrayList<String> getFileList(String pemFilePath, String userName) throws IOException, InterruptedException {
+
+        String line = null;
+        ArrayList<String> list = new ArrayList<>();
+        int exitVal = 0;
 
         logger.info("In the start of getFileList");
 
-        ArrayList<String> list = new ArrayList<>();
-        prcs = null;
-        int status = sshToCloud(pemFilePath);
-        String line;
+        sshToCloud(pemFilePath);
 
-        logger.info(status);
+        String command = "cd " + userName + "; ls";
+        logger.info(command);
 
-        if (status == 0) {
-            try {
+        PrintWriter out = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(CommandExecutor.prcs.getOutputStream())), true);
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(CommandExecutor.prcs.getInputStream()));
+        BufferedReader stdError = new BufferedReader(new InputStreamReader(CommandExecutor.prcs.getErrorStream()));
 
-                String command = "cd " + userName + "; ls";
-                logger.info(command);
+        out.println(command);
+        out.println("exit");
 
-                PrintWriter out = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(prcs.getOutputStream())), true);
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(prcs.getInputStream()));
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(prcs.getErrorStream()));
-
-                out.println(command);
-                out.println("exit");
-
-                logger.info("Output of the process - get file list");
-
-                while ((line = stdInput.readLine()) != null) {
-                    logger.info(line);
-                    if (line.endsWith("ls")) {
-                        while (!(line = stdInput.readLine()).endsWith("exit")) {
-                            String[] lines = line.split("\\s+");
-                            list.addAll(Arrays.asList(lines));
-
-                        }
-                    }
-                }
-            } catch (IOException ex) {
-                logger.info(ex.getMessage());
-                logger.info("Exiting the method");
-                return null;
-            }
-            logger.info("End of output");
-            logger.info("List of files" + list.toString());
-
-
-            int exitVal;
-            try {
-                exitVal = prcs.waitFor();
-                logger.info("Process exitValue: " + exitVal);
-
-            } catch (InterruptedException ex) {
-                java.util.logging.Logger.getLogger(ConnectToAmazonEC2.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            prcs.destroy();
-
-        } else {
-            logger.info("can not SSH into cloud");
-            return null;
+        logger.info("Output of the process - get file list");
+        while ((line = stdError.readLine()) != null) {
+            logger.info(line);
         }
+
+        while ((line = stdInput.readLine()) != null) {
+            logger.info(line);
+          
+            if (line.endsWith("ls")) {
+                while (!(line = stdInput.readLine()).endsWith("exit")) {
+                    if (line.contains("No such file or directory")) {
+                        throw new RuntimeException("No such file or directory. Please enter user name again");
+                    }
+                    logger.info(line);
+                    String[] lines = line.split("\\s+");
+                    list.addAll(Arrays.asList(lines));
+                }
+            }
+
+        }
+
+        exitVal = CommandExecutor.prcs.waitFor();
+        logger.info("Process exitValue: " + exitVal);
+        CommandExecutor.prcs.destroy();
+
+        logger.info("List of files" + list.toString());
         logger.info("Exiting the method");
         return list;
     }

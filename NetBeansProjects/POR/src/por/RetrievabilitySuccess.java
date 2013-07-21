@@ -1,6 +1,7 @@
 package por;
 
 
+import por.util.PORPropertyConfigurator;
 import java.io.IOException;
 import java.util.*;
 import org.apache.log4j.Logger;
