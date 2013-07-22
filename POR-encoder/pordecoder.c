@@ -331,6 +331,12 @@ int main(int argc,char** argv)
 		//if (checkFile(newfp,originalmac)==0) {
 			printf("File is recovered after outer encoding.\n");
 			fclose(fp1);
+			system("rm original");
+			system("rm parity");
+			system("rm tempfile");
+			char command[100];
+			sprintf(command, "mv outerdec %s", argv[1]);
+			system(command);
 			totalEndTime = getCPUTime();
 			totalTime = totalEndTime - totalStartTime;
 			printf("#RESULT#\n");
@@ -342,7 +348,7 @@ int main(int argc,char** argv)
 			printf("%lf\n",macTime);
 			printf("%lf\n",chalTime);
 			printf("%lf\n",writeTime);
-            printf("%lf\n",decTime);
+			printf("%lf\n",decTime);
 			exit(0);
 		//}
 	}
@@ -567,7 +573,7 @@ int main(int argc,char** argv)
 	    printf("%lf\n",writeTime);
         printf("%lf\n",decTime);
 		printf("Your file can not be recovered.\n");
-		//return -1;
+		return -1;
 	}
 
 	fclose(fp2);
