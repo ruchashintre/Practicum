@@ -1,5 +1,6 @@
 package por;
 
+import por.util.PORPropertyConfigurator;
 import java.awt.Cursor;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;

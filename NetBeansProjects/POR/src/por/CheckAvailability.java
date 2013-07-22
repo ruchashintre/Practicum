@@ -1,6 +1,9 @@
 package por;
 
+import por.util.PORPropertyConfigurator;
+import por.util.KeyStore;
 import java.awt.Cursor;
+import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -22,7 +25,7 @@ public class CheckAvailability extends javax.swing.JFrame {
     /**
      * Creates new form CheckRetrievability
      */
-    public CheckAvailability(String userString, String pemFilePath) {
+    public CheckAvailability(String userString, String pemFilePath,ArrayList<String> list) {
         PropertyConfigurator.configure(PORPropertyConfigurator.logger_path);
         logger.info("Entering the class");
 
@@ -30,10 +33,14 @@ public class CheckAvailability extends javax.swing.JFrame {
         CheckAvailability.pemFilePath = pemFilePath;
         initComponents();
         jLabel3.setVisible(false);
-
-        ArrayList<String> list = ConnectToAmazonEC2.getFileList(pemFilePath, userName);
-        for (int i = 0; i < list.size(); i++) {
-            jComboBox1.addItem(list.get(i));
+              
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                jComboBox1.addItem(list.get(i));
+            }
+        } else {
+            jLabel3.setText("Can not retrieve list of the files. Kindly try again");
+            jLabel3.setVisible(rootPaneCheckingEnabled);
         }
     }
 
@@ -172,7 +179,7 @@ public class CheckAvailability extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    
+
         MainMenu menu = new MainMenu(userName, pemFilePath);
         menu.setVisible(true);
         setVisible(false);
@@ -193,16 +200,21 @@ public class CheckAvailability extends javax.swing.JFrame {
             String filename = jComboBox1.getSelectedItem().toString();
             String masterkey = jTextField1.getText().toString();
 
-            int status = KeyStore.validateKey(userName, filename, masterkey, ConnectToAmazonCloud.admPassword);
-            if (status == 0) {
+            try {
+                KeyStore.validateKey(userName, filename, masterkey, ConnectToAmazonCloud.admPassword);
                 logger.info("masterKey validated");
                 RetrievabilitySuccess connectToCloud = new RetrievabilitySuccess(filename, masterkey, userName, pemFilePath);
                 connectToCloud.setVisible(true);
                 setVisible(false);
                 logger.info("Exiting the class");
-            } else {
+            } catch (IOException ie) {
                 logger.info("Invalid masterKey");
                 jLabel3.setText("Invalid master key. Please re-enter");
+                jLabel3.setVisible(true);
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            } catch (RuntimeException re) {
+                logger.info(re.getMessage());
+                jLabel3.setText(re.getMessage());
                 jLabel3.setVisible(true);
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }

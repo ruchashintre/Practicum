@@ -4,7 +4,10 @@ package por;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+import por.util.PORPropertyConfigurator;
 import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -162,20 +165,44 @@ public class MainMenu extends javax.swing.JFrame {
         if (jRadioButton1.isSelected()) {
             FileUpload upload = new FileUpload(userName, pemFilePath);
             upload.setVisible(true);
+            setVisible(false);
+            dispose();
+            logger.info("Exiting the class");
 
         } else if (jRadioButton2.isSelected()) {
-            FileDownload download = new FileDownload(userName, pemFilePath);
-            download.setVisible(true);
+            ArrayList<String> list = null;
+            try {
+                list = ConnectToAmazonEC2.getFileList(pemFilePath, userName);
+                FileDownload download = new FileDownload(userName, pemFilePath, list);
+                download.setVisible(true);
+                setVisible(false);
+                dispose();
+                logger.info("Exiting the class");
+            } catch (InterruptedException | IOException ex) {
+                jLabel1.setText("Unable to retrieve list of files. Kindly verify username");
+                jLabel1.setVisible(true);
+            } catch (RuntimeException ex) {
+                jLabel1.setText(ex.getMessage());
+                jLabel1.setVisible(true);
+            }
 
         } else {
-            CheckAvailability retrieve = new CheckAvailability(userName, pemFilePath);
-            retrieve.setVisible(true);
-
+            ArrayList<String> list = null;
+            try {
+                list = ConnectToAmazonEC2.getFileList(pemFilePath, userName);
+                CheckAvailability retrieve = new CheckAvailability(userName, pemFilePath, list);
+                retrieve.setVisible(true);
+                setVisible(false);
+                dispose();
+                logger.info("Exiting the class");
+            } catch (InterruptedException | IOException ex) {
+                jLabel1.setText("Unable to retrieve list of files. Kindly verify username");
+                jLabel1.setVisible(true);
+            } catch (RuntimeException ex) {
+                jLabel1.setText(ex.getMessage());
+                jLabel1.setVisible(true);
+            }
         }
-        setVisible(false);
-        dispose();
-        logger.info("Exiting the class");
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

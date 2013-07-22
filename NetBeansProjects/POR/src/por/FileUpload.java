@@ -1,6 +1,9 @@
 package por;
 
+import por.util.PORPropertyConfigurator;
+import por.util.KeyStore;
 import java.awt.Cursor;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -192,8 +195,20 @@ public class FileUpload extends javax.swing.JFrame {
             String masterkey = jTextField2.getText().toString();
             //store the master key locally
             logger.info("Key to be stored");
-            KeyStore.storeKey(userName, filename, masterkey, ConnectToAmazonCloud.admPassword);
-
+            try {
+                KeyStore.storeKey(userName, filename, masterkey, ConnectToAmazonCloud.admPassword);
+            } catch (IOException | InterruptedException ioe) {
+                logger.info("Error while storing the masterkey");
+                jLabel3.setText("Unexpected error while storing the masterkey. Please check the settings again");
+                jLabel3.setVisible(true);
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+             } catch (RuntimeException re) {
+                logger.info(re.getMessage());
+                jLabel3.setText(re.getMessage());
+                jLabel3.setVisible(true);
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+            
             logger.info("File to be encoded");
 
             UploadSuccess success = new UploadSuccess(filename, masterkey, userName, pemFileName);
