@@ -1,0 +1,16 @@
+import java.util.*;
+public class Test {    
+    public static void main(String[] args) {
+    	try{
+	    	Runtime rt = Runtime.getRuntime();
+	    	Process pr = rt.exec("./a.out");
+	    	//Scanner input = new Scanner(pr.getInputStream());
+	    	//while (input.hasNext()) {
+	    		//System.out.println(input.nextLine());
+	    	//}
+	    	pr.waitFor();
+	    	}catch(Exception e) {
+	    		System.out.println(e.toString());
+	    	}
+    	}
+}
