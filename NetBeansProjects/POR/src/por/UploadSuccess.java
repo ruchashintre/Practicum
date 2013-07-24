@@ -458,7 +458,7 @@ public class UploadSuccess extends javax.swing.JFrame {
                     + "          ['" + jLabel8.getText() + "',  " + jTextField6.getText() + " ],\n"
                     + "          ['" + jLabel9.getText() + "',  " + jTextField7.getText() + " ],\n"
                     + "          ['" + jLabel10.getText() + "',  " + jTextField8.getText() + " ],\n"
-                    + "          ['" + jLabel11.getText() + "',  " + jTextField9.getText() + " ]\n"
+                    + "          ['" + jLabel11.getText() + "',  " + jTextField9.getText() + " ],\n"
                      + "          ['"+ jLabel12.getText()+"',  "+ jTextField10.getText()+" ]\n"
 
                     + "        ]);\n"

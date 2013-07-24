@@ -221,9 +221,10 @@ public class FileDownload extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         JFileChooser jFileChooser1 = new JFileChooser();
+         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int rVal = jFileChooser1.showSaveDialog(this);
         if (rVal == JFileChooser.APPROVE_OPTION) {
-            jTextField2.setText(jFileChooser1.getCurrentDirectory().toString());
+            jTextField2.setText(jFileChooser1.getSelectedFile().toString());
         }
         if (rVal == JFileChooser.CANCEL_OPTION) {
             jTextField2.setText("");

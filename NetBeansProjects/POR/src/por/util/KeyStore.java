@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import por.ConnectToAmazonCloud;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -164,7 +165,12 @@ public abstract class KeyStore {
     public static void mount(String userName, String fileName, String masterKey, String admPassword) throws IOException, InterruptedException {
         logger.info("Entering method");
 
-        String command = "truecrypt " + PORPropertyConfigurator.file_to_be_mounted + " " + PORPropertyConfigurator.mount_path + " -k=" + PORPropertyConfigurator.key_file + " -p=" + masterKey + " --protect-hidden=no --password=" + PORPropertyConfigurator.truecrypt_password;
+        String command = "truecrypt " + PORPropertyConfigurator.file_to_be_mounted 
+                + " " + PORPropertyConfigurator.mount_path 
+                + " -k=" + PORPropertyConfigurator.key_file 
+                + " -p=" + PORPropertyConfigurator.truecrypt_password;
+        //+ " --protect-hidden=no --password=" 
+          //      + admPassword;
         CommandExecutor.executeCommandAndExit(command);
 
         logger.info("Exiting method");
@@ -174,7 +180,10 @@ public abstract class KeyStore {
     public static void dismount(String userName, String fileName, String masterKey, String passString) throws IOException, InterruptedException {
 
         logger.info("Entering the method");
-        String command = "truecrypt -d " + PORPropertyConfigurator.mount_path;
+        String command = "truecrypt -d " ;
+             //  + PORPropertyConfigurator.mount_path
+               // + "--password="
+               // + passString;
         CommandExecutor.executeCommandAndExit(command);
 
         logger.info("Exiting the process");

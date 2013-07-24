@@ -42,7 +42,7 @@ public class PORPropertyConfigurator {
     	   //prop.load(App.class.getClassLoader().getResourceAsStream("config.properties");));
  
             //load a properties file
-            prop.load(new FileInputStream("/home/poojad/POR/config/Config.properties"));
+            prop.load(new FileInputStream("/home/rucha/Desktop/POR/config/Config.properties"));
 
             //get the property value and print it out
             if (prop.getProperty("LOGGER_PATH") != null) {
