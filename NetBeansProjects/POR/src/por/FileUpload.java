@@ -3,6 +3,8 @@ package por;
 import por.util.PORPropertyConfigurator;
 import por.util.KeyStore;
 import java.awt.Cursor;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import org.apache.log4j.Logger;
@@ -21,6 +23,7 @@ public class FileUpload extends javax.swing.JFrame {
     static Logger logger = Logger.getLogger(FileUpload.class);
     public static String userName = null;
     public static String pemFileName = null;
+    CloudProvider cloudProvider = null;
 
     /**
      * Creates new form FileUpload
@@ -33,6 +36,41 @@ public class FileUpload extends javax.swing.JFrame {
         FileUpload.pemFileName = pemFileName;
         jTextField1.setEditable(false);
         jLabel3.setVisible(false);
+
+        cloudProvider = new CloudProvider() {
+        };
+
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                cloudProvider.stopInstanceGeneric();
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+
+            public void windowClosed(WindowEvent e) {
+            }
+        });
     }
 
     /**
@@ -56,7 +94,7 @@ public class FileUpload extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Upload Your File"));
 
@@ -124,7 +162,7 @@ public class FileUpload extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
+                .addContainerGap(38, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -171,7 +209,7 @@ public class FileUpload extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,13 +240,13 @@ public class FileUpload extends javax.swing.JFrame {
                 jLabel3.setText("Unexpected error while storing the masterkey. Please check the settings again");
                 jLabel3.setVisible(true);
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-             } catch (RuntimeException re) {
+            } catch (RuntimeException re) {
                 logger.info(re.getMessage());
                 jLabel3.setText(re.getMessage());
                 jLabel3.setVisible(true);
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
-            
+
             logger.info("File to be encoded");
 
             UploadSuccess success = new UploadSuccess(filename, masterkey, userName, pemFileName);
@@ -241,8 +279,7 @@ public class FileUpload extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        dispose();
-        System.exit(0);
+        cloudProvider.stopInstanceGeneric();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**

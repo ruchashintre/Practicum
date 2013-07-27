@@ -1,6 +1,7 @@
 package por;
 
-
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import por.util.PORPropertyConfigurator;
 import java.io.IOException;
 import java.util.*;
@@ -16,14 +17,16 @@ import org.apache.log4j.PropertyConfigurator;
  * @author PoojaD
  */
 public class RetrievabilitySuccess extends javax.swing.JFrame {
+
     static Logger logger = Logger.getLogger(RetrievabilitySuccess.class);
     private static String filename, masterkey, userName, pemFilePath;
+    CloudProvider cloudProvider = null;
 
     /**
      * Creates new form RetrievabilitySuccess
      */
     public RetrievabilitySuccess(String filename, String masterkey, String userName, String pemFilePath) {
-         PropertyConfigurator.configure(PORPropertyConfigurator.logger_path);
+        PropertyConfigurator.configure(PORPropertyConfigurator.logger_path);
         initComponents();
         RetrievabilitySuccess.userName = userName;
         RetrievabilitySuccess.pemFilePath = pemFilePath;
@@ -33,11 +36,11 @@ public class RetrievabilitySuccess extends javax.swing.JFrame {
         RetrievabilitySuccess.filename = filename;
         RetrievabilitySuccess.masterkey = masterkey;
         String hostname = ConnectToAmazonEC2.pubDnsName;
-     
-        ConnectToAmazonEC2.verify(pemFilePath, filename,userName);
-     
+
+        ConnectToAmazonEC2.verify(pemFilePath, filename, userName);
+
         try {
-            String command = PORPropertyConfigurator.executable_path + PORPropertyConfigurator.por_client_executable+" " + hostname + " " + masterkey;
+            String command = PORPropertyConfigurator.executable_path + PORPropertyConfigurator.por_client_executable + " " + hostname + " " + masterkey;
             logger.info(command);
             Process pr = Runtime.getRuntime().exec(command);
             //logger.info(pr.exitValue());
@@ -58,8 +61,43 @@ public class RetrievabilitySuccess extends javax.swing.JFrame {
             pr.destroy();
 
         } catch (IOException | InterruptedException e) {
-           logger.info(e.getMessage());
+            logger.info(e.getMessage());
         }
+
+        cloudProvider = new CloudProvider() {
+        };
+
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                cloudProvider.stopInstanceGeneric();
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+
+            public void windowClosed(WindowEvent e) {
+            }
+        });
     }
 
     /**
@@ -82,7 +120,7 @@ public class RetrievabilitySuccess extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
         jLabel1.setText("Congratulations ! Your File is available with the cloud provider.");
@@ -191,9 +229,7 @@ public class RetrievabilitySuccess extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        dispose();
-        logger.info("Exiting the class");
-        System.exit(0);
+        cloudProvider.stopInstanceGeneric();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

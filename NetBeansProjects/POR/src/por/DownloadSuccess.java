@@ -1,5 +1,7 @@
 package por;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import por.util.PORPropertyConfigurator;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -19,15 +21,16 @@ public class DownloadSuccess extends javax.swing.JFrame {
 
     private static Logger logger = Logger.getLogger(DownloadSuccess.class);
     private String userName, pemFilePath;
+    CloudProvider cloudProvider = null;
 
     /**
      * Creates new form UploadSuccess
      */
-    public DownloadSuccess(String filename, String masterkey, String userName, String pemFilePath,String downloadPath) {
+    public DownloadSuccess(String filename, String masterkey, String userName, String pemFilePath, String downloadPath) {
         PropertyConfigurator.configure(PORPropertyConfigurator.logger_path);
         logger.info("Entering DownloadSuccess");
 
-        ConnectToAmazonEC2.fileDownload(userName, pemFilePath, filename,downloadPath);
+        ConnectToAmazonEC2.fileDownload(userName, pemFilePath, filename, downloadPath);
         this.userName = userName;
         this.pemFilePath = pemFilePath;
         initComponents();
@@ -40,26 +43,26 @@ public class DownloadSuccess extends javax.swing.JFrame {
         jTextField9.setEditable(false);
         jTextField10.setEditable(false);
         try {
-            String command = "pkill -9 -f "+PORPropertyConfigurator.por_decoder_executable;
+            String command = "pkill -9 -f " + PORPropertyConfigurator.por_decoder_executable;
             Process pr = Runtime.getRuntime().exec(command);
             pr.waitFor();
             pr.destroy();
-            command = PORPropertyConfigurator.executable_path+ PORPropertyConfigurator.por_decoder_executable + " " + downloadPath +"/"+ filename + " " + masterkey;
+            command = PORPropertyConfigurator.executable_path + PORPropertyConfigurator.por_decoder_executable + " " + downloadPath + "/" + filename + " " + masterkey;
             logger.info(command);
             pr = Runtime.getRuntime().exec(command);
             Scanner in = new Scanner(pr.getInputStream());
             Scanner err = new Scanner(pr.getErrorStream());
             while (in.hasNextLine()) {
                 String result = in.nextLine();
-                logger.info("result "+result);
-                
+                logger.info("result " + result);
+
                 if (result.equals("#RESULT#")) {
                     result = in.nextLine();
-                    if(result.matches("0")){
+                    if (result.matches("0")) {
                         jLabel1.setText("Congratulations! Your file is successly downloaded.");
-                    }else if(result.matches("1")){
+                    } else if (result.matches("1")) {
                         jLabel1.setText("Your file was corrupted; however, we have recovered it");
-                    }else{
+                    } else {
                         jLabel1.setText("Sorry! Your File is fully corrupted and can not be recovered. Please contact your cloud provider.");
                     }
                     result = in.nextLine();
@@ -85,6 +88,42 @@ public class DownloadSuccess extends javax.swing.JFrame {
         } catch (Exception e) {
             logger.info(e.getMessage());
         }
+
+        cloudProvider = new CloudProvider() {
+        };
+
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                cloudProvider.stopInstanceGeneric();
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+
+            public void windowClosed(WindowEvent e) {
+            }
+        });
+
     }
 
     /**
@@ -120,7 +159,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
         jTextField10 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 15)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(204, 0, 0));
@@ -376,8 +415,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        dispose();
-        System.exit(0);
+        cloudProvider.stopInstanceGeneric();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
@@ -387,7 +425,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
             logger.info("Entering the method");
-            FileWriter fileWritter = new FileWriter(PORPropertyConfigurator.chart_path+"DownloadChart.html", true);
+            FileWriter fileWritter = new FileWriter(PORPropertyConfigurator.chart_path + "DownloadChart.html", true);
             BufferedWriter bufferWritter;
             bufferWritter = new BufferedWriter(fileWritter);
             bufferWritter.write("<html>\n"
@@ -399,14 +437,13 @@ public class DownloadSuccess extends javax.swing.JFrame {
                     + "      function drawChart() {\n"
                     + "        var data = google.visualization.arrayToDataTable([\n"
                     + "          ['Step', 'Time in seconds'],\n"
-                     + "          ['" + jLabel6.getText() + "',  " + jTextField4.getText() + " ],\n"
+                    + "          ['" + jLabel6.getText() + "',  " + jTextField4.getText() + " ],\n"
                     + "          ['" + jLabel7.getText() + "',  " + jTextField5.getText() + " ],\n"
                     + "          ['" + jLabel8.getText() + "',  " + jTextField6.getText() + " ],\n"
                     + "          ['" + jLabel9.getText() + "',  " + jTextField7.getText() + " ],\n"
                     + "          ['" + jLabel10.getText() + "',  " + jTextField8.getText() + " ],\n"
                     + "          ['" + jLabel12.getText() + "',  " + jTextField9.getText() + " ],\n"
-                    + "          ['"+ jLabel11.getText()+"',  "+ jTextField10.getText()+" ]\n"
-
+                    + "          ['" + jLabel11.getText() + "',  " + jTextField10.getText() + " ]\n"
                     + "        ]);\n"
                     + "\n"
                     + "        var options = {\n"
@@ -425,7 +462,7 @@ public class DownloadSuccess extends javax.swing.JFrame {
                     + "  </body>\n"
                     + "</html>");
             bufferWritter.close();
-            Runtime.getRuntime().exec("firefox "+PORPropertyConfigurator.chart_path+"DownloadChart.html");
+            Runtime.getRuntime().exec("firefox " + PORPropertyConfigurator.chart_path + "DownloadChart.html");
         } catch (Exception e) {
             logger.info(e.toString());
         }

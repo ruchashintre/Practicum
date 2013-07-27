@@ -15,6 +15,8 @@ import com.amazonaws.services.ec2.model.Reservation;
 import com.amazonaws.services.ec2.model.RunInstancesRequest;
 import com.amazonaws.services.ec2.model.RunInstancesResult;
 import com.amazonaws.services.ec2.model.StartInstancesRequest;
+import com.amazonaws.services.ec2.model.StopInstancesRequest;
+import com.amazonaws.services.ec2.model.Tag;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,10 +37,12 @@ import static por.util.CommandExecutor.prcs;
  */
 /**
  *
- * @author poojad
+ * @author rucha, poojad
  */
 public class ConnectToAmazonEC2 {
 
+    private static Instance running_instance;
+    private static AmazonEC2Client ec2client;
     static Logger logger = Logger.getLogger(ConnectToAmazonEC2.class);
     protected static String pubDnsName = null;
 
@@ -48,7 +52,7 @@ public class ConnectToAmazonEC2 {
         logger.info("Entering the class");
         try {
             AWSCredentials awsc = new BasicAWSCredentials(accessKey, secretKey);
-            AmazonEC2Client ec2client = new AmazonEC2Client(awsc);
+            ec2client = new AmazonEC2Client(awsc);
 
             String[] temp = pemFilePath.split("/");
             String keyName = temp[temp.length - 1];
@@ -68,6 +72,7 @@ public class ConnectToAmazonEC2 {
                     if (instance.getImageId().equals(PORPropertyConfigurator.ami_id)) {
 
                         String instanceName = instance.getState().getName();
+                        running_instance = instance;
                         pubDnsName = instance.getPublicDnsName();
                         logger.info("Public DnS Name " + pubDnsName);
                         logger.info("IP address of the instance " + instance.getPublicIpAddress());
@@ -82,7 +87,16 @@ public class ConnectToAmazonEC2 {
                             do {
                                 logger.info("Instance Status = " + instance.getState().getName());
                                 Thread.sleep(5 * 1000);
-                                instanceName = instance.getState().getName();
+                                DescribeInstanceStatusRequest describeInstanceRequest = new DescribeInstanceStatusRequest().withInstanceIds(instance.getInstanceId());
+                                DescribeInstanceStatusResult describeInstanceResult = ec2client.describeInstanceStatus(describeInstanceRequest);
+                                List<InstanceStatus> state = describeInstanceResult.getInstanceStatuses();
+                                while (state.size() < 1) {
+                                    // Do nothing, just wait, have thread sleep if needed
+                                    describeInstanceResult = ec2client.describeInstanceStatus(describeInstanceRequest);
+                                    state = describeInstanceResult.getInstanceStatuses();
+                                }
+                                instanceName = state.get(0).getInstanceState().getName();
+                                logger.info("Instance Name=" + instanceName);
                             } while (!instanceName.equals("running"));
                             logger.info("Exiting the method");
                             return 0;
@@ -113,6 +127,7 @@ public class ConnectToAmazonEC2 {
             do {
                 List<Instance> newlyCreatedList = runResult.getReservation().getInstances();
                 Instance runningInstance = newlyCreatedList.get(0);
+                running_instance = runningInstance;
                 runningId = runningInstance.getInstanceId();
                 pubDnsName = runningInstance.getPublicDnsName();
                 logger.info("Public DNS Name" + pubDnsName);
@@ -273,7 +288,7 @@ public class ConnectToAmazonEC2 {
 
         while ((line = stdInput.readLine()) != null) {
             logger.info(line);
-          
+
             if (line.endsWith("ls")) {
                 while (!(line = stdInput.readLine()).endsWith("exit")) {
                     if (line.contains("No such file or directory")) {
@@ -294,5 +309,42 @@ public class ConnectToAmazonEC2 {
         logger.info("List of files" + list.toString());
         logger.info("Exiting the method");
         return list;
+    }
+
+    public static void stopInstance() throws InterruptedException {
+
+        StopInstancesRequest stopInstancesRequest = new StopInstancesRequest();
+        List<String> instanceList = new ArrayList<>();
+        instanceList.add(running_instance.getInstanceId());
+        stopInstancesRequest.setInstanceIds(instanceList);
+        ec2client.stopInstances(stopInstancesRequest);
+        String instanceState="";
+        do {
+            logger.info("Instance Status = " + running_instance.getState().getName());
+            Thread.sleep(5 * 1000);
+            DescribeInstancesRequest dis = new DescribeInstancesRequest();
+            ArrayList<String> runningInstanceList = new ArrayList<String>();
+            runningInstanceList.add(running_instance.getInstanceId());
+            dis.setInstanceIds(runningInstanceList);
+            DescribeInstancesResult disresult = ec2client.describeInstances(dis);
+            List<Reservation> list = disresult.getReservations();
+
+            System.out.println("-------------- status of instances -------------");
+            for (Reservation res : list) {
+                List<Instance> instancelist = res.getInstances();
+
+                for (Instance instance : instancelist) {
+
+                    logger.info("Instance Status : " + instance.getState().getName());
+                    List<Tag> t1 = instance.getTags();
+                    for (Tag teg : t1) {
+                        logger.info("Instance Name   : " + teg.getValue());
+                    }
+                    instanceState = instance.getState().getName();
+                    logger.info("Instance State = " + instanceState);
+                }
+            }
+        } while (!instanceState.equals("stopped"));
+        logger.info("Exiting the method");
     }
 }

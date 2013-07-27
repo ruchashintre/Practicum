@@ -14,6 +14,7 @@ import org.apache.log4j.PropertyConfigurator;
  * @author PoojaD
  */
 public class CloudSelector extends javax.swing.JFrame {
+
     private static Logger logger = Logger.getLogger(CloudSelector.class);
 
     /**
@@ -107,7 +108,7 @@ public class CloudSelector extends javax.swing.JFrame {
         // TODO add your handling code here:
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         if (jComboBox1.getSelectedItem().equals("Amazon EC2")) {
-            
+
             logger.info("Amazon cloud Provider Selected");
             ConnectToAmazonCloud connectToCloud = new ConnectToAmazonCloud();
             connectToCloud.setVisible(true);

@@ -1,6 +1,7 @@
 package por;
 
-
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import por.util.PORPropertyConfigurator;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -20,6 +21,7 @@ public class UploadSuccess extends javax.swing.JFrame {
 
     static Logger logger = Logger.getLogger(UploadSuccess.class);
     private String filename, masterkey, userName, pemFilePath;
+    CloudProvider cloudProvider = null;
 
     /**
      * Creates new form UploadSuccess
@@ -43,8 +45,8 @@ public class UploadSuccess extends javax.swing.JFrame {
         this.masterkey = masterkey;
         try {
             String command = PORPropertyConfigurator.executable_path
-                    +PORPropertyConfigurator.por_encoder_executable+" " + 
-                    filename + " " + masterkey;
+                    + PORPropertyConfigurator.por_encoder_executable + " "
+                    + filename + " " + masterkey;
             logger.info(command);
             Process pr = Runtime.getRuntime().exec(command);
             Scanner in = new Scanner(pr.getInputStream());
@@ -77,11 +79,46 @@ public class UploadSuccess extends javax.swing.JFrame {
                 }
             }
             pr.destroy();
-            ConnectToAmazonEC2.fileUpload(filename, pemFilePath,userName);
+            ConnectToAmazonEC2.fileUpload(filename, pemFilePath, userName);
 
         } catch (Exception e) {
             logger.info(e.getMessage());
         }
+
+        cloudProvider = new CloudProvider() {
+        };
+
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                cloudProvider.stopInstanceGeneric();
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+
+            public void windowClosed(WindowEvent e) {
+            }
+        });
     }
 
     /**
@@ -121,7 +158,7 @@ public class UploadSuccess extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(184, 194, 200));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -429,9 +466,7 @@ public class UploadSuccess extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        dispose();
-        logger.info("Exiting the class");
-        System.exit(0);
+        cloudProvider.stopInstanceGeneric();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
@@ -441,7 +476,7 @@ public class UploadSuccess extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your d code here:
         try {
-            FileWriter fileWritter = new FileWriter(PORPropertyConfigurator.chart_path+"UploadChart.html", true);
+            FileWriter fileWritter = new FileWriter(PORPropertyConfigurator.chart_path + "UploadChart.html", true);
             BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
             bufferWritter.write("<html>\n"
                     + "  <head>\n"
@@ -452,15 +487,14 @@ public class UploadSuccess extends javax.swing.JFrame {
                     + "      function drawChart() {\n"
                     + "        var data = google.visualization.arrayToDataTable([\n"
                     + "          ['Step', 'Time in seconds'],\n"
-                 //   + "          ['" + jLabel5.getText() + "',  " + jTextField3.getText() + " ],\n"
+                    //   + "          ['" + jLabel5.getText() + "',  " + jTextField3.getText() + " ],\n"
                     + "          ['" + jLabel6.getText() + "',  " + jTextField4.getText() + " ],\n"
                     + "          ['" + jLabel7.getText() + "',  " + jTextField5.getText() + " ],\n"
                     + "          ['" + jLabel8.getText() + "',  " + jTextField6.getText() + " ],\n"
                     + "          ['" + jLabel9.getText() + "',  " + jTextField7.getText() + " ],\n"
                     + "          ['" + jLabel10.getText() + "',  " + jTextField8.getText() + " ],\n"
                     + "          ['" + jLabel11.getText() + "',  " + jTextField9.getText() + " ],\n"
-                     + "          ['"+ jLabel12.getText()+"',  "+ jTextField10.getText()+" ]\n"
-
+                    + "          ['" + jLabel12.getText() + "',  " + jTextField10.getText() + " ]\n"
                     + "        ]);\n"
                     + "\n"
                     + "        var options = {\n"
@@ -479,7 +513,7 @@ public class UploadSuccess extends javax.swing.JFrame {
                     + "  </body>\n"
                     + "</html>");
             bufferWritter.close();
-            Runtime.getRuntime().exec("firefox "+PORPropertyConfigurator.chart_path+"UploadChart.html");
+            Runtime.getRuntime().exec("firefox " + PORPropertyConfigurator.chart_path + "UploadChart.html");
         } catch (Exception e) {
             logger.info(e.toString());
         }

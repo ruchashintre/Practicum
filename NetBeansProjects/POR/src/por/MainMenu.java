@@ -6,6 +6,8 @@ package por;
  */
 import por.util.PORPropertyConfigurator;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
@@ -23,6 +25,7 @@ public class MainMenu extends javax.swing.JFrame {
     static String retrieveString = "Check availability";
     static String userName = null;
     static String pemFilePath = null;
+    CloudProvider cloudProvider = null;
 
     /**
      * Creates new form MainMenu
@@ -32,6 +35,40 @@ public class MainMenu extends javax.swing.JFrame {
         initComponents();
         MainMenu.userName = userName;
         MainMenu.pemFilePath = pemFilePath;
+        cloudProvider = new CloudProvider() {
+        };
+
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                cloudProvider.stopInstanceGeneric();
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+
+            public void windowClosed(WindowEvent e) {
+            }
+        });
     }
 
     /**
@@ -53,7 +90,7 @@ public class MainMenu extends javax.swing.JFrame {
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setForeground(new java.awt.Color(232, 19, 19));
         jLabel1.setText("You are now connected to Amazon EC2!");
@@ -152,7 +189,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -216,9 +253,19 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        dispose();
-        logger.info("Exiting the class");
-        System.exit(0);
+        /*
+         try {
+         ConnectToAmazonEC2.stopInstance();
+         dispose();
+         logger.info("Exiting the class");
+         System.exit(0);
+         } catch (InterruptedException ex) {
+         ex.printStackTrace();
+         System.exit(1);
+         }
+         */
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        cloudProvider.stopInstanceGeneric();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
