@@ -8,6 +8,7 @@ import por.util.PORPropertyConfigurator;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.Cursor;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
@@ -45,9 +46,8 @@ public class MainMenu extends javax.swing.JFrame {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 cloudProvider.stopInstanceGeneric();
-
             }
 
             @Override
@@ -264,7 +264,7 @@ public class MainMenu extends javax.swing.JFrame {
          System.exit(1);
          }
          */
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         cloudProvider.stopInstanceGeneric();
     }//GEN-LAST:event_jButton2ActionPerformed
 

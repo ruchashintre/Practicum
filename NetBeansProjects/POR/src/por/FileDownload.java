@@ -61,9 +61,8 @@ public class FileDownload extends javax.swing.JFrame {
 
             @Override
             public void windowClosing(WindowEvent e) {
-
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 cloudProvider.stopInstanceGeneric();
-
             }
 
             @Override
@@ -271,6 +270,7 @@ public class FileDownload extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         cloudProvider.stopInstanceGeneric();
     }//GEN-LAST:event_jButton3ActionPerformed
 
