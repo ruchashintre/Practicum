@@ -22,7 +22,7 @@ LIB_HSRC = ecc.h eccwrapper.h
 LIB_OBJS = rs.o galois.o berlekamp.o crcgen.o 
 
 TARGET_LIB = libecc.a
-TEST_PROGS = demo 
+TEST_PROGS = por 
 
 TARGETS = $(TARGET_LIB) $(TEST_PROGS)
 
@@ -36,8 +36,11 @@ $(TARGET_LIB): $(LIB_OBJS)
 example: example.o galois.o berlekamp.o crcgen.o rs.o
 	gcc -o example example.o -L. -lecc
 
-demo: demo.o galois.o berlekamp.o crcgen.o rs.o
-	gcc -o demo demo.o -L. -lecc
+por: porencoder.o pordecoder.o porclient.o porserver.o galois.o berlekamp.o crcgen.o rs.o
+	gcc -o porencoder porencoder.o jg_timing.c FeistelPRP.c -L. -lecc -ltomcrypt -lm -lrt
+	gcc -o pordecoder pordecoder.o jg_timing.c FeistelPRP.c -L. -lecc -ltomcrypt -lm -lrt
+	gcc -o porclient porclient.o jg_timing.c FeistelPRP.c -L. -lecc -ltomcrypt -lm -lrt
+	gcc -o porserver porserver.o jg_timing.c FeistelPRP.c -L. -lecc -ltomcrypt -lm -lrt
 
 test: test.o galois.o berlekamp.o crcgen.o rs.o
 	gcc -o test test.o -L. -lecc
