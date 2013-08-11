@@ -104,6 +104,18 @@ public class ConnectToAmazonEC2 {
                                     state = describeInstanceResult.getInstanceStatuses();
                                 }
                                 instanceName = state.get(0).getInstanceState().getName();
+                                request = new DescribeInstancesRequest().withInstanceIds(instance.getInstanceId());
+                                result = ec2client.describeInstances(request);
+
+                                reservations = result.getReservations();
+
+                                for (Reservation r : reservations) {
+                                    List<Instance> insts = r.getInstances();
+                                    for (Instance i : insts) {
+                                        pubDnsName = i.getPublicDnsName();
+                                        logger.info("DNS " + pubDnsName);
+                                    }
+                                }
                                 logger.info("Instance Name=" + instanceName);
                             } while (!instanceName.equals("running")); // get status while the state is not 'running'
                             // the state of the instance is now 'running'
@@ -163,7 +175,7 @@ public class ConnectToAmazonEC2 {
 
                 logger.info("Status = " + status);
             } while (!status.equals("running"));
-            
+
             // Now the state of the instance is 'running', we use this instance to run the application
             request = new DescribeInstancesRequest().withInstanceIds(runningId);
             result = ec2client.describeInstances(request);
