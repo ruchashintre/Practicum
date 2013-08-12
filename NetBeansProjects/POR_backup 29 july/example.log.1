@@ -1,0 +1,794 @@
+2013-07-19 12:02:24,754 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Length: 221[\r][\n]"
+2013-07-19 12:02:24,755 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Connection: Keep-Alive[\r][\n]"
+2013-07-19 12:02:24,755 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "[\r][\n]"
+2013-07-19 12:02:24,756 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 273 - >> POST / HTTP/1.1
+2013-07-19 12:02:24,756 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Host: ec2.amazonaws.com
+2013-07-19 12:02:24,756 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01
+2013-07-19 12:02:24,757 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Type: application/x-www-form-urlencoded; charset=utf-8
+2013-07-19 12:02:24,757 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Length: 221
+2013-07-19 12:02:24,758 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Connection: Keep-Alive
+2013-07-19 12:02:24,759 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - >> "Action=DescribeInstances&SignatureMethod=HmacSHA256&AWSAccessKeyId=AKIAIHLBFFYWOAIOXLPQ&SignatureVersion=2&Version=2013-02-01&Signature=7AvAb3hJjSGC2fKqMdrKa5MDNIm76ouBC8PGd1r4B2w%3D&Timestamp=2013-07-19T16%3A02%3A24.138Z"
+2013-07-19 12:02:24,939 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "HTTP/1.1 200 OK[\r][\n]"
+2013-07-19 12:02:24,943 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Content-Type: text/xml;charset=UTF-8[\r][\n]"
+2013-07-19 12:02:24,943 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Transfer-Encoding: chunked[\r][\n]"
+2013-07-19 12:02:24,944 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Date: Fri, 19 Jul 2013 16:02:24 GMT[\r][\n]"
+2013-07-19 12:02:24,944 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Server: AmazonEC2[\r][\n]"
+2013-07-19 12:02:24,945 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:02:24,947 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 254 - Receiving response: HTTP/1.1 200 OK
+2013-07-19 12:02:24,949 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 257 - << HTTP/1.1 200 OK
+2013-07-19 12:02:24,950 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Content-Type: text/xml;charset=UTF-8
+2013-07-19 12:02:24,951 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Transfer-Encoding: chunked
+2013-07-19 12:02:24,952 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Date: Fri, 19 Jul 2013 16:02:24 GMT
+2013-07-19 12:02:24,953 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Server: AmazonEC2
+2013-07-19 12:02:24,960 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 543 - Connection can be kept alive indefinitely
+2013-07-19 12:02:24,971 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "c8f[\r][\n]"
+2013-07-19 12:02:24,972 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "<"
+2013-07-19 12:02:24,972 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:02:24,973 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "x"
+2013-07-19 12:02:24,973 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "m"
+2013-07-19 12:02:24,975 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "l version="1.0" encoding="UT"
+2013-07-19 12:02:24,978 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "F"
+2013-07-19 12:02:24,978 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "-"
+2013-07-19 12:02:24,978 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "8"
+2013-07-19 12:02:24,979 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << """
+2013-07-19 12:02:24,979 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:02:24,980 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << ">"
+2013-07-19 12:02:24,984 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\n]"
+2013-07-19 12:02:24,984 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "<DescribeInstancesResponse xmlns="http://ec2.amazonaws.com/doc/2013-02-01/">[\n]"
+2013-07-19 12:02:24,984 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <requestId>d61fd178-82ba-4230-87c9-1510c33daec3</requestId>[\n]"
+2013-07-19 12:02:24,985 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <reservationSet>[\n]"
+2013-07-19 12:02:24,985 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        <item>[\n]"
+2013-07-19 12:02:24,985 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <reservationId>r-40743520</reservationId>[\n]"
+2013-07-19 12:02:24,986 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <ownerId>675697390021</ownerId>[\n]"
+2013-07-19 12:02:24,986 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <groupSet>[\n]"
+2013-07-19 12:02:24,987 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:02:24,987 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:02:24,987 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupName>default</groupName>[\n]"
+2013-07-19 12:02:24,988 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:02:24,988 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </groupSet>[\n]"
+2013-07-19 12:02:24,988 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <instancesSet>[\n]"
+2013-07-19 12:02:24,989 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:02:24,989 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceId>i-3080915c</instanceId>[\n]"
+2013-07-19 12:02:24,990 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <imageId>ami-d0f89fb9</imageId>[\n]"
+2013-07-19 12:02:24,990 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceState>[\n]"
+2013-07-19 12:02:24,990 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <code>16</code>[\n]"
+2013-07-19 12:02:24,991 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <name>running</name>[\n]"
+2013-07-19 12:02:24,991 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </instanceState>[\n]"
+2013-07-19 12:02:24,991 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateDnsName>ip-10-164-64-30.ec2.internal</privateDnsName>[\n]"
+2013-07-19 12:02:24,992 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <dnsName>ec2-54-227-60-122.compute-1.amazonaws.com</dnsName>[\n]"
+2013-07-19 12:02:24,992 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <reason/>[\n]"
+2013-07-19 12:02:24,993 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <keyName>RazzyFresh</keyName>[\n]"
+2013-07-19 12:02:24,993 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <amiLaunchIndex>0</amiLaunchIndex>[\n]"
+2013-07-19 12:02:24,993 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <productCodes/>[\n]"
+2013-07-19 12:02:24,994 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceType>t1.micro</instanceType>[\n]"
+2013-07-19 12:02:24,994 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <launchTime>2013-07-19T13:50:55.000Z</launchTime>[\n]"
+2013-07-19 12:02:24,994 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <placement>[\n]"
+2013-07-19 12:02:24,995 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <availabilityZone>us-east-1c</availabilityZone>[\n]"
+2013-07-19 12:02:24,995 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <groupName/>[\n]"
+2013-07-19 12:02:24,996 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <tenancy>default</tenancy>[\n]"
+2013-07-19 12:02:24,996 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </placement>[\n]"
+2013-07-19 12:02:24,996 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <kernelId>aki-88aa75e1</kernelId>[\n]"
+2013-07-19 12:02:24,997 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <monitoring>[\n]"
+2013-07-19 12:02:24,997 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <state>disabled</state>[\n]"
+2013-07-19 12:02:24,997 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </monitoring>[\n]"
+2013-07-19 12:02:24,998 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateIpAddress>10.164.64.30</privateIpAddress>[\n]"
+2013-07-19 12:02:24,998 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ipAddress>54.227.60.122</ipAddress>[\n]"
+2013-07-19 12:02:24,999 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupSet>[\n]"
+2013-07-19 12:02:24,999 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:02:24,999 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:02:25,000 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupName>default</groupName>[\n]"
+2013-07-19 12:02:25,000 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:02:25,000 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </groupSet>[\n]"
+2013-07-19 12:02:25,001 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <architecture>x86_64</architecture>[\n]"
+2013-07-19 12:02:25,001 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceType>ebs</rootDeviceType>[\n]"
+2013-07-19 12:02:25,002 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceName>/dev/sda1</rootDeviceName>[\n]"
+2013-07-19 12:02:25,002 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <blockDeviceMapping>[\n]"
+2013-07-19 12:02:25,002 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:02:25,003 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <deviceName>/dev/sda1</deviceName>[\n]"
+2013-07-19 12:02:25,003 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <ebs>[\n]"
+2013-07-19 12:02:25,003 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <volumeId>vol-9b73a3c6</volumeId>[\n]"
+2013-07-19 12:02:25,004 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <status>attached</status>[\n]"
+2013-07-19 12:02:25,004 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <attachTime>2013-07-10T20:09:56.000Z</attachTime>[\n]"
+2013-07-19 12:02:25,005 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <deleteOnTermination>true</deleteOnTermination>[\n]"
+2013-07-19 12:02:25,005 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            </ebs>[\n]"
+2013-07-19 12:02:25,005 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:02:25,006 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </blockDeviceMapping>[\n]"
+2013-07-19 12:02:25,006 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <virtualizationType>paravirtual</virtualizationType>[\n]"
+2013-07-19 12:02:25,007 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <clientToken>00ab00be-ec8f-417c-af50-52588ba17b8d</clientToken>[\n]"
+2013-07-19 12:02:25,007 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <hypervisor>xen</hypervisor>[\n]"
+2013-07-19 12:02:25,007 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <networkInterfaceSet/>[\n]"
+2013-07-19 12:02:25,008 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ebsOptimized>false</ebsOptimized>[\n]"
+2013-07-19 12:02:25,008 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:02:25,008 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </instancesSet>[\n]"
+2013-07-19 12:02:25,009 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        </item>[\n]"
+2013-07-19 12:02:25,009 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    </reservationSet>[\n]"
+2013-07-19 12:02:25,010 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "</DescribeInstancesResponse>"
+2013-07-19 12:02:25,034 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:02:25,035 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "0[\r][\n]"
+2013-07-19 12:02:25,035 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:02:25,035 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 288 - Released connection is reusable.
+2013-07-19 12:02:25,036 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 433 - Releasing connection [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:02:25,036 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 459 - Pooling connection [{s}->https://ec2.amazonaws.com][null]; keep alive indefinitely
+2013-07-19 12:02:25,036 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 679 - Notifying no-one, there are no waiting threads
+2013-07-19 12:02:25,037 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 590 - Received successful response: 200, AWS Request ID: d61fd178-82ba-4230-87c9-1510c33daec3
+2013-07-19 12:02:25,038 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 72 - Public DnS Name ec2-54-227-60-122.compute-1.amazonaws.com
+2013-07-19 12:02:25,038 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 73 - IP address of the instance 54.227.60.122
+2013-07-19 12:02:25,038 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 90 - Status = running
+2013-07-19 12:02:25,039 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 91 - Exiting the method
+2013-07-19 12:02:25,039 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 298 - Exiting class
+2013-07-19 12:02:27,260 INFO  por.FileDownload [AWT-EventQueue-0    ] 29 - Entering class
+2013-07-19 12:02:27,470 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 332 - In the start of getFileList
+2013-07-19 12:02:27,471 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 310 - Entering the method
+2013-07-19 12:02:27,472 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 315 - ssh -t -t -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com '/bin/bash'
+2013-07-19 12:02:27,481 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 318 - SSHed into instance
+2013-07-19 12:02:27,482 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 325 - Exiting the method
+2013-07-19 12:02:27,483 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 339 - 0
+2013-07-19 12:02:27,484 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 310 - Entering the method
+2013-07-19 12:02:27,485 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 315 - ssh -t -t -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com '/bin/bash'
+2013-07-19 12:02:27,490 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 318 - SSHed into instance
+2013-07-19 12:02:27,490 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 325 - Exiting the method
+2013-07-19 12:02:27,491 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 349 - Output of the process - get file list
+2013-07-19 12:02:27,491 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 353 - ERROR in the process - get file list(if any)
+2013-07-19 12:03:24,099 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [java-sdk-http-connection-reaper] 332 - Closing connections idle longer than 60 SECONDS
+2013-07-19 12:03:24,100 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [java-sdk-http-connection-reaper] 725 - Closing connections idle longer than 60 SECONDS
+2013-07-19 12:05:01,375 INFO  por.Practicum [main                ] 25 - Entering the class
+2013-07-19 12:05:01,477 INFO  por.CloudSelector [main                ] 23 - Entering class
+2013-07-19 12:05:01,691 INFO  por.Practicum [main                ] 31 - Exiting the class
+2013-07-19 12:05:02,703 INFO  por.CloudSelector [AWT-EventQueue-0    ] 110 - Amazon cloud Provider Selected
+2013-07-19 12:05:02,712 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 25 - Entering class
+2013-07-19 12:05:26,019 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 48 - Entering the class
+2013-07-19 12:05:26,290 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 56 - keyname RazzyFresh
+2013-07-19 12:05:26,431 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 279 - Sending Request: POST https://ec2.amazonaws.com / Parameters: (Action: DescribeInstances, SignatureMethod: HmacSHA256, AWSAccessKeyId: AKIAIHLBFFYWOAIOXLPQ, SignatureVersion: 2, Version: 2013-02-01, Signature: mbFC3V+CNJgyVi38kljiP03jTqbR3s8LLC9CYdCjfJw=, Timestamp: 2013-07-19T16:05:26.309Z, ) Headers: (User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01, ) 
+2013-07-19 12:05:26,479 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 239 - Get connection: {s}->https://ec2.amazonaws.com, timeout = 50000
+2013-07-19 12:05:26,481 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 349 - [{s}->https://ec2.amazonaws.com] total kept alive: 0, total issued: 0, total allocated: 0 out of 50
+2013-07-19 12:05:26,481 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 523 - No free connections [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:05:26,482 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 368 - Available capacity: 50 out of 50 [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:05:26,482 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 549 - Creating new connection [{s}->https://ec2.amazonaws.com]
+2013-07-19 12:05:26,620 DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator [AWT-EventQueue-0    ] 177 - Connecting to ec2.amazonaws.com:443
+2013-07-19 12:05:26,795 DEBUG org.apache.http.client.protocol.RequestAddCookies [AWT-EventQueue-0    ] 132 - CookieSpec selected: best-match
+2013-07-19 12:05:26,805 DEBUG org.apache.http.client.protocol.RequestAuthCache [AWT-EventQueue-0    ] 78 - Auth cache not set in the context
+2013-07-19 12:05:26,806 DEBUG org.apache.http.client.protocol.RequestTargetAuthentication [AWT-EventQueue-0    ] 78 - Target auth state: UNCHALLENGED
+2013-07-19 12:05:26,807 DEBUG org.apache.http.client.protocol.RequestProxyAuthentication [AWT-EventQueue-0    ] 87 - Proxy auth state: UNCHALLENGED
+2013-07-19 12:05:26,807 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 713 - Attempt 1 to execute request
+2013-07-19 12:05:26,807 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 269 - Sending request: POST / HTTP/1.1
+2013-07-19 12:05:26,808 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "POST / HTTP/1.1[\r][\n]"
+2013-07-19 12:05:26,809 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Host: ec2.amazonaws.com[\r][\n]"
+2013-07-19 12:05:26,810 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01[\r][\n]"
+2013-07-19 12:05:26,810 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Type: application/x-www-form-urlencoded; charset=utf-8[\r][\n]"
+2013-07-19 12:05:26,810 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Length: 223[\r][\n]"
+2013-07-19 12:05:26,810 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Connection: Keep-Alive[\r][\n]"
+2013-07-19 12:05:26,811 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "[\r][\n]"
+2013-07-19 12:05:26,811 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 273 - >> POST / HTTP/1.1
+2013-07-19 12:05:26,811 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Host: ec2.amazonaws.com
+2013-07-19 12:05:26,811 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01
+2013-07-19 12:05:26,812 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Type: application/x-www-form-urlencoded; charset=utf-8
+2013-07-19 12:05:26,812 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Length: 223
+2013-07-19 12:05:26,812 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Connection: Keep-Alive
+2013-07-19 12:05:26,813 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - >> "Action=DescribeInstances&SignatureMethod=HmacSHA256&AWSAccessKeyId=AKIAIHLBFFYWOAIOXLPQ&SignatureVersion=2&Version=2013-02-01&Signature=mbFC3V%2BCNJgyVi38kljiP03jTqbR3s8LLC9CYdCjfJw%3D&Timestamp=2013-07-19T16%3A05%3A26.309Z"
+2013-07-19 12:05:27,869 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "HTTP/1.1 200 OK[\r][\n]"
+2013-07-19 12:05:27,874 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Content-Type: text/xml;charset=UTF-8[\r][\n]"
+2013-07-19 12:05:27,875 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Transfer-Encoding: chunked[\r][\n]"
+2013-07-19 12:05:27,875 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Date: Fri, 19 Jul 2013 16:05:27 GMT[\r][\n]"
+2013-07-19 12:05:27,879 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Server: AmazonEC2[\r][\n]"
+2013-07-19 12:05:27,880 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:05:27,882 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 254 - Receiving response: HTTP/1.1 200 OK
+2013-07-19 12:05:27,882 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 257 - << HTTP/1.1 200 OK
+2013-07-19 12:05:27,883 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Content-Type: text/xml;charset=UTF-8
+2013-07-19 12:05:27,883 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Transfer-Encoding: chunked
+2013-07-19 12:05:27,884 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Date: Fri, 19 Jul 2013 16:05:27 GMT
+2013-07-19 12:05:27,884 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Server: AmazonEC2
+2013-07-19 12:05:27,890 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 543 - Connection can be kept alive indefinitely
+2013-07-19 12:05:27,901 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "c8f[\r][\n]"
+2013-07-19 12:05:27,901 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "<"
+2013-07-19 12:05:27,901 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:05:27,902 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "x"
+2013-07-19 12:05:27,902 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "m"
+2013-07-19 12:05:27,903 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "l version="1.0" encoding="UT"
+2013-07-19 12:05:27,906 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "F"
+2013-07-19 12:05:27,906 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "-"
+2013-07-19 12:05:27,907 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "8"
+2013-07-19 12:05:27,907 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << """
+2013-07-19 12:05:27,907 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:05:27,908 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << ">"
+2013-07-19 12:05:27,911 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\n]"
+2013-07-19 12:05:27,912 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "<DescribeInstancesResponse xmlns="http://ec2.amazonaws.com/doc/2013-02-01/">[\n]"
+2013-07-19 12:05:27,912 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <requestId>4ecb8685-a083-4977-ac71-8c0f5aec6eb7</requestId>[\n]"
+2013-07-19 12:05:27,913 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <reservationSet>[\n]"
+2013-07-19 12:05:27,913 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        <item>[\n]"
+2013-07-19 12:05:27,913 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <reservationId>r-40743520</reservationId>[\n]"
+2013-07-19 12:05:27,914 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <ownerId>675697390021</ownerId>[\n]"
+2013-07-19 12:05:27,914 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <groupSet>[\n]"
+2013-07-19 12:05:27,914 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:05:27,915 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:05:27,915 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupName>default</groupName>[\n]"
+2013-07-19 12:05:27,916 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:05:27,916 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </groupSet>[\n]"
+2013-07-19 12:05:27,916 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <instancesSet>[\n]"
+2013-07-19 12:05:27,917 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:05:27,917 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceId>i-3080915c</instanceId>[\n]"
+2013-07-19 12:05:27,917 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <imageId>ami-d0f89fb9</imageId>[\n]"
+2013-07-19 12:05:27,918 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceState>[\n]"
+2013-07-19 12:05:27,918 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <code>16</code>[\n]"
+2013-07-19 12:05:27,918 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <name>running</name>[\n]"
+2013-07-19 12:05:27,919 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </instanceState>[\n]"
+2013-07-19 12:05:27,919 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateDnsName>ip-10-164-64-30.ec2.internal</privateDnsName>[\n]"
+2013-07-19 12:05:27,919 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <dnsName>ec2-54-227-60-122.compute-1.amazonaws.com</dnsName>[\n]"
+2013-07-19 12:05:27,920 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <reason/>[\n]"
+2013-07-19 12:05:27,920 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <keyName>RazzyFresh</keyName>[\n]"
+2013-07-19 12:05:27,921 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <amiLaunchIndex>0</amiLaunchIndex>[\n]"
+2013-07-19 12:05:27,921 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <productCodes/>[\n]"
+2013-07-19 12:05:27,921 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceType>t1.micro</instanceType>[\n]"
+2013-07-19 12:05:27,922 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <launchTime>2013-07-19T13:50:55.000Z</launchTime>[\n]"
+2013-07-19 12:05:27,922 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <placement>[\n]"
+2013-07-19 12:05:27,922 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <availabilityZone>us-east-1c</availabilityZone>[\n]"
+2013-07-19 12:05:27,923 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <groupName/>[\n]"
+2013-07-19 12:05:27,923 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <tenancy>default</tenancy>[\n]"
+2013-07-19 12:05:27,923 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </placement>[\n]"
+2013-07-19 12:05:27,924 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <kernelId>aki-88aa75e1</kernelId>[\n]"
+2013-07-19 12:05:27,924 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <monitoring>[\n]"
+2013-07-19 12:05:27,925 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <state>disabled</state>[\n]"
+2013-07-19 12:05:27,925 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </monitoring>[\n]"
+2013-07-19 12:05:27,925 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateIpAddress>10.164.64.30</privateIpAddress>[\n]"
+2013-07-19 12:05:27,926 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ipAddress>54.227.60.122</ipAddress>[\n]"
+2013-07-19 12:05:27,926 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupSet>[\n]"
+2013-07-19 12:05:27,926 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:05:27,927 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:05:27,927 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupName>default</groupName>[\n]"
+2013-07-19 12:05:27,927 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:05:27,928 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </groupSet>[\n]"
+2013-07-19 12:05:27,928 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <architecture>x86_64</architecture>[\n]"
+2013-07-19 12:05:27,929 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceType>ebs</rootDeviceType>[\n]"
+2013-07-19 12:05:27,929 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceName>/dev/sda1</rootDeviceName>[\n]"
+2013-07-19 12:05:27,929 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <blockDeviceMapping>[\n]"
+2013-07-19 12:05:27,930 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:05:27,930 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <deviceName>/dev/sda1</deviceName>[\n]"
+2013-07-19 12:05:27,930 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <ebs>[\n]"
+2013-07-19 12:05:27,931 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <volumeId>vol-9b73a3c6</volumeId>[\n]"
+2013-07-19 12:05:27,931 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <status>attached</status>[\n]"
+2013-07-19 12:05:27,931 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <attachTime>2013-07-10T20:09:56.000Z</attachTime>[\n]"
+2013-07-19 12:05:27,932 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <deleteOnTermination>true</deleteOnTermination>[\n]"
+2013-07-19 12:05:27,932 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            </ebs>[\n]"
+2013-07-19 12:05:27,932 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:05:27,933 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </blockDeviceMapping>[\n]"
+2013-07-19 12:05:27,933 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <virtualizationType>paravirtual</virtualizationType>[\n]"
+2013-07-19 12:05:27,934 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <clientToken>00ab00be-ec8f-417c-af50-52588ba17b8d</clientToken>[\n]"
+2013-07-19 12:05:27,934 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <hypervisor>xen</hypervisor>[\n]"
+2013-07-19 12:05:27,934 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <networkInterfaceSet/>[\n]"
+2013-07-19 12:05:27,935 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ebsOptimized>false</ebsOptimized>[\n]"
+2013-07-19 12:05:27,935 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:05:27,935 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </instancesSet>[\n]"
+2013-07-19 12:05:27,936 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        </item>[\n]"
+2013-07-19 12:05:27,936 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    </reservationSet>[\n]"
+2013-07-19 12:05:27,936 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "</DescribeInstancesResponse>"
+2013-07-19 12:05:27,963 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:05:27,964 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "0[\r][\n]"
+2013-07-19 12:05:27,964 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:05:27,965 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 288 - Released connection is reusable.
+2013-07-19 12:05:27,965 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 433 - Releasing connection [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:05:27,966 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 459 - Pooling connection [{s}->https://ec2.amazonaws.com][null]; keep alive indefinitely
+2013-07-19 12:05:27,966 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 679 - Notifying no-one, there are no waiting threads
+2013-07-19 12:05:27,967 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 590 - Received successful response: 200, AWS Request ID: 4ecb8685-a083-4977-ac71-8c0f5aec6eb7
+2013-07-19 12:05:27,968 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 72 - Public DnS Name ec2-54-227-60-122.compute-1.amazonaws.com
+2013-07-19 12:05:27,968 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 73 - IP address of the instance 54.227.60.122
+2013-07-19 12:05:27,969 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 90 - Status = running
+2013-07-19 12:05:27,969 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 91 - Exiting the method
+2013-07-19 12:05:27,969 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 298 - Exiting class
+2013-07-19 12:05:30,299 INFO  por.FileDownload [AWT-EventQueue-0    ] 29 - Entering class
+2013-07-19 12:05:30,524 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 332 - In the start of getFileList
+2013-07-19 12:05:30,525 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 310 - Entering the method
+2013-07-19 12:05:30,526 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 315 - ssh -t -t -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com '/bin/bash'
+2013-07-19 12:05:30,532 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 318 - SSHed into instance
+2013-07-19 12:05:30,533 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 325 - Exiting the method
+2013-07-19 12:05:30,533 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 339 - 0
+2013-07-19 12:05:30,533 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 310 - Entering the method
+2013-07-19 12:05:30,534 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 315 - ssh -t -t -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com '/bin/bash'
+2013-07-19 12:05:30,535 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 318 - SSHed into instance
+2013-07-19 12:05:30,536 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 325 - Exiting the method
+2013-07-19 12:05:30,536 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 345 - cd sdd; ls
+2013-07-19 12:05:30,537 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 351 - ERROR in the process - get file list(if any)
+2013-07-19 12:08:21,136 INFO  por.Practicum [main                ] 25 - Entering the class
+2013-07-19 12:08:21,225 INFO  por.CloudSelector [main                ] 23 - Entering class
+2013-07-19 12:08:21,437 INFO  por.Practicum [main                ] 31 - Exiting the class
+2013-07-19 12:08:27,164 INFO  por.CloudSelector [AWT-EventQueue-0    ] 110 - Amazon cloud Provider Selected
+2013-07-19 12:08:27,173 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 25 - Entering class
+2013-07-19 12:08:42,034 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 48 - Entering the class
+2013-07-19 12:08:42,298 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 56 - keyname RazzyFresh
+2013-07-19 12:08:42,436 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 279 - Sending Request: POST https://ec2.amazonaws.com / Parameters: (Action: DescribeInstances, SignatureMethod: HmacSHA256, AWSAccessKeyId: AKIAIHLBFFYWOAIOXLPQ, SignatureVersion: 2, Version: 2013-02-01, Signature: auQTHMhLI4b39qXFhgJhbJJGzUxu2dqtQYA44a7aATA=, Timestamp: 2013-07-19T16:08:42.316Z, ) Headers: (User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01, ) 
+2013-07-19 12:08:42,478 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 239 - Get connection: {s}->https://ec2.amazonaws.com, timeout = 50000
+2013-07-19 12:08:42,480 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 349 - [{s}->https://ec2.amazonaws.com] total kept alive: 0, total issued: 0, total allocated: 0 out of 50
+2013-07-19 12:08:42,480 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 523 - No free connections [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:08:42,481 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 368 - Available capacity: 50 out of 50 [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:08:42,481 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 549 - Creating new connection [{s}->https://ec2.amazonaws.com]
+2013-07-19 12:08:42,636 DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator [AWT-EventQueue-0    ] 177 - Connecting to ec2.amazonaws.com:443
+2013-07-19 12:08:42,943 DEBUG org.apache.http.client.protocol.RequestAddCookies [AWT-EventQueue-0    ] 132 - CookieSpec selected: best-match
+2013-07-19 12:08:42,953 DEBUG org.apache.http.client.protocol.RequestAuthCache [AWT-EventQueue-0    ] 78 - Auth cache not set in the context
+2013-07-19 12:08:42,954 DEBUG org.apache.http.client.protocol.RequestTargetAuthentication [AWT-EventQueue-0    ] 78 - Target auth state: UNCHALLENGED
+2013-07-19 12:08:42,955 DEBUG org.apache.http.client.protocol.RequestProxyAuthentication [AWT-EventQueue-0    ] 87 - Proxy auth state: UNCHALLENGED
+2013-07-19 12:08:42,955 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 713 - Attempt 1 to execute request
+2013-07-19 12:08:42,956 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 269 - Sending request: POST / HTTP/1.1
+2013-07-19 12:08:42,956 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "POST / HTTP/1.1[\r][\n]"
+2013-07-19 12:08:42,958 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Host: ec2.amazonaws.com[\r][\n]"
+2013-07-19 12:08:42,958 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01[\r][\n]"
+2013-07-19 12:08:42,958 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Type: application/x-www-form-urlencoded; charset=utf-8[\r][\n]"
+2013-07-19 12:08:42,959 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Length: 221[\r][\n]"
+2013-07-19 12:08:42,959 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Connection: Keep-Alive[\r][\n]"
+2013-07-19 12:08:42,959 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "[\r][\n]"
+2013-07-19 12:08:42,960 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 273 - >> POST / HTTP/1.1
+2013-07-19 12:08:42,960 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Host: ec2.amazonaws.com
+2013-07-19 12:08:42,960 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01
+2013-07-19 12:08:42,961 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Type: application/x-www-form-urlencoded; charset=utf-8
+2013-07-19 12:08:42,961 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Length: 221
+2013-07-19 12:08:42,961 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Connection: Keep-Alive
+2013-07-19 12:08:42,965 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - >> "Action=DescribeInstances&SignatureMethod=HmacSHA256&AWSAccessKeyId=AKIAIHLBFFYWOAIOXLPQ&SignatureVersion=2&Version=2013-02-01&Signature=auQTHMhLI4b39qXFhgJhbJJGzUxu2dqtQYA44a7aATA%3D&Timestamp=2013-07-19T16%3A08%3A42.316Z"
+2013-07-19 12:08:43,193 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "HTTP/1.1 200 OK[\r][\n]"
+2013-07-19 12:08:43,196 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Content-Type: text/xml;charset=UTF-8[\r][\n]"
+2013-07-19 12:08:43,197 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Transfer-Encoding: chunked[\r][\n]"
+2013-07-19 12:08:43,197 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Date: Fri, 19 Jul 2013 16:08:42 GMT[\r][\n]"
+2013-07-19 12:08:43,198 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Server: AmazonEC2[\r][\n]"
+2013-07-19 12:08:43,198 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:08:43,200 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 254 - Receiving response: HTTP/1.1 200 OK
+2013-07-19 12:08:43,200 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 257 - << HTTP/1.1 200 OK
+2013-07-19 12:08:43,200 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Content-Type: text/xml;charset=UTF-8
+2013-07-19 12:08:43,201 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Transfer-Encoding: chunked
+2013-07-19 12:08:43,201 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Date: Fri, 19 Jul 2013 16:08:42 GMT
+2013-07-19 12:08:43,201 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Server: AmazonEC2
+2013-07-19 12:08:43,206 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 543 - Connection can be kept alive indefinitely
+2013-07-19 12:08:43,217 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "c8f[\r][\n]"
+2013-07-19 12:08:43,218 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "<"
+2013-07-19 12:08:43,218 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:08:43,218 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "x"
+2013-07-19 12:08:43,219 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "m"
+2013-07-19 12:08:43,220 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "l version="1.0" encoding="UT"
+2013-07-19 12:08:43,224 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "F"
+2013-07-19 12:08:43,224 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "-"
+2013-07-19 12:08:43,224 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "8"
+2013-07-19 12:08:43,225 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << """
+2013-07-19 12:08:43,225 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:08:43,226 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << ">"
+2013-07-19 12:08:43,229 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\n]"
+2013-07-19 12:08:43,230 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "<DescribeInstancesResponse xmlns="http://ec2.amazonaws.com/doc/2013-02-01/">[\n]"
+2013-07-19 12:08:43,230 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <requestId>aa60fe03-6099-4663-8cf7-108f9d5dbe71</requestId>[\n]"
+2013-07-19 12:08:43,231 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <reservationSet>[\n]"
+2013-07-19 12:08:43,231 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        <item>[\n]"
+2013-07-19 12:08:43,231 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <reservationId>r-40743520</reservationId>[\n]"
+2013-07-19 12:08:43,232 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <ownerId>675697390021</ownerId>[\n]"
+2013-07-19 12:08:43,232 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <groupSet>[\n]"
+2013-07-19 12:08:43,233 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:08:43,233 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:08:43,233 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupName>default</groupName>[\n]"
+2013-07-19 12:08:43,234 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:08:43,234 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </groupSet>[\n]"
+2013-07-19 12:08:43,234 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <instancesSet>[\n]"
+2013-07-19 12:08:43,235 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:08:43,235 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceId>i-3080915c</instanceId>[\n]"
+2013-07-19 12:08:43,236 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <imageId>ami-d0f89fb9</imageId>[\n]"
+2013-07-19 12:08:43,236 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceState>[\n]"
+2013-07-19 12:08:43,236 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <code>16</code>[\n]"
+2013-07-19 12:08:43,237 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <name>running</name>[\n]"
+2013-07-19 12:08:43,237 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </instanceState>[\n]"
+2013-07-19 12:08:43,237 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateDnsName>ip-10-164-64-30.ec2.internal</privateDnsName>[\n]"
+2013-07-19 12:08:43,238 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <dnsName>ec2-54-227-60-122.compute-1.amazonaws.com</dnsName>[\n]"
+2013-07-19 12:08:43,238 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <reason/>[\n]"
+2013-07-19 12:08:43,238 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <keyName>RazzyFresh</keyName>[\n]"
+2013-07-19 12:08:43,238 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <amiLaunchIndex>0</amiLaunchIndex>[\n]"
+2013-07-19 12:08:43,239 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <productCodes/>[\n]"
+2013-07-19 12:08:43,239 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceType>t1.micro</instanceType>[\n]"
+2013-07-19 12:08:43,239 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <launchTime>2013-07-19T13:50:55.000Z</launchTime>[\n]"
+2013-07-19 12:08:43,239 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <placement>[\n]"
+2013-07-19 12:08:43,240 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <availabilityZone>us-east-1c</availabilityZone>[\n]"
+2013-07-19 12:08:43,240 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <groupName/>[\n]"
+2013-07-19 12:08:43,240 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <tenancy>default</tenancy>[\n]"
+2013-07-19 12:08:43,240 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </placement>[\n]"
+2013-07-19 12:08:43,241 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <kernelId>aki-88aa75e1</kernelId>[\n]"
+2013-07-19 12:08:43,241 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <monitoring>[\n]"
+2013-07-19 12:08:43,241 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <state>disabled</state>[\n]"
+2013-07-19 12:08:43,241 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </monitoring>[\n]"
+2013-07-19 12:08:43,242 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateIpAddress>10.164.64.30</privateIpAddress>[\n]"
+2013-07-19 12:08:43,242 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ipAddress>54.227.60.122</ipAddress>[\n]"
+2013-07-19 12:08:43,242 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupSet>[\n]"
+2013-07-19 12:08:43,242 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:08:43,243 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:08:43,243 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupName>default</groupName>[\n]"
+2013-07-19 12:08:43,243 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:08:43,243 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </groupSet>[\n]"
+2013-07-19 12:08:43,244 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <architecture>x86_64</architecture>[\n]"
+2013-07-19 12:08:43,244 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceType>ebs</rootDeviceType>[\n]"
+2013-07-19 12:08:43,244 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceName>/dev/sda1</rootDeviceName>[\n]"
+2013-07-19 12:08:43,244 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <blockDeviceMapping>[\n]"
+2013-07-19 12:08:43,245 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:08:43,245 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <deviceName>/dev/sda1</deviceName>[\n]"
+2013-07-19 12:08:43,245 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <ebs>[\n]"
+2013-07-19 12:08:43,245 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <volumeId>vol-9b73a3c6</volumeId>[\n]"
+2013-07-19 12:08:43,246 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <status>attached</status>[\n]"
+2013-07-19 12:08:43,246 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <attachTime>2013-07-10T20:09:56.000Z</attachTime>[\n]"
+2013-07-19 12:08:43,246 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <deleteOnTermination>true</deleteOnTermination>[\n]"
+2013-07-19 12:08:43,246 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            </ebs>[\n]"
+2013-07-19 12:08:43,247 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:08:43,247 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </blockDeviceMapping>[\n]"
+2013-07-19 12:08:43,247 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <virtualizationType>paravirtual</virtualizationType>[\n]"
+2013-07-19 12:08:43,247 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <clientToken>00ab00be-ec8f-417c-af50-52588ba17b8d</clientToken>[\n]"
+2013-07-19 12:08:43,248 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <hypervisor>xen</hypervisor>[\n]"
+2013-07-19 12:08:43,248 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <networkInterfaceSet/>[\n]"
+2013-07-19 12:08:43,248 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ebsOptimized>false</ebsOptimized>[\n]"
+2013-07-19 12:08:43,248 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:08:43,249 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </instancesSet>[\n]"
+2013-07-19 12:08:43,249 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        </item>[\n]"
+2013-07-19 12:08:43,249 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    </reservationSet>[\n]"
+2013-07-19 12:08:43,249 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "</DescribeInstancesResponse>"
+2013-07-19 12:08:43,272 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:08:43,273 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "0[\r][\n]"
+2013-07-19 12:08:43,273 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:08:43,274 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 288 - Released connection is reusable.
+2013-07-19 12:08:43,274 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 433 - Releasing connection [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:08:43,274 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 459 - Pooling connection [{s}->https://ec2.amazonaws.com][null]; keep alive indefinitely
+2013-07-19 12:08:43,274 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 679 - Notifying no-one, there are no waiting threads
+2013-07-19 12:08:43,276 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 590 - Received successful response: 200, AWS Request ID: aa60fe03-6099-4663-8cf7-108f9d5dbe71
+2013-07-19 12:08:43,276 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 72 - Public DnS Name ec2-54-227-60-122.compute-1.amazonaws.com
+2013-07-19 12:08:43,276 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 73 - IP address of the instance 54.227.60.122
+2013-07-19 12:08:43,277 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 90 - Status = running
+2013-07-19 12:08:43,277 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 91 - Exiting the method
+2013-07-19 12:08:43,277 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 298 - Exiting class
+2013-07-19 12:09:09,304 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 25 - Entering class
+2013-07-19 12:09:09,378 INFO  por.MainMenu [AWT-EventQueue-0    ] 186 - Exiting the class
+2013-07-19 12:09:27,753 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 48 - Entering the class
+2013-07-19 12:09:27,757 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 56 - keyname RazzyFresh
+2013-07-19 12:09:27,759 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 279 - Sending Request: POST https://ec2.amazonaws.com / Parameters: (Action: DescribeInstances, SignatureMethod: HmacSHA256, AWSAccessKeyId: AKIAIHLBFFYWOAIOXLPQ, SignatureVersion: 2, Version: 2013-02-01, Signature: lH2WfT8Rm5KGpGbr0VsHyXkSbVoFkohUhkbcopkisLI=, Timestamp: 2013-07-19T16:09:27.758Z, ) Headers: (User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01, ) 
+2013-07-19 12:09:27,762 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 239 - Get connection: {s}->https://ec2.amazonaws.com, timeout = 50000
+2013-07-19 12:09:27,762 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 349 - [{s}->https://ec2.amazonaws.com] total kept alive: 0, total issued: 0, total allocated: 0 out of 50
+2013-07-19 12:09:27,763 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 523 - No free connections [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:09:27,763 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 368 - Available capacity: 50 out of 50 [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:09:27,763 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 549 - Creating new connection [{s}->https://ec2.amazonaws.com]
+2013-07-19 12:09:27,773 DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator [AWT-EventQueue-0    ] 177 - Connecting to ec2.amazonaws.com:443
+2013-07-19 12:09:27,822 DEBUG org.apache.http.client.protocol.RequestAddCookies [AWT-EventQueue-0    ] 132 - CookieSpec selected: best-match
+2013-07-19 12:09:27,824 DEBUG org.apache.http.client.protocol.RequestAuthCache [AWT-EventQueue-0    ] 78 - Auth cache not set in the context
+2013-07-19 12:09:27,824 DEBUG org.apache.http.client.protocol.RequestTargetAuthentication [AWT-EventQueue-0    ] 78 - Target auth state: UNCHALLENGED
+2013-07-19 12:09:27,825 DEBUG org.apache.http.client.protocol.RequestProxyAuthentication [AWT-EventQueue-0    ] 87 - Proxy auth state: UNCHALLENGED
+2013-07-19 12:09:27,825 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 713 - Attempt 1 to execute request
+2013-07-19 12:09:27,826 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 269 - Sending request: POST / HTTP/1.1
+2013-07-19 12:09:27,827 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "POST / HTTP/1.1[\r][\n]"
+2013-07-19 12:09:27,828 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Host: ec2.amazonaws.com[\r][\n]"
+2013-07-19 12:09:27,828 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01[\r][\n]"
+2013-07-19 12:09:27,829 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Type: application/x-www-form-urlencoded; charset=utf-8[\r][\n]"
+2013-07-19 12:09:27,830 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Length: 221[\r][\n]"
+2013-07-19 12:09:27,830 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Connection: Keep-Alive[\r][\n]"
+2013-07-19 12:09:27,830 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "[\r][\n]"
+2013-07-19 12:09:27,830 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 273 - >> POST / HTTP/1.1
+2013-07-19 12:09:27,830 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Host: ec2.amazonaws.com
+2013-07-19 12:09:27,831 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01
+2013-07-19 12:09:27,831 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Type: application/x-www-form-urlencoded; charset=utf-8
+2013-07-19 12:09:27,831 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Length: 221
+2013-07-19 12:09:27,831 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Connection: Keep-Alive
+2013-07-19 12:09:27,832 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - >> "Action=DescribeInstances&SignatureMethod=HmacSHA256&AWSAccessKeyId=AKIAIHLBFFYWOAIOXLPQ&SignatureVersion=2&Version=2013-02-01&Signature=lH2WfT8Rm5KGpGbr0VsHyXkSbVoFkohUhkbcopkisLI%3D&Timestamp=2013-07-19T16%3A09%3A27.758Z"
+2013-07-19 12:09:27,921 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "HTTP/1.1 200 OK[\r][\n]"
+2013-07-19 12:09:27,922 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Content-Type: text/xml;charset=UTF-8[\r][\n]"
+2013-07-19 12:09:27,923 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Transfer-Encoding: chunked[\r][\n]"
+2013-07-19 12:09:27,923 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Date: Fri, 19 Jul 2013 16:09:27 GMT[\r][\n]"
+2013-07-19 12:09:27,923 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Server: AmazonEC2[\r][\n]"
+2013-07-19 12:09:27,924 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:09:27,924 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 254 - Receiving response: HTTP/1.1 200 OK
+2013-07-19 12:09:27,924 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 257 - << HTTP/1.1 200 OK
+2013-07-19 12:09:27,924 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Content-Type: text/xml;charset=UTF-8
+2013-07-19 12:09:27,925 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Transfer-Encoding: chunked
+2013-07-19 12:09:27,925 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Date: Fri, 19 Jul 2013 16:09:27 GMT
+2013-07-19 12:09:27,925 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Server: AmazonEC2
+2013-07-19 12:09:27,926 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 543 - Connection can be kept alive indefinitely
+2013-07-19 12:09:27,926 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "c8f[\r][\n]"
+2013-07-19 12:09:27,926 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "<"
+2013-07-19 12:09:27,927 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:09:27,927 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "x"
+2013-07-19 12:09:27,927 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "m"
+2013-07-19 12:09:27,928 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "l version="1.0" encoding="UT"
+2013-07-19 12:09:27,928 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "F"
+2013-07-19 12:09:27,928 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "-"
+2013-07-19 12:09:27,929 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "8"
+2013-07-19 12:09:27,929 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << """
+2013-07-19 12:09:27,929 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:09:27,930 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << ">"
+2013-07-19 12:09:27,930 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\n]"
+2013-07-19 12:09:27,930 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "<DescribeInstancesResponse xmlns="http://ec2.amazonaws.com/doc/2013-02-01/">[\n]"
+2013-07-19 12:09:27,931 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <requestId>2e19000f-f0fb-4adf-80cd-2f23e1bda752</requestId>[\n]"
+2013-07-19 12:09:27,931 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <reservationSet>[\n]"
+2013-07-19 12:09:27,931 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        <item>[\n]"
+2013-07-19 12:09:27,931 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <reservationId>r-40743520</reservationId>[\n]"
+2013-07-19 12:09:27,932 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <ownerId>675697390021</ownerId>[\n]"
+2013-07-19 12:09:27,932 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <groupSet>[\n]"
+2013-07-19 12:09:27,932 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:09:27,933 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:09:27,933 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupName>default</groupName>[\n]"
+2013-07-19 12:09:27,933 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:09:27,934 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </groupSet>[\n]"
+2013-07-19 12:09:27,934 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <instancesSet>[\n]"
+2013-07-19 12:09:27,934 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:09:27,935 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceId>i-3080915c</instanceId>[\n]"
+2013-07-19 12:09:27,935 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <imageId>ami-d0f89fb9</imageId>[\n]"
+2013-07-19 12:09:27,935 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceState>[\n]"
+2013-07-19 12:09:27,936 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <code>16</code>[\n]"
+2013-07-19 12:09:27,936 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <name>running</name>[\n]"
+2013-07-19 12:09:27,936 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </instanceState>[\n]"
+2013-07-19 12:09:27,936 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateDnsName>ip-10-164-64-30.ec2.internal</privateDnsName>[\n]"
+2013-07-19 12:09:27,937 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <dnsName>ec2-54-227-60-122.compute-1.amazonaws.com</dnsName>[\n]"
+2013-07-19 12:09:27,937 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <reason/>[\n]"
+2013-07-19 12:09:27,937 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <keyName>RazzyFresh</keyName>[\n]"
+2013-07-19 12:09:27,938 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <amiLaunchIndex>0</amiLaunchIndex>[\n]"
+2013-07-19 12:09:27,938 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <productCodes/>[\n]"
+2013-07-19 12:09:27,938 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceType>t1.micro</instanceType>[\n]"
+2013-07-19 12:09:27,939 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <launchTime>2013-07-19T13:50:55.000Z</launchTime>[\n]"
+2013-07-19 12:09:27,939 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <placement>[\n]"
+2013-07-19 12:09:27,939 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <availabilityZone>us-east-1c</availabilityZone>[\n]"
+2013-07-19 12:09:27,940 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <groupName/>[\n]"
+2013-07-19 12:09:27,940 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <tenancy>default</tenancy>[\n]"
+2013-07-19 12:09:27,940 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </placement>[\n]"
+2013-07-19 12:09:27,940 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <kernelId>aki-88aa75e1</kernelId>[\n]"
+2013-07-19 12:09:27,941 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <monitoring>[\n]"
+2013-07-19 12:09:27,941 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <state>disabled</state>[\n]"
+2013-07-19 12:09:27,941 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </monitoring>[\n]"
+2013-07-19 12:09:27,942 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateIpAddress>10.164.64.30</privateIpAddress>[\n]"
+2013-07-19 12:09:27,942 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ipAddress>54.227.60.122</ipAddress>[\n]"
+2013-07-19 12:09:27,942 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupSet>[\n]"
+2013-07-19 12:09:27,943 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:09:27,943 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:09:27,943 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupName>default</groupName>[\n]"
+2013-07-19 12:09:27,944 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:09:27,944 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </groupSet>[\n]"
+2013-07-19 12:09:27,944 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <architecture>x86_64</architecture>[\n]"
+2013-07-19 12:09:27,945 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceType>ebs</rootDeviceType>[\n]"
+2013-07-19 12:09:27,945 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceName>/dev/sda1</rootDeviceName>[\n]"
+2013-07-19 12:09:27,945 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <blockDeviceMapping>[\n]"
+2013-07-19 12:09:27,946 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:09:27,946 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <deviceName>/dev/sda1</deviceName>[\n]"
+2013-07-19 12:09:27,946 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <ebs>[\n]"
+2013-07-19 12:09:27,947 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <volumeId>vol-9b73a3c6</volumeId>[\n]"
+2013-07-19 12:09:27,947 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <status>attached</status>[\n]"
+2013-07-19 12:09:27,947 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <attachTime>2013-07-10T20:09:56.000Z</attachTime>[\n]"
+2013-07-19 12:09:27,948 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <deleteOnTermination>true</deleteOnTermination>[\n]"
+2013-07-19 12:09:27,948 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            </ebs>[\n]"
+2013-07-19 12:09:27,948 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:09:27,949 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </blockDeviceMapping>[\n]"
+2013-07-19 12:09:27,949 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <virtualizationType>paravirtual</virtualizationType>[\n]"
+2013-07-19 12:09:27,949 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <clientToken>00ab00be-ec8f-417c-af50-52588ba17b8d</clientToken>[\n]"
+2013-07-19 12:09:27,949 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <hypervisor>xen</hypervisor>[\n]"
+2013-07-19 12:09:27,950 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <networkInterfaceSet/>[\n]"
+2013-07-19 12:09:27,950 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ebsOptimized>false</ebsOptimized>[\n]"
+2013-07-19 12:09:27,950 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:09:27,950 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </instancesSet>[\n]"
+2013-07-19 12:09:27,950 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        </item>[\n]"
+2013-07-19 12:09:27,951 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    </reservationSet>[\n]"
+2013-07-19 12:09:27,951 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "</DescribeInstancesResponse>"
+2013-07-19 12:09:27,958 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:09:27,958 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "0[\r][\n]"
+2013-07-19 12:09:27,959 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:09:27,959 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 288 - Released connection is reusable.
+2013-07-19 12:09:27,959 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 433 - Releasing connection [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:09:27,960 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 459 - Pooling connection [{s}->https://ec2.amazonaws.com][null]; keep alive indefinitely
+2013-07-19 12:09:27,960 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 679 - Notifying no-one, there are no waiting threads
+2013-07-19 12:09:27,960 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 590 - Received successful response: 200, AWS Request ID: 2e19000f-f0fb-4adf-80cd-2f23e1bda752
+2013-07-19 12:09:27,961 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 72 - Public DnS Name ec2-54-227-60-122.compute-1.amazonaws.com
+2013-07-19 12:09:27,961 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 73 - IP address of the instance 54.227.60.122
+2013-07-19 12:09:27,961 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 90 - Status = running
+2013-07-19 12:09:27,961 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 91 - Exiting the method
+2013-07-19 12:09:27,962 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 298 - Exiting class
+2013-07-19 12:09:42,276 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [java-sdk-http-connection-reaper] 332 - Closing connections idle longer than 60 SECONDS
+2013-07-19 12:09:42,277 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [java-sdk-http-connection-reaper] 725 - Closing connections idle longer than 60 SECONDS
+2013-07-19 12:09:42,278 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [java-sdk-http-connection-reaper] 332 - Closing connections idle longer than 60 SECONDS
+2013-07-19 12:09:42,278 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [java-sdk-http-connection-reaper] 725 - Closing connections idle longer than 60 SECONDS
+2013-07-19 12:09:49,159 INFO  por.FileDownload [AWT-EventQueue-0    ] 29 - Entering class
+2013-07-19 12:09:49,287 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [Finalizer           ] 300 - Shutting down
+2013-07-19 12:09:49,287 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [Finalizer           ] 794 - Closing connection [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:09:49,289 DEBUG org.apache.http.impl.conn.DefaultClientConnection [Finalizer           ] 169 - Connection 0.0.0.0:41832<->207.171.162.181:443 closed
+2013-07-19 12:09:49,291 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [Finalizer           ] 300 - Shutting down
+2013-07-19 12:09:49,292 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [Finalizer           ] 794 - Closing connection [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:09:49,292 DEBUG org.apache.http.impl.conn.DefaultClientConnection [Finalizer           ] 169 - Connection 0.0.0.0:41843<->207.171.162.181:443 closed
+2013-07-19 12:09:49,392 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 332 - In the start of getFileList
+2013-07-19 12:09:49,393 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 310 - Entering the method
+2013-07-19 12:09:49,394 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 315 - ssh -t -t -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com '/bin/bash'
+2013-07-19 12:09:49,400 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 318 - SSHed into instance
+2013-07-19 12:09:49,401 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 325 - Exiting the method
+2013-07-19 12:09:49,401 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 339 - 0
+2013-07-19 12:09:49,401 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 310 - Entering the method
+2013-07-19 12:09:49,402 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 315 - ssh -t -t -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com '/bin/bash'
+2013-07-19 12:09:49,406 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 318 - SSHed into instance
+2013-07-19 12:09:49,406 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 325 - Exiting the method
+2013-07-19 12:09:49,406 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 345 - cd sdd; ls
+2013-07-19 12:09:49,407 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 351 - ERROR in the process - get file list(if any)
+2013-07-19 12:09:51,403 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 353 - Connection to ec2-54-227-60-122.compute-1.amazonaws.com closed.
+2013-07-19 12:09:51,403 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 355 - End of error
+2013-07-19 12:09:51,404 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 358 - Output of the process - get file list
+2013-07-19 12:09:51,404 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 361 - cd sdd; ls
+2013-07-19 12:09:51,405 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 363 - cd sdd; ls
+2013-07-19 12:09:51,405 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 361 - exit
+2013-07-19 12:09:51,406 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 363 - exit
+2013-07-19 12:09:51,406 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 361 - ubuntu@ip-10-164-64-30:~$ cd sdd; ls
+2013-07-19 12:09:51,406 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 363 - ubuntu@ip-10-164-64-30:~$ cd sdd; ls
+2013-07-19 12:09:51,407 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 361 - p.txt
+2013-07-19 12:09:51,407 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 363 - p.txt
+2013-07-19 12:09:51,407 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 361 - ubuntu@ip-10-164-64-30:~/sdd$ exit
+2013-07-19 12:09:51,408 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 363 - ubuntu@ip-10-164-64-30:~/sdd$ exit
+2013-07-19 12:09:51,408 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 361 - exit
+2013-07-19 12:09:51,408 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 363 - exit
+2013-07-19 12:09:51,409 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 366 - End of output
+2013-07-19 12:09:51,409 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 367 - List of files[cd, sdd;, ls, exit, ubuntu@ip-10-164-64-30:~$, cd, sdd;, ls, p.txt, ubuntu@ip-10-164-64-30:~/sdd$, exit, exit]
+2013-07-19 12:09:51,409 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 370 - Process exitValue: 0
+2013-07-19 12:09:51,410 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 383 - Exiting the method
+2013-07-19 12:09:51,422 INFO  por.MainMenu [AWT-EventQueue-0    ] 177 - Exiting the class
+2013-07-19 12:22:39,157 INFO  por.Practicum [main                ] 25 - Entering the class
+2013-07-19 12:22:39,273 INFO  por.CloudSelector [main                ] 23 - Entering class
+2013-07-19 12:22:39,491 INFO  por.Practicum [main                ] 31 - Exiting the class
+2013-07-19 12:22:41,549 INFO  por.CloudSelector [AWT-EventQueue-0    ] 110 - Amazon cloud Provider Selected
+2013-07-19 12:22:41,553 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 25 - Entering class
+2013-07-19 12:22:55,480 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 48 - Entering the class
+2013-07-19 12:22:55,747 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 56 - keyname RazzyFresh
+2013-07-19 12:22:55,886 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 279 - Sending Request: POST https://ec2.amazonaws.com / Parameters: (Action: DescribeInstances, SignatureMethod: HmacSHA256, AWSAccessKeyId: AKIAIHLBFFYWOAIOXLPQ, SignatureVersion: 2, Version: 2013-02-01, Signature: BsXozqEmL3OBQdUVqItLb0JJYytolS2O4KkaRwosXBg=, Timestamp: 2013-07-19T16:22:55.765Z, ) Headers: (User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01, ) 
+2013-07-19 12:22:55,927 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 239 - Get connection: {s}->https://ec2.amazonaws.com, timeout = 50000
+2013-07-19 12:22:55,929 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 349 - [{s}->https://ec2.amazonaws.com] total kept alive: 0, total issued: 0, total allocated: 0 out of 50
+2013-07-19 12:22:55,930 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 523 - No free connections [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:22:55,930 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 368 - Available capacity: 50 out of 50 [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:22:55,931 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 549 - Creating new connection [{s}->https://ec2.amazonaws.com]
+2013-07-19 12:22:56,123 DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator [AWT-EventQueue-0    ] 177 - Connecting to ec2.amazonaws.com:443
+2013-07-19 12:22:56,346 DEBUG org.apache.http.client.protocol.RequestAddCookies [AWT-EventQueue-0    ] 132 - CookieSpec selected: best-match
+2013-07-19 12:22:56,357 DEBUG org.apache.http.client.protocol.RequestAuthCache [AWT-EventQueue-0    ] 78 - Auth cache not set in the context
+2013-07-19 12:22:56,359 DEBUG org.apache.http.client.protocol.RequestTargetAuthentication [AWT-EventQueue-0    ] 78 - Target auth state: UNCHALLENGED
+2013-07-19 12:22:56,360 DEBUG org.apache.http.client.protocol.RequestProxyAuthentication [AWT-EventQueue-0    ] 87 - Proxy auth state: UNCHALLENGED
+2013-07-19 12:22:56,360 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 713 - Attempt 1 to execute request
+2013-07-19 12:22:56,361 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 269 - Sending request: POST / HTTP/1.1
+2013-07-19 12:22:56,362 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "POST / HTTP/1.1[\r][\n]"
+2013-07-19 12:22:56,363 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Host: ec2.amazonaws.com[\r][\n]"
+2013-07-19 12:22:56,364 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01[\r][\n]"
+2013-07-19 12:22:56,364 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Type: application/x-www-form-urlencoded; charset=utf-8[\r][\n]"
+2013-07-19 12:22:56,365 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Content-Length: 221[\r][\n]"
+2013-07-19 12:22:56,365 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "Connection: Keep-Alive[\r][\n]"
+2013-07-19 12:22:56,365 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - >> "[\r][\n]"
+2013-07-19 12:22:56,366 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 273 - >> POST / HTTP/1.1
+2013-07-19 12:22:56,366 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Host: ec2.amazonaws.com
+2013-07-19 12:22:56,367 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> User-Agent: aws-sdk-java/1.4.7 Linux/3.5.0-23-generic Java_HotSpot(TM)_64-Bit_Server_VM/23.25-b01
+2013-07-19 12:22:56,367 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Type: application/x-www-form-urlencoded; charset=utf-8
+2013-07-19 12:22:56,367 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Content-Length: 221
+2013-07-19 12:22:56,368 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 276 - >> Connection: Keep-Alive
+2013-07-19 12:22:56,368 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - >> "Action=DescribeInstances&SignatureMethod=HmacSHA256&AWSAccessKeyId=AKIAIHLBFFYWOAIOXLPQ&SignatureVersion=2&Version=2013-02-01&Signature=BsXozqEmL3OBQdUVqItLb0JJYytolS2O4KkaRwosXBg%3D&Timestamp=2013-07-19T16%3A22%3A55.765Z"
+2013-07-19 12:22:56,553 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "HTTP/1.1 200 OK[\r][\n]"
+2013-07-19 12:22:56,558 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Content-Type: text/xml;charset=UTF-8[\r][\n]"
+2013-07-19 12:22:56,559 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Transfer-Encoding: chunked[\r][\n]"
+2013-07-19 12:22:56,560 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Date: Fri, 19 Jul 2013 16:22:56 GMT[\r][\n]"
+2013-07-19 12:22:56,561 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "Server: AmazonEC2[\r][\n]"
+2013-07-19 12:22:56,562 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:22:56,564 DEBUG org.apache.http.impl.conn.DefaultClientConnection [AWT-EventQueue-0    ] 254 - Receiving response: HTTP/1.1 200 OK
+2013-07-19 12:22:56,566 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 257 - << HTTP/1.1 200 OK
+2013-07-19 12:22:56,566 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Content-Type: text/xml;charset=UTF-8
+2013-07-19 12:22:56,568 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Transfer-Encoding: chunked
+2013-07-19 12:22:56,569 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Date: Fri, 19 Jul 2013 16:22:56 GMT
+2013-07-19 12:22:56,569 DEBUG org.apache.http.headers [AWT-EventQueue-0    ] 260 - << Server: AmazonEC2
+2013-07-19 12:22:56,574 DEBUG org.apache.http.impl.client.DefaultHttpClient [AWT-EventQueue-0    ] 543 - Connection can be kept alive indefinitely
+2013-07-19 12:22:56,586 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "c8f[\r][\n]"
+2013-07-19 12:22:56,587 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "<"
+2013-07-19 12:22:56,587 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:22:56,587 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "x"
+2013-07-19 12:22:56,587 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "m"
+2013-07-19 12:22:56,588 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "l version="1.0" encoding="UT"
+2013-07-19 12:22:56,590 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "F"
+2013-07-19 12:22:56,591 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "-"
+2013-07-19 12:22:56,591 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "8"
+2013-07-19 12:22:56,591 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << """
+2013-07-19 12:22:56,592 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "?"
+2013-07-19 12:22:56,592 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << ">"
+2013-07-19 12:22:56,595 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\n]"
+2013-07-19 12:22:56,595 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "<DescribeInstancesResponse xmlns="http://ec2.amazonaws.com/doc/2013-02-01/">[\n]"
+2013-07-19 12:22:56,596 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <requestId>a609a9a3-7290-4d4e-b45c-46ab05c4506c</requestId>[\n]"
+2013-07-19 12:22:56,596 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    <reservationSet>[\n]"
+2013-07-19 12:22:56,596 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        <item>[\n]"
+2013-07-19 12:22:56,596 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <reservationId>r-40743520</reservationId>[\n]"
+2013-07-19 12:22:56,597 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <ownerId>675697390021</ownerId>[\n]"
+2013-07-19 12:22:56,597 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <groupSet>[\n]"
+2013-07-19 12:22:56,597 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:22:56,597 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:22:56,597 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupName>default</groupName>[\n]"
+2013-07-19 12:22:56,598 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:22:56,598 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </groupSet>[\n]"
+2013-07-19 12:22:56,598 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            <instancesSet>[\n]"
+2013-07-19 12:22:56,599 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                <item>[\n]"
+2013-07-19 12:22:56,599 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceId>i-3080915c</instanceId>[\n]"
+2013-07-19 12:22:56,599 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <imageId>ami-d0f89fb9</imageId>[\n]"
+2013-07-19 12:22:56,599 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceState>[\n]"
+2013-07-19 12:22:56,600 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <code>16</code>[\n]"
+2013-07-19 12:22:56,600 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <name>running</name>[\n]"
+2013-07-19 12:22:56,600 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </instanceState>[\n]"
+2013-07-19 12:22:56,600 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateDnsName>ip-10-164-64-30.ec2.internal</privateDnsName>[\n]"
+2013-07-19 12:22:56,601 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <dnsName>ec2-54-227-60-122.compute-1.amazonaws.com</dnsName>[\n]"
+2013-07-19 12:22:56,601 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <reason/>[\n]"
+2013-07-19 12:22:56,601 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <keyName>RazzyFresh</keyName>[\n]"
+2013-07-19 12:22:56,602 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <amiLaunchIndex>0</amiLaunchIndex>[\n]"
+2013-07-19 12:22:56,602 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <productCodes/>[\n]"
+2013-07-19 12:22:56,602 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <instanceType>t1.micro</instanceType>[\n]"
+2013-07-19 12:22:56,602 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <launchTime>2013-07-19T13:50:55.000Z</launchTime>[\n]"
+2013-07-19 12:22:56,602 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <placement>[\n]"
+2013-07-19 12:22:56,603 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <availabilityZone>us-east-1c</availabilityZone>[\n]"
+2013-07-19 12:22:56,603 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <groupName/>[\n]"
+2013-07-19 12:22:56,603 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <tenancy>default</tenancy>[\n]"
+2013-07-19 12:22:56,603 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </placement>[\n]"
+2013-07-19 12:22:56,604 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <kernelId>aki-88aa75e1</kernelId>[\n]"
+2013-07-19 12:22:56,604 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <monitoring>[\n]"
+2013-07-19 12:22:56,604 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <state>disabled</state>[\n]"
+2013-07-19 12:22:56,604 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </monitoring>[\n]"
+2013-07-19 12:22:56,605 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <privateIpAddress>10.164.64.30</privateIpAddress>[\n]"
+2013-07-19 12:22:56,605 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ipAddress>54.227.60.122</ipAddress>[\n]"
+2013-07-19 12:22:56,605 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <groupSet>[\n]"
+2013-07-19 12:22:56,605 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:22:56,605 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupId>sg-89f2e5e1</groupId>[\n]"
+2013-07-19 12:22:56,606 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <groupName>default</groupName>[\n]"
+2013-07-19 12:22:56,606 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:22:56,606 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </groupSet>[\n]"
+2013-07-19 12:22:56,606 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <architecture>x86_64</architecture>[\n]"
+2013-07-19 12:22:56,607 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceType>ebs</rootDeviceType>[\n]"
+2013-07-19 12:22:56,607 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <rootDeviceName>/dev/sda1</rootDeviceName>[\n]"
+2013-07-19 12:22:56,607 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <blockDeviceMapping>[\n]"
+2013-07-19 12:22:56,607 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        <item>[\n]"
+2013-07-19 12:22:56,607 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <deviceName>/dev/sda1</deviceName>[\n]"
+2013-07-19 12:22:56,608 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            <ebs>[\n]"
+2013-07-19 12:22:56,608 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <volumeId>vol-9b73a3c6</volumeId>[\n]"
+2013-07-19 12:22:56,608 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <status>attached</status>[\n]"
+2013-07-19 12:22:56,608 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <attachTime>2013-07-10T20:09:56.000Z</attachTime>[\n]"
+2013-07-19 12:22:56,609 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                                <deleteOnTermination>true</deleteOnTermination>[\n]"
+2013-07-19 12:22:56,609 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                            </ebs>[\n]"
+2013-07-19 12:22:56,609 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                        </item>[\n]"
+2013-07-19 12:22:56,609 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    </blockDeviceMapping>[\n]"
+2013-07-19 12:22:56,610 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <virtualizationType>paravirtual</virtualizationType>[\n]"
+2013-07-19 12:22:56,610 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <clientToken>00ab00be-ec8f-417c-af50-52588ba17b8d</clientToken>[\n]"
+2013-07-19 12:22:56,610 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <hypervisor>xen</hypervisor>[\n]"
+2013-07-19 12:22:56,610 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <networkInterfaceSet/>[\n]"
+2013-07-19 12:22:56,611 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                    <ebsOptimized>false</ebsOptimized>[\n]"
+2013-07-19 12:22:56,611 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "                </item>[\n]"
+2013-07-19 12:22:56,611 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "            </instancesSet>[\n]"
+2013-07-19 12:22:56,611 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "        </item>[\n]"
+2013-07-19 12:22:56,611 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "    </reservationSet>[\n]"
+2013-07-19 12:22:56,612 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 77 - << "</DescribeInstancesResponse>"
+2013-07-19 12:22:56,635 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:22:56,635 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "0[\r][\n]"
+2013-07-19 12:22:56,635 DEBUG org.apache.http.wire [AWT-EventQueue-0    ] 63 - << "[\r][\n]"
+2013-07-19 12:22:56,636 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [AWT-EventQueue-0    ] 288 - Released connection is reusable.
+2013-07-19 12:22:56,636 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 433 - Releasing connection [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:22:56,636 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 459 - Pooling connection [{s}->https://ec2.amazonaws.com][null]; keep alive indefinitely
+2013-07-19 12:22:56,637 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [AWT-EventQueue-0    ] 679 - Notifying no-one, there are no waiting threads
+2013-07-19 12:22:56,638 DEBUG com.amazonaws.request [AWT-EventQueue-0    ] 590 - Received successful response: 200, AWS Request ID: a609a9a3-7290-4d4e-b45c-46ab05c4506c
+2013-07-19 12:22:56,638 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 72 - Public DnS Name ec2-54-227-60-122.compute-1.amazonaws.com
+2013-07-19 12:22:56,639 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 73 - IP address of the instance 54.227.60.122
+2013-07-19 12:22:56,639 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 90 - Status = running
+2013-07-19 12:22:56,639 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 91 - Exiting the method
+2013-07-19 12:22:56,639 INFO  por.ConnectToAmazonCloud [AWT-EventQueue-0    ] 298 - Exiting class
+2013-07-19 12:23:03,587 INFO  por.FileDownload [AWT-EventQueue-0    ] 29 - Entering class
+2013-07-19 12:23:03,805 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 332 - In the start of getFileList
+2013-07-19 12:23:03,806 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 310 - Entering the method
+2013-07-19 12:23:03,806 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 315 - ssh -t -t -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com '/bin/bash'
+2013-07-19 12:23:03,810 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 318 - SSHed into instance
+2013-07-19 12:23:03,811 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 325 - Exiting the method
+2013-07-19 12:23:03,812 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 339 - 0
+2013-07-19 12:23:03,813 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 310 - Entering the method
+2013-07-19 12:23:03,814 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 315 - ssh -t -t -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com '/bin/bash'
+2013-07-19 12:23:03,815 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 318 - SSHed into instance
+2013-07-19 12:23:03,816 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 325 - Exiting the method
+2013-07-19 12:23:03,816 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 345 - cd d; ls
+2013-07-19 12:23:03,817 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 352 - ERROR in the process - get file list(if any)
+2013-07-19 12:23:05,853 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 354 - Connection to ec2-54-227-60-122.compute-1.amazonaws.com closed.
+2013-07-19 12:23:05,854 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 356 - End of error
+2013-07-19 12:23:05,855 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 359 - Output of the process - get file list
+2013-07-19 12:23:05,856 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 362 - cd d; ls
+2013-07-19 12:23:05,857 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 364 - cd d; ls
+2013-07-19 12:23:05,858 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 362 - exit
+2013-07-19 12:23:05,859 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 364 - exit
+2013-07-19 12:23:05,859 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 362 - ubuntu@ip-10-164-64-30:~$ cd d; ls
+2013-07-19 12:23:05,860 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 364 - ubuntu@ip-10-164-64-30:~$ cd d; ls
+2013-07-19 12:23:05,861 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 362 - abcd.txt
+2013-07-19 12:23:05,862 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 364 - abcd.txt
+2013-07-19 12:23:05,864 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 362 - ubuntu@ip-10-164-64-30:~/d$ exit
+2013-07-19 12:23:05,864 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 364 - ubuntu@ip-10-164-64-30:~/d$ exit
+2013-07-19 12:23:05,865 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 362 - exit
+2013-07-19 12:23:05,866 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 364 - exit
+2013-07-19 12:23:05,867 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 367 - End of output
+2013-07-19 12:23:05,867 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 368 - List of files[cd, d;, ls, exit, ubuntu@ip-10-164-64-30:~$, cd, d;, ls, abcd.txt, ubuntu@ip-10-164-64-30:~/d$, exit, exit]
+2013-07-19 12:23:05,868 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 371 - Process exitValue: 0
+2013-07-19 12:23:05,869 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 384 - Exiting the method
+2013-07-19 12:23:05,881 INFO  por.MainMenu [AWT-EventQueue-0    ] 177 - Exiting the class
+2013-07-19 12:23:55,726 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [java-sdk-http-connection-reaper] 332 - Closing connections idle longer than 60 SECONDS
+2013-07-19 12:23:55,727 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [java-sdk-http-connection-reaper] 725 - Closing connections idle longer than 60 SECONDS
+2013-07-19 12:24:17,149 DEBUG org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager [Finalizer           ] 300 - Shutting down
+2013-07-19 12:24:17,149 DEBUG org.apache.http.impl.conn.tsccm.ConnPoolByRoute [Finalizer           ] 794 - Closing connection [{s}->https://ec2.amazonaws.com][null]
+2013-07-19 12:24:17,150 DEBUG org.apache.http.impl.conn.DefaultClientConnection [Finalizer           ] 169 - Connection 0.0.0.0:41932<->207.171.162.181:443 closed
+2013-07-19 12:24:39,446 INFO  por.KeyStore [AWT-EventQueue-0    ] 169 - Entering method
+2013-07-19 12:24:39,447 INFO  por.KeyStore [AWT-EventQueue-0    ] 171 - truecrypt /home/poojad/pd.txt /media/DISK1 -k=/home/poojad/key -p=jied --protect-hidden=no --password=poojad

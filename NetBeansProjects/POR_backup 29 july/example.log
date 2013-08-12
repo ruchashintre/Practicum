@@ -1,0 +1,42 @@
+2013-07-19 12:24:39,451 INFO  por.KeyStore [AWT-EventQueue-0    ] 174 - Output of the process - mount Volume
+2013-07-19 12:24:40,926 INFO  por.KeyStore [AWT-EventQueue-0    ] 181 - Enter your user password or administrator password: 
+2013-07-19 12:24:40,931 INFO  por.KeyStore [AWT-EventQueue-0    ] 184 - End of output
+2013-07-19 12:24:40,932 INFO  por.KeyStore [AWT-EventQueue-0    ] 188 - ERROR in the process(if any) - mount volume
+2013-07-19 12:24:40,932 INFO  por.KeyStore [AWT-EventQueue-0    ] 192 - End of error
+2013-07-19 12:24:40,932 INFO  por.KeyStore [AWT-EventQueue-0    ] 195 - Process exitValue: 0
+2013-07-19 12:24:40,933 INFO  por.KeyStore [AWT-EventQueue-0    ] 131 - partition mounted
+2013-07-19 12:24:40,935 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - a|/home/poojad/smallfile~|abcd
+2013-07-19 12:24:40,935 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - a|/home/poojad/Downloads/jdk-7u25-nb-7_3_1-linux-x64.sh|jied3
+2013-07-19 12:24:40,935 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - a|/home/poojad/Downloads/jdk-7u25-nb-7_3_1-linux-x64.sh|jied3
+2013-07-19 12:24:40,936 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - ad|/home/poojad/Downloads/aws-java-sdk-1.4.7.zip|jied1
+2013-07-19 12:24:40,936 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - s|/home/poojad/Downloads/aws-java-sdk-1.4.7/LICENSE.txt|jied
+2013-07-19 12:24:40,936 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - pooja|/home/poojad/Downloads/aws-java-sdk-1.4.7.zip|jied
+2013-07-19 12:24:40,936 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - adsf|/home/poojad/test.txt|jied
+2013-07-19 12:24:40,936 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - asdf|/home/poojad/test.txt|jied
+2013-07-19 12:24:40,937 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - poojad|/home/poojad/test.txt|jied
+2013-07-19 12:24:40,937 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - poojad|/home/poojad/RazzyFresh.pem|jied
+2013-07-19 12:24:40,937 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - asdf|/home/poojad/test.txt|jied
+2013-07-19 12:24:40,946 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - adf|/home/poojad/adu.txt|jied
+2013-07-19 12:24:40,946 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - poojad|/home/poojad/p.txt|jied
+2013-07-19 12:24:40,946 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - poojad|/home/poojad/test.txt|jied
+2013-07-19 12:24:40,947 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - jied|/home/poojad/adu.txt|jied
+2013-07-19 12:24:40,947 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - poojad|/home/poojad/adu.txt|jied
+2013-07-19 12:24:40,947 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - asdf|/home/poojad/abcd.txdt|jied
+2013-07-19 12:24:40,947 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - asdf|/home/poojad/p.txt|jied
+2013-07-19 12:24:40,948 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - asdf|/home/poojad/p.txt|jied
+2013-07-19 12:24:40,948 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - adf|/home/poojad/pd.txt|jied
+2013-07-19 12:24:40,948 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - asdf|/home/poojad/x.txt|jied
+2013-07-19 12:24:40,948 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - asdf|/home/poojad/x.txt|jied
+2013-07-19 12:24:40,949 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - df|/home/poojad/pd.txt|jied
+2013-07-19 12:24:40,949 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - poojad|/home/poojad/adu.txt|jied
+2013-07-19 12:24:40,949 INFO  por.KeyStore [AWT-EventQueue-0    ] 138 - d|/home/poojad/abcd.txt|jied
+2013-07-19 12:24:40,958 INFO  por.DownloadSuccess [AWT-EventQueue-0    ] 27 - Entering DownloadSuccess
+2013-07-19 12:24:40,958 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 228 - Entering the method
+2013-07-19 12:24:40,958 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 231 - scp -i /home/poojad/RazzyFresh.pem ubuntu@ec2-54-227-60-122.compute-1.amazonaws.com:~/d/abcd.txt abcd.txt
+2013-07-19 12:24:40,962 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 237 - ERROR in the process - create volume(if any)
+2013-07-19 12:24:41,861 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 241 - End of error
+2013-07-19 12:24:41,862 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 245 - Output of the process - create Volume
+2013-07-19 12:24:41,863 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 250 - End of output
+2013-07-19 12:24:41,863 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 253 - Process exitValue: 0
+2013-07-19 12:24:41,864 INFO  por.ConnectToAmazonEC2 [AWT-EventQueue-0    ] 262 - Exiting the method
+2013-07-19 12:24:41,911 INFO  por.DownloadSuccess [AWT-EventQueue-0    ] 43 - /home/poojad/POR/pordecoder abcd.txt jied

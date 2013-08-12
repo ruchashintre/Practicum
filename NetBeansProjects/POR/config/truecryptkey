@@ -1,0 +1,15 @@
+MI_ID 			= ami-d0f89fb9 
+INSTANCE_USER_NAME 	= ubuntu
+EXECUTABLE_PATH 	= /home/poojad/exec/
+FILE_TO_BE_MOUNTED 	= /home/poojad/config/truecryptmount
+MOUNT_PATH		= /MEDIA/DISK1
+DEFAULT_PARTITION_SIZE_MB 	= 1074000000
+TRUECRYPT_PASSWORD 		= cmuboschpor
+RANDOM_FILE		= /home/poojad/config/random
+KEY_FILE		= /home/poojad/config/truecryptkey
+KEYSTORE_FILE_NAME	= keystore.txt
+CHART_PATH		= /home/poojad/output
+POR_ENCODER_EXECUTABLE	= porencoder
+POR_DECODER_EXECUTABLE  = pordecoder
+POR_SERVER_EXECUTABLE	= porserver
+POR_CLIENT_EXECUTABLE	= porclient

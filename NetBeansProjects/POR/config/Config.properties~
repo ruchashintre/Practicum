@@ -1,0 +1,17 @@
+LOGGER_PATH 		= /home/poojad/NetBeansProjects/POR/config/log4j.properties
+AMI_ID 			= ami-d0f89fb9
+INSTANCE_USER_NAME 	= ubuntu
+EXECUTABLE_PATH 	= /home/poojad/NetBeansProjects/POR/exec/
+FILE_TO_BE_MOUNTED 	= /home/poojad/NetBeansProjects/POR/config/truecryptmount
+MOUNT_PATH		= /home/poojad/mount
+DEFAULT_PARTITION_SIZE 	= 1074000
+TRUECRYPT_PASSWORD 		= cmuboschpor
+RANDOM_FILE		= /home/poojad/NetBeansProjects/POR/config/random
+KEY_FILE		= /home/poojad/NetBeansProjects/POR/config/truecryptkey
+KEYSTORE_FILE_NAME	= keystore.txt
+CHART_PATH		= /home/poojad/NetBeansProjects/POR/output/
+POR_ENCODER_EXECUTABLE	= porencoder
+POR_DECODER_EXECUTABLE  = pordecoder
+POR_SERVER_EXECUTABLE	= porserver
+POR_CLIENT_EXECUTABLE	= porclient
+
