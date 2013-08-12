@@ -1,20 +1,4 @@
-#include "keygenwrapper.h"
-#include "eccwrapper.h"
-#include "FeistelPRP.h"
-#include "encwrapper.h"
-#include "jg_timing.h"
-
-#define v 1024/32
-#define w 4096/32
-#define n 255
-#define k 223
-#define n1 64
-#define k1 32
-#define n2 64
-#define k2 32
-#define BLOCK_SIZE 32
-#define q 100
-#define readLen 1024*1024*1024 // incremental encoding read amount
+#include "por.h"
 
 static unsigned long t;
 extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
@@ -35,39 +19,6 @@ typedef struct {
 	unsigned long s[v];
 	unsigned int u;
 } Chal;
-
-// compute the MAC of a given file
-int hmac(char* filename,unsigned char* dst,unsigned char* key)
-{
-	int idx, err;
-	hmac_state hmac;
-	unsigned long dstlen;
-	if (register_hash(&sha1_desc)==-1) {
-		printf("error registering SHA1\n");
-		return -1;
-	}
-	idx = find_hash("sha1"); // use sha1 for HMAC
-
-	dstlen = 16;
-
-	if ((err = hmac_file(idx,filename,key,16,dst,&dstlen))!=CRYPT_OK) {
-		printf("Error hmac: %s\n",error_to_string(err));
-		return -1;
-	}
-    
-    printf("hmac complete\n");
-    return 0;
-}
-
-// display unsigned char array
-void displayCharArray(unsigned char* out,int len)
-{
-	int i;
-	for (i = 0;i < len; i++) {
-		printf("%02x", out[i]);
-	}
-	printf("\n");
-}
 
 // blockize the file, padding 0 if not divisible by BLOCK_SIZE
 int blockize(FILE* fp)

@@ -12,9 +12,9 @@ DIRNAME= rscode-$(VERSION)
 
 
 CC = gcc
-
+# OPTIMIZE_FLAGS = -O69
 DEBUG_FLAGS = -g
-CFLAGS =  $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS) -I..
+CFLAGS = -Wall -Wstrict-prototypes  $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS) -I..
 LDFLAGS = $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS)
 
 LIB_CSRC = rs.c galois.c berlekamp.c crcgen.c 

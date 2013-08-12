@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "eccwrapper.h"
+#include "FeistelPRP.h"
+#include "encwrapper.h"
+#include "keygenwrapper.h"
+#include "jg_timing.h"
+#include <math.h>
+
+#define alpha 10
+#define delta 0.25
+#define BLOCK_SIZE 32
+#define n 255
+#define k 223
+#define d 32
+#define w 4096/BLOCK_SIZE 
+#define v 1024/BLOCK_SIZE
+#define q 100
+#define MACSIZE 16
+#define n1 64          // n1,k1,d1 is for outer code
+#define k1 32
+#define d1 32
+#define n2 64			// n2,k2,d2 is for inner code
+#define k2 32
+#define d2 32
+#define readLen 1024*1024*1024 // incremental encoding read amount
+
+// display unsigned char array
+void displayCharArray(unsigned char* out,int len)
+{
+	int i;
+	for (i = 0;i < len; i++) {
+		printf("%02x", out[i]);
+	}
+	printf("\n");
+}
+
+// compute the MAC of a file using HMAC
+int hmac(char* filename,unsigned char* dst,unsigned char* key)
+{
+	int idx, err;
+	hmac_state hmac;
+	unsigned long dstlen;
+	if (register_hash(&sha1_desc)==-1) {
+		printf("error registering SHA1\n");
+		return -1;
+	}
+	idx = find_hash("sha1");
+    
+	dstlen = 16;
+    
+	if ((err = hmac_file(idx,filename,key,16,dst,&dstlen))!=CRYPT_OK) {
+		printf("Error hmac: %s\n",error_to_string(err));
+		return -1;
+	}
+    
+    printf("hmac complete\n");
+    return 0;
+}

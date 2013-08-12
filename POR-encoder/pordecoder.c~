@@ -1,34 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "eccwrapper.h"
-#include "FeistelPRP.h"
-#include "encwrapper.h"
-#include "keygenwrapper.h"
-#include "jg_timing.h"
-#include <math.h>
-
-#define alpha 10
-#define delta 0.25
-#define BLOCK_SIZE 32
-#define n 255
-#define k 223
-#define d 32
-#define w 4096/32 
-#define v 1024/32 
-#define oldq 100
-#define MACSIZE 16
-#define n1 64
-#define k1 32
-#define d1 32
-#define n2 64
-#define k2 32
-#define d2 32
+#include "por.h"
 
 //double startTime, endTime;
 //startTime = getCPUTime();
 //endTime = getCPUTime();
 
-static unsigned long q,t,m;
+static unsigned long newq,t,m;
 static unsigned	char uth[32];
 double totalTime,totalStartTime, totalEndTime;
 double readTime,readStartTime, readEndTime;
@@ -65,39 +41,6 @@ void inner_decoding(decoded_blocks *db,unsigned char * c_in_codeword, unsigned l
 
 // using GMD to decoding concatenated code
 void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long * indices,FILE * fp);
-
-// display the unsigned char array
-void displayCharArray(unsigned char* out,int len)
-{
-	int i;
-	for (i = 0;i < len; i++) {
-		printf("%02x", out[i]);
-	}
-	printf("\n");
-}
-
-// compute the MAC of a file using HMAC
-int hmac(char* filename,unsigned char* dst,unsigned char* key)
-{
-	int idx, err;
-	hmac_state hmac;
-	unsigned long dstlen;
-	if (register_hash(&sha1_desc)==-1) {
-		printf("error registering SHA1\n");
-		return -1;
-	}
-	idx = find_hash("sha1");
-    
-	dstlen = 16;
-    
-	if ((err = hmac_file(idx,filename,key,16,dst,&dstlen))!=CRYPT_OK) {
-		printf("Error hmac: %s\n",error_to_string(err));
-		return -1;
-	}
-    
-    printf("hmac complete\n");
-    return 0;
-}
 
 void concat_encode(unsigned char * message,unsigned char* codeword) {
 	unsigned char tmp_code[v*32*n1/k1],stripe[k1],stripe_code[n1];
@@ -289,7 +232,7 @@ int main(int argc,char** argv)
 	unsigned long fileLen;
 	fseek(fp1,0,SEEK_END);
 	fileLen = ftell(fp1);
-	t = (fileLen-16-oldq*BLOCK_SIZE) / BLOCK_SIZE;
+	t = (fileLen-16-q*BLOCK_SIZE) / BLOCK_SIZE;
 	m = t*k/n;
 	printf("extract for file \"%s\" with size=%lu m=%lu and t=%lu\n",filename,fileLen,m,t);
 	//use master key and call keygen to generate all the keys here.	
@@ -359,11 +302,11 @@ int main(int argc,char** argv)
 		exit(0);
 	}// */
 	int tempv = v;
-	q = alpha * t / tempv;
+	newq = alpha * t / tempv;
 	decoded_blocks * db;
 	unsigned int i,j,u,size,index;
 	char * codeword,mac;
-	chal c[q];
+	chal c[newq];
 	unsigned char k_j_c[16]; 
 	char str[999]; 
 	char * temp_block;
@@ -419,10 +362,10 @@ int main(int argc,char** argv)
 	
 	// populate challenge set
 	printf("\nstart inner layer decoding...\n");
-	printf("generate %lu challenges\n",q);
+	printf("generate %lu challenges\n",newq);
 	keygen_init();
 	seeding(k_chal);	
-	for (j=0;j<q;j++){
+	for (j=0;j<newq;j++){
 		keygen(c[j].k_j_c, 16);
 		c[j].j = j;
 	}
@@ -430,7 +373,7 @@ int main(int argc,char** argv)
 	
     chalStartTime = getCPUTime();
     // for each challenge
-	for (i=0;i<q;i++){
+	for (i=0;i<newq;i++){
 		
 		//unsigned char * codeword = (unsigned char *) malloc(sizeof(unsigned char)*32*w);
 		unsigned char codeword[32*w];
@@ -573,7 +516,7 @@ int main(int argc,char** argv)
 	    printf("%lf\n",writeTime);
         printf("%lf\n",decTime);
 		printf("Your file can not be recovered.\n");
-		//return -1;
+		return -1;
 	}
 
 	fclose(fp2);
@@ -906,6 +849,7 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 				delta_dist++;
 		}
 		double prob;
+		int d2 = n2-k2;
 		if(delta_dist<d2/2)
 			prob = 2*(double)delta_dist/d2;
 		else
@@ -939,6 +883,7 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		}
 		int p;
 		//copy parity part codeword
+		int d1 = n1-k1;
 		p = v*32 + (i*d1);
 		for(j=0;j<d1;j++){
 			c_out_codeword[index++]=c_in_message[j+p];		
@@ -955,6 +900,7 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		}
 		if(erasure_index[v]==1) {
 			int di;
+			int d2 = n2-k2;
 			for(di=0;di<d2;di++) {
 				erasure[num_erasure] = k2+di;
 				num_erasure++;
