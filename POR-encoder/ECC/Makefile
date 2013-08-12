@@ -12,9 +12,9 @@ DIRNAME= rscode-$(VERSION)
 
 
 CC = gcc
-
+# OPTIMIZE_FLAGS = -O69
 DEBUG_FLAGS = -g
-CFLAGS =  $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS) -I..
+CFLAGS = -Wall -Wstrict-prototypes  $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS) -I..
 LDFLAGS = $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS)
 
 LIB_CSRC = rs.c galois.c berlekamp.c crcgen.c 
@@ -22,7 +22,7 @@ LIB_HSRC = ecc.h eccwrapper.h
 LIB_OBJS = rs.o galois.o berlekamp.o crcgen.o 
 
 TARGET_LIB = libecc.a
-TEST_PROGS = por 
+TEST_PROGS = demo 
 
 TARGETS = $(TARGET_LIB) $(TEST_PROGS)
 
@@ -36,11 +36,8 @@ $(TARGET_LIB): $(LIB_OBJS)
 example: example.o galois.o berlekamp.o crcgen.o rs.o
 	gcc -o example example.o -L. -lecc
 
-por: porencoder.o pordecoder.o porclient.o porserver.o galois.o berlekamp.o crcgen.o rs.o
-	gcc -o porencoder por.h porencoder.o jg_timing.c FeistelPRP.c -L. -lecc -ltomcrypt -lm -lrt
-	gcc -o pordecoder por.h pordecoder.o jg_timing.c FeistelPRP.c -L. -lecc -ltomcrypt -lm -lrt
-	gcc -o porclient por.h porclient.o jg_timing.c FeistelPRP.c -L. -lecc -ltomcrypt -lm -lrt
-	gcc -o porserver por.h porserver.o jg_timing.c FeistelPRP.c -L. -lecc -ltomcrypt -lm -lrt
+demo: demo.o galois.o berlekamp.o crcgen.o rs.o
+	gcc -o demo demo.o -L. -lecc
 
 test: test.o galois.o berlekamp.o crcgen.o rs.o
 	gcc -o test test.o -L. -lecc

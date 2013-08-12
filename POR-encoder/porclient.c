@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
@@ -12,30 +11,15 @@
 #include <fcntl.h>
 #include <time.h>
 #include <arpa/inet.h>
-#include "keygenwrapper.h"
-#include "encwrapper.h"
+#include "por.h"
 
 #define PORT "3490" // the port client will be connecting to 
-#define v 1024/32
-#define w 4096/32
 #define LEN 16
-#define BLOCK_SIZE 32
-#define q 100
 #define MAXDATASIZE 100 // max number of bytes we can get at once 
 
 extern unsigned char k_file_perm[16],k_ecc_perm[16],k_ecc_enc[16],
 	k_chal[16],k_ind[16],k_enc[16],k_mac[16];
 static struct timespec start, finish;
-
-// display unsigned char array
-void displayCharArray(unsigned char* out,int len)
-{
-	int i;
-	for (i = 0;i < len; i++) {
-		printf("%02x", out[i]);
-	}
-	printf("\n");
-}
 
 // get sockaddr, IPv4 or IPv6:
 void *get_in_addr(struct sockaddr *sa)

@@ -1,0 +1,14 @@
+#include "eccwrapper.h"
+
+int main()
+{
+	char * msg = "asdfasdfasd;lkjasd;fjasdf;lkjasdf";
+	char * codeword = malloc(sizeof(char)*256);
+	encode_data(msg, sizeof(msg), codeword);
+	long i;
+	for (i = 0; i < strlen(msg) - 1; i++) {
+		printf("%02x", v[i]);
+	}
+
+	printf("\n");
+}

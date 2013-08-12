@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
@@ -13,37 +11,15 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
-#include "eccwrapper.h"
-#include "encwrapper.h"
-#include "keygenwrapper.h"
+#include "por.h"
 
 #define PORT "3490"  // the port users will be connecting to
-#define v 1024/32
-#define w 4096/32
 #define LEN 16
-#define BLOCK_SIZE 32
-#define q 100
 #define BACKLOG 10     // how many pending connections queue will hold
-#define n1 64          // n1,k1,d1 is for outer code
-#define k1 32
-#define d1 32
-#define n2 64			// n2,k2,d2 is for inner code
-#define k2 32
-#define d2 32
 #define MAXDATASIZE 100
 
 static unsigned long t;
 static unsigned	char uth[BLOCK_SIZE];
-
-// display unsigned char array
-void displayCharArray(unsigned char* out,int len)
-{
-	int i;
-	for (i = 0;i < len; i++) {
-		printf("%02x", out[i]);
-	}
-	printf("\n");
-}
 
 // concatenate two RS code for encoding
 void concat_encode(unsigned char * message,unsigned char* codeword) {
