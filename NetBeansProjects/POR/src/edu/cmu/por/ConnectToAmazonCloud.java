@@ -284,10 +284,8 @@ public class ConnectToAmazonCloud extends javax.swing.JFrame {
             String pemFilePath = jTextField2.getText();
             //String pemFilePath = "/home/poojad/RazzyFresh.pem";
             admPassword = jPasswordField1.getPassword().toString();
-            // String accessKey = jTextField3.getText();
-            //String secretKey = jTextField4.getText();
-            String accessKey = "AKIAIHLBFFYWOAIOXLPQ";
-            String secretKey = "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";
+             String accessKey = jTextField3.getText();
+            String secretKey = jTextField4.getText();
 
             try {
                 ConnectToAmazonEC2.connectToCloud(pemFilePath, accessKey, secretKey);
