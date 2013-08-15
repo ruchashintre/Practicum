@@ -12,14 +12,17 @@
 #define BLOCK_SIZE 32
 #define n 255
 #define k 223
+#define d n-k
 #define w 4096/BLOCK_SIZE 
 #define v 1024/BLOCK_SIZE
 #define q 100
 #define MACSIZE 16
 #define n1 64          // n1,k1 is for outer code
 #define k1 32
+#define d1 n1-k1
 #define n2 64			// n2,k2 is for inner code
 #define k2 32
+#define d2 n2-k2
 #define readLen 1024*1024*1024 // incremental encoding read amount
 
 // display unsigned char array

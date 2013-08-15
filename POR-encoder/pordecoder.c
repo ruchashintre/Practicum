@@ -769,7 +769,6 @@ void inner_decoding(decoded_blocks *db,unsigned char * c_in_codeword, unsigned l
 		}
 
 		//copy parity part codeword
-		int d1 = n1-k1;
 		p = (m_index/2) + (i*d1);
 		for(j=0;j<d1;j++){
 			c_out_codeword[index++]=c_in_message[j+p];		
@@ -850,7 +849,6 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 				delta_dist++;
 		}
 		double prob;
-		int d2 = n2-k2;
 		if(delta_dist<d2/2)
 			prob = 2*(double)delta_dist/d2;
 		else
@@ -884,7 +882,6 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		}
 		int p;
 		//copy parity part codeword
-		int d1 = n1-k1;
 		p = v*32 + (i*d1);
 		for(j=0;j<d1;j++){
 			c_out_codeword[index++]=c_in_message[j+p];		
@@ -901,7 +898,6 @@ void inner_GMD(decoded_blocks *db,unsigned char * c_in_codeword, unsigned long *
 		}
 		if(erasure_index[v]==1) {
 			int di;
-			int d2 = n2-k2;
 			for(di=0;di<d2;di++) {
 				erasure[num_erasure] = k2+di;
 				num_erasure++;
